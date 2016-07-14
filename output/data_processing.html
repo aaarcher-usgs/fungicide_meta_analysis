@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Data entry and processing</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>Data entry and processing</h1>
+
+<h3>Preamble</h3>
+
+<p>Load Libraries</p>
+
+<pre><code class="r">library(ezknitr)
+library(knitr)
+library(metafor)
+library(doBy)
+</code></pre>
+
+<p>Clear environment</p>
+
+<pre><code class="r">remove(list=ls())
+</code></pre>
+
+<p>Document settings</p>
+
+<pre><code class="r">opts_chunk$set(fig.width = 6, fig.height = 4)
+</code></pre>
+
+<h3>Load data</h3>
+
+<pre><code class="r">raw.data &lt;- read.csv(&quot;data/workspace.csv&quot;)
+</code></pre>
+
+<h3>Processing data Steps</h3>
+
+<ol>
+<li>New dataset with only selected fields</li>
+<li>Standardize categorical moderators</li>
+<li>Partition data</li>
+<li>Standardize effect size information</li>
+<li>Make sure categorical moderators have n &gt; 5</li>
+<li>Calculate effect sizes</li>
+<li>Save files for analysis</li>
+</ol>
+
+<h3>1. New dataset with only selected fields</h3>
+
+<pre><code class="r">data.reduced &lt;- raw.data[,c(1:5,10:11,13:17,20:49)]
+# take out three data points with information on control treatments only
+data.reduced &lt;- data.reduced[data.reduced$FID!=105 &amp;
+                               data.reduced$FID!=154 &amp;
+                               data.reduced$FID!=211,]
+</code></pre>
+
+<p>Table of all data</p>
+
+<pre><code class="r">summaryBy(FID~Reference+ReferenceNumb+studyYear+State, data = data.reduced, FUN = length)
+</code></pre>
+
+<pre><code>##                 Reference ReferenceNumb studyYear State FID.length
+## 1            Allen ref 11            11      2010    MS          7
+## 2            Allen ref 12            12      2010    MS          8
+## 3            Allen ref 13            13      2011    MS          5
+## 4            Allen ref 14            14      2011    MS          5
+## 5         Delanely ref 28            28      2013    AL          2
+## 6     Delaney et al ref 6             6      2010    AL          8
+## 7     Delaney et al ref 8             8      2011    AL         12
+## 8          Delaney ref 17            17      2010    AL          8
+## 9          Delaney ref 24            24      2010    AL          8
+## 10         Delaney ref 26            26      2013    AL          3
+## 11         Delaney ref 27            27      2013    AL          2
+## 12         Delaney ref 29            29      2013    AL          2
+## 13         Delaney ref 30            30      2013    AL          9
+## 14         Delaney ref 31            31      2013    AL          9
+## 15         Delaney ref 32            32      2013    AL          4
+## 16         Delaney ref 33            33      2013    AL          4
+## 17         Delaney ref 34            34      2013    AL         12
+## 18         Delaney ref 44            44      2009    AL         13
+## 19   Douglas et al ref 65            65      2008    FL         18
+## 20   Douglas et al ref 66            66      2008    FL         13
+## 21   Douglas et al ref 67            67      2009    FL         11
+## 22          Harmon ref 47            47      2006    FL          6
+## 23          Harmon ref 48            48      2006    FL          1
+## 24          Harmon ref 48            48      2007    FL          1
+## 25          Harmon ref 48            48      2008    FL          1
+## 26          Harmon ref 48            48      2009    FL          1
+## 27          Harmon ref 48            48      2010    FL          1
+## 28          Harmon ref 48            48      2011    FL          1
+## 29  Kemerait et al ref 59            59      2006    GA         15
+## 30  Kemerait et al ref 71            71      2005    GA          8
+## 31        Kemerait ref 46            46      2006    GA          5
+## 32        Kemerait ref 49            49      2006    GA         12
+## 33        Kemerait ref 50            50      2006    GA         10
+## 34        Kemerait ref 51            51      2006    GA          7
+## 35   Lawrence et al ref 3             3      2007    AL          7
+## 36   lawrence et al ref 4             4      2005    AL          6
+## 37  Lawrence et al ref 53            53      2007    AL          6
+## 38  Lawrence et al ref 55            55      2006    AL         10
+## 39  Lawrence et al ref 62            62      2007    AL          7
+## 40  Lawrence et al ref 68            68      2013    AL          5
+## 41        Lawrence ref 16            16      2008    AL         13
+## 42        Lawrence ref 18            18      2006    AL          3
+## 43        Lawrence ref 21            21      2005    AL          6
+## 44        Lawrence ref 22            22      2008    AL          9
+## 45        Lawrence ref 41            41      2006   AL          11
+## 46   Mueller et al  ref 1             1      2007    FL          3
+## 47   Mueller et al ref 63            63      2006    FL          6
+## 48    Mueller et al ref 9             9      2007    FL          9
+## 49         Mueller ref 36            36      2006    FL         23
+## 50         Mueller ref 37            37      2006    FL         15
+## 51         Mueller ref 38            38      2006    FL          6
+## 52         Mueller ref 39            39      2006    FL         11
+## 53         Mueller ref 40            40      2006    FL          4
+## 54         Mueller ref 43            43      2006    GA         15
+## 55         Mueller ref 45            45      2006    FL         17
+## 56   O&#39;Brien et al ref 69            69      2013    FL         13
+## 57         O&#39;Brien ref 25            25      2012    FL          7
+## 58   Padgett et al ref 54            54      2007    LA          9
+## 59   Padgett et al ref 72            72      2005    LA         15
+## 60   Padgett et al ref 73            73      2005    LA         15
+## 61     Price et al ref 35            35      2012    LA         12
+## 62 Schneider et al ref 60            60      2006    LA         23
+## 63     Sikora et al ref 7             7      2011    AL          4
+## 64    Sikora et al ref 70            70      2005    AL         13
+## 65    Sikora et al ref 74            74      2006    AL         12
+## 66          Sikora ref 23            23      2007    AL         12
+## 67          Sikora ref 42            42      2005    AL          7
+</code></pre>
+
+<pre><code class="r">#summaryBy(FID~ReferenceNumb+Reference+studyYear+State, data = data.reduced, FUN = length)
+</code></pre>
+
+<h3>2. Standardize categorical moderators</h3>
+
+<p>Active ingredients: define mixed and 2+ applications of mixed (if 2+ applications of same, just use that active ingredient as is.)</p>
+
+<pre><code class="r"># Active ingredients - fix typos in original dataset
+data.reduced$active.ingredient.coded &lt;- as.character(data.reduced$active.ingredient.coded)
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;ACT Plus&quot;] &lt;- &quot;oth&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Domark&quot;] &lt;- &quot;tetra&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur&quot;] &lt;- &quot;tebu&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur fb Headline&quot;] &lt;- &quot;tebu + pyra&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur + Headline&quot;] &lt;- &quot;tebu + pyra&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Laredo&quot;] &lt;- &quot;myc&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Punch fb Punch&quot;] &lt;- &quot;flus&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Stratego&quot;] &lt;- &quot;mixed&quot;
+
+
+# Active ingredients - new code for analysis (e.g. &gt;5 obs)
+#     Start by making new field and storing the old code
+data.reduced$activeIngClean &lt;- &quot;empty&quot;
+#     Mixed
+mixed.indices &lt;- grep(&quot;+&quot;, data.reduced$active.ingredient.coded, fixed=TRUE)
+data.reduced$activeIngClean[mixed.indices] &lt;- &quot;mixed&quot;
+#     Dual applications
+dual.apps &lt;- grep(&quot;fb&quot;, data.reduced$active.ingredient.coded, fixed=TRUE)
+data.reduced$activeIngClean[dual.apps] &lt;- &quot;dual&quot;
+data.reduced$activeIngClean[grep(&quot;azo fb azo&quot;, data.reduced$active.ingredient.coded, fixed=F)] &lt;- &quot;azo&quot;
+data.reduced$activeIngClean[grep(&quot;myc fb myc&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;myc&quot;
+data.reduced$activeIngClean[grep(&quot;tetr fb tetr&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;tetra&quot;
+data.reduced$activeIngClean[grep(&quot;tetra fb tetra&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;tetra&quot;
+data.reduced$activeIngClean[grep(&quot;tebu fb tebu&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;tebu&quot;
+data.reduced$activeIngClean[grep(&quot;prop fb prop&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;prop&quot;
+data.reduced$activeIngClean[grep(&quot;pyra fb pyra&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;pyra&quot;
+data.reduced$activeIngClean[grep(&quot;pyra fb prya&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;pyra&quot;
+data.reduced$activeIngClean[grep(&quot;flut fb flut&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;flut&quot;
+#     Single applications
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;empty&quot;] &lt;- 
+  as.character(data.reduced$active.ingredient.coded[data.reduced$activeIngClean==&quot;empty&quot;])
+#     Clean up so labels are consistent (e.g., &quot;pyr&quot; vs &quot;pyra&quot;)
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyr&quot;] &lt;- &quot;pyra&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyraclostrobin&quot;] &lt;- &quot;pyra&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyro&quot;] &lt;- &quot;pyra&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;teb&quot;] &lt;- &quot;tebu&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;tetr&quot;] &lt;- &quot;tetra&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;thi&quot;] &lt;- &quot;thio&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;&quot;] &lt;- &quot;unknown&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;cyp&quot;] &lt;- &quot;cypr&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;tebu &quot;] &lt;- &quot;tebu&quot;
+#     Check progress
+table(data.reduced$activeIngClean)
+</code></pre>
+
+<pre><code>## 
+##     azo    chlo     cop    cypr    dual     eth    febu    flus    flut 
+##      29       2       2       6      44       2       1       8      66 
+##     gly    met    mixed     myc     org     oth    pico    prop    prot 
+##       6       1     177      14       3      16       4       2       4 
+##    pyra     sul    tebu   tetra    thio    tria    trif unknown 
+##      54       3      54      37      10       1       2      18
+</code></pre>
+
+<p>When sample size is &lt; 5, make &ldquo;oth&rdquo;</p>
+
+<pre><code class="r">less.than.five &lt;- c(&quot;chlo&quot;, &quot;cop&quot;, &quot;eth&quot;, &quot;febu&quot;, &quot;met &quot;, &quot;org&quot;, &quot;pico&quot;, &quot;prop&quot;,
+                    &quot;prot&quot;, &quot;sul&quot;, &quot;tria&quot;, &quot;trif&quot;, &quot;unknown&quot;)
+data.reduced$activeIngClean[data.reduced$activeIngClean %in% less.than.five] &lt;- &quot;oth&quot;
+# Check with table
+table(data.reduced$activeIngClean)
+</code></pre>
+
+<pre><code>## 
+##   azo  cypr  dual  flus  flut   gly mixed   myc   oth  pyra  tebu tetra 
+##    29     6    44     8    66     6   177    14    61    54    54    37 
+##  thio 
+##    10
+</code></pre>
+
+<p>Class of fungicide: clean up labels to be consistent and if &lt;5, relabel as &ldquo;oth&rdquo;</p>
+
+<pre><code class="r"># Table to see how it looks as is
+table(data.reduced$class.code)
+</code></pre>
+
+<pre><code>## 
+##                             chloronitrile       copper sulfate 
+##                    1                    2                    1 
+##            herbicide             mancozeb          metconazole 
+##                    6                    1                    1 
+##                  mma                  myc                other 
+##                  220                    2                   31 
+##               other           strobilurin         strobilurin  
+##                    1                   78                    4 
+##          strobulurin                 tebu          thiophanate 
+##                    8                    1                    9 
+## triaz+AL384:AM384ole             triazole              unknown 
+##                    1                  188                   11
+</code></pre>
+
+<pre><code class="r"># Start with &quot;empty&quot;
+data.reduced$classClean &lt;- &quot;empty&quot;
+# Clean up labels
+data.reduced$classClean[data.reduced$class.code==&quot;&quot;] &lt;- &quot;unknown&quot;
+data.reduced$classClean[data.reduced$class.code==&quot;other &quot;] &lt;- &quot;other&quot;
+data.reduced$classClean[data.reduced$class.code==&quot;strobilurin &quot;] &lt;- &quot;strobilurin&quot;
+data.reduced$classClean[data.reduced$class.code==&quot;strobulurin&quot;] &lt;- &quot;strobilurin&quot;
+data.reduced$classClean[data.reduced$class.code==&quot;triaz+AL384:AM384ole&quot;] &lt;- &quot;triazole&quot;
+# Fill in the rest
+data.reduced$classClean[data.reduced$classClean==&quot;empty&quot;] &lt;- 
+  as.character(data.reduced$class.code[data.reduced$classClean==&quot;empty&quot;])
+# Check with table
+table(data.reduced$classClean)
+</code></pre>
+
+<pre><code>## 
+##  chloronitrile copper sulfate      herbicide       mancozeb    metconazole 
+##              2              1              6              1              1 
+##            mma            myc          other    strobilurin           tebu 
+##            220              2             32             90              1 
+##    thiophanate       triazole        unknown 
+##              9            189             12
+</code></pre>
+
+<p>When sample size is &lt; 5, make &ldquo;oth&rdquo;</p>
+
+<pre><code class="r">less.than.five &lt;- c(&quot;chloronitrile&quot;, &quot;copper sulfate&quot;, &quot;mancozeb&quot;, &quot;metconazole&quot;,
+                    &quot;myc&quot;, &quot;tebu&quot;, &quot;unknown&quot;)
+data.reduced$classClean[data.reduced$classClean %in% less.than.five] &lt;- &quot;other&quot;
+# Check with table
+table(data.reduced$classClean)
+</code></pre>
+
+<pre><code>## 
+##   herbicide         mma       other strobilurin thiophanate    triazole 
+##           6         220          52          90           9         189
+</code></pre>
+
+<p>Growth stages of application</p>
+
+<pre><code class="r"># Examine original data
+sort(table(data.reduced$Growth.stage.applied))
+</code></pre>
+
+<pre><code>## 
+##                     3,7                    3fb6            r1 + r3 + r5 
+##                       1                       1                       1 
+##                   r1 r3                  r1, r3                  r2,r10 
+##                       1                       1                       1 
+##                  r2,r11                  r2,r12                  r2,r13 
+##                       1                       1                       1 
+##                  r2,r14                  r2,r15                   r2,r4 
+##                       1                       1                       1 
+##                   r2,r6                   r2,r7                   r2,r8 
+##                       1                       1                       1 
+##                   r2,r9                  r2+r10                  r2+r11 
+##                       1                       1                       1 
+##                  r2+r12                  r2+r13                  r2+r14 
+##                       1                       1                       1 
+##                   r2+r3                   r2+r4                   r2+r5 
+##                       1                       1                       1 
+##                   r2+r6                   r2+r7                   r2+r8 
+##                       1                       1                       1 
+##                   r2+r9               r3  + r5                  r3, r5  
+##                       1                       1                       1 
+##                r3.5, r5                  r3+21d                  r3+28d 
+##                       1                       1                       1 
+##                 r5,r5.5 v9,r1,r2,r3,r4,r5,r6,r7                     1+5 
+##                       1                       1                       2 
+##                r1 fb r3               r2 + r5.5                r3 + r5  
+##                       2                       2                       2 
+##                r3 fb r5                  r3, r5              r3+21 days 
+##                       2                       2                       2 
+##              r5 fb r5.5                   v5,r1                   v5+r2 
+##                       2                       2                       2 
+##                v5+r2+r4                  3 fb 6                 r1 + 14 
+##                       2                       3                       3 
+##                 r1 + 21                   r4,r6                     3,6 
+##                       3                       3                       4 
+##                 r1 + r3             r1, r1+ 21d            r3, r3 + 21d 
+##                       4                       4                       4 
+##                 r3.5,r5                   r4,r5                      R1 
+##                       4                       4                       5 
+##                      R3                    r3.5                      R5 
+##                       5                       5                       5 
+##                  r1+21d          v5+r1+r2+r4+r5            r2 + r3 + r5 
+##                       6                       6                       7 
+##                 r2,r5.5                   r3+r5                     3,5 
+##                       8                       8                       9 
+##                       5             r2+r4 or r5                      r4 
+##                       9                       9                       9 
+##                   1+21d                 r1 + r4                r1,r3,r5 
+##                      10                      11                      13 
+##                   r3,r5                      r1                   r2,r5 
+##                      13                      15                      15 
+##                      r2                 r2 + r4                 r3 + r5 
+##                      22                      24                      25 
+##                                         r2 + r5                      r5 
+##                      27                      37                      61 
+##                      r3 
+##                     109
+</code></pre>
+
+<pre><code class="r">data.reduced$growthStateClean &lt;- &quot;empty&quot;
+
+#   Applied during R1 plus another stage
+data.reduced$growthStateClean[grep(&quot;^1&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;1+&quot;
+data.reduced$growthStateClean[grep(&quot;^r1&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;1+&quot;
+#   Applied during R1 only
+data.reduced$growthStateClean[data.reduced$Growth.stage.applied==&quot;1&quot;|
+                                data.reduced$Growth.stage.applied==&quot;r1&quot;|
+                                data.reduced$Growth.stage.applied==&quot;R1&quot;] &lt;- &quot;1&quot;
+#   Applied during R2 initially plus another stage
+data.reduced$growthStateClean[grep(&quot;^r2&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;2+&quot;
+#   Applied during R2 only
+data.reduced$growthStateClean[data.reduced$Growth.stage.applied==&quot;r2&quot;] &lt;- &quot;2&quot;
+#   Applied during R3 initially plus another stage
+data.reduced$growthStateClean[grep(&quot;^3&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;3&quot;
+data.reduced$growthStateClean[grep(&quot;^r3&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;3&quot;
+#   Applied during R3 only
+data.reduced$growthStateClean[data.reduced$Growth.stage.applied==&quot;r3&quot;|
+                                data.reduced$Growth.stage.applied==&quot;R3&quot;] &lt;- &quot;3&quot;
+#   Applied during R4 initially plus another stage (none were 4 only)
+data.reduced$growthStateClean[grep(&quot;^r4&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;4&quot;
+#   Applied during R5
+data.reduced$growthStateClean[grep(&quot;^r5&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;5&quot;
+data.reduced$growthStateClean[grep(&quot;^R5&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;5&quot;
+data.reduced$growthStateClean[grep(&quot;^5&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;5&quot;
+#   Applied during V-stage
+data.reduced$growthStateClean[grep(&quot;^v&quot;, data.reduced$Growth.stage.applied)] &lt;- &quot;V&quot;
+#   Unknown stage of application
+data.reduced$growthStateClean[data.reduced$growthStateClean==&quot;empty&quot;] &lt;- &quot;unknown&quot;
+# Check with table
+#sort(table(data.reduced$Growth.stage.applied[data.reduced$growthStateClean==&quot;empty&quot;]))
+table(data.reduced$growthStateClean)
+</code></pre>
+
+<pre><code>## 
+##       1      1+       2      2+       3       4       5 unknown       V 
+##      20      61      22     125     204      16      78      27      13
+</code></pre>
+
+<p>Number of applications</p>
+
+<pre><code class="r"># Check with table
+table(data.reduced$applicationsNumb)
+</code></pre>
+
+<pre><code>## 
+##   1   2   3   5   8 
+## 282 254  23   6   1
+</code></pre>
+
+<p>When sample size is &lt; 5, delete</p>
+
+<pre><code class="r">data.reduced &lt;- data.reduced[data.reduced$applicationsNumb!=8,]
+</code></pre>
+
+<h3>3. Partition data</h3>
+
+<p>Rust data</p>
+
+<pre><code class="r"># Data that had rust severity in percentage originally
+    # Column #15 is rustSeverPerc
+rust.perc.orig &lt;- data.reduced[!rowSums(is.na(data.reduced[15])),]
+rust.perc.orig$scale &lt;- &quot;Percent&quot;
+# Data that had rust severity on scale originally
+    # Column #19 is rustSever1-8
+rust.scale.orig &lt;- data.reduced[!rowSums(is.na(data.reduced[19])),]
+# Data from Lawrence references are actually on 0-10 Scale
+scale.1to10.refs &lt;- c(3,4,53,55,62,68,16,41)
+rust.scale.orig$scale[rust.scale.orig$ReferenceNumb %in% scale.1to10.refs] &lt;- &quot;Scale 0-10&quot;
+# Rest are on 1-8 scale
+rust.scale.orig$scale[!rust.scale.orig$ReferenceNumb %in% scale.1to10.refs] &lt;- &quot;Scale 0-8&quot;
+
+# Combine back together
+rust.data &lt;- rbind(rust.perc.orig, rust.scale.orig)
+</code></pre>
+
+<p>Yield data</p>
+
+<pre><code class="r"># Data that had yield data
+    # Column #35 is yield
+yield.data &lt;- data.reduced[!rowSums(is.na(data.reduced[35])),] 
+</code></pre>
+
+<p>100sw data</p>
+
+<pre><code class="r"># Data that had 100sw data
+    # Column #39 is 100sw
+seedwt.data &lt;- data.reduced[!rowSums(is.na(data.reduced[39])),] 
+</code></pre>
+
+<p>Cercospora data</p>
+
+<pre><code class="r"># Data that had Cercospora data
+cerco.data &lt;- data.reduced[!rowSums(is.na(data.reduced[31])),]
+# Define the scale used
+cerco.data$scale &lt;- &quot;empty&quot;
+# Data from Padgett et al. studies used scale 0-10
+cerco.data$scale[grep(&quot;^Pa&quot;, cerco.data$Reference)] &lt;- &quot;Scale 0-10&quot;
+# Data from Price et al. studies used scale 0-8
+cerco.data$scale[grep(&quot;^Pr&quot;, cerco.data$Reference)] &lt;- &quot;Scale 0-8&quot;
+# Data from others used 0-5 scale
+cerco.data$scale[cerco.data$scale==&quot;empty&quot;] &lt;- &quot;Scale 0-5&quot;
+</code></pre>
+
+<p>Target spot data</p>
+
+<pre><code class="r"># Data that had Target Spot data
+target.spot.data &lt;- data.reduced[!rowSums(is.na(data.reduced[28]))|
+                                   !rowSums(is.na(data.reduced[23])),]
+# Define the scale used
+target.spot.data$scale &lt;- &quot;empty&quot;
+# Percentage originally
+target.spot.data$scale[target.spot.data$ReferenceNumb==55 | 
+                         target.spot.data$ReferenceNumb==21] &lt;- &quot;Percent&quot;
+# Data with scale 0-10
+target.spot.data$scale[target.spot.data$ReferenceNumb==30] &lt;- &quot;Scale 0-10&quot;
+# Data with scale 0-5
+target.spot.data$scale[target.spot.data$scale==&quot;empty&quot;] &lt;- &quot;Scale 0-5&quot;
+</code></pre>
+
+<h3>4. Standardize effect size information</h3>
+
+<ul>
+<li>Convert group means, n, and std into form needed for metafor package</li>
+</ul>
+
+<p>For rust severity on scale 0-8, convert to percent</p>
+
+<ul>
+<li>if scale is less than or equal to 2; 2.5*scale</li>
+<li>if scale is greater than 2, less than or equal to 4; 5 + 5*(scale-2)</li>
+<li>if scale is greater than 4, less than or equal to 6; 15 + 10*(scale-4)</li>
+<li>if scale is greater than 6; 35 + 32.5*(scale-6)</li>
+</ul>
+
+<p>For rust severity on scale 0-10, convert to percent</p>
+
+<ul>
+<li>if scale is &lt;= 3, (0.25/3)*scale</li>
+<li>if scale is &gt;3, &lt;=4, 2.5 + 2.5(scale-3)</li>
+<li>if scale is &gt;4, &lt;=6, 5 + 5(scale-4)</li>
+<li>if scale is &gt;6, &lt;=8, 15 + 10(scale-6)</li>
+<li>if scale is &gt;8, 35 + 32.5(scale-8)</li>
+</ul>
+
+<pre><code class="r"># For treatment groups
+rust.data$m1i[rust.data$scale==&quot;Scale 0-8&quot; &amp; 
+                rust.data$rustSever1.8 &lt;= 2] &lt;-
+                      rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-8&quot;&amp;
+                                               rust.data$rustSever1.8 &lt;= 2]*2.5
+rust.data$m1i[rust.data$scale==&quot;Scale 0-8&quot; &amp; 
+                rust.data$rustSever1.8 &gt; 2 &amp;
+                rust.data$rustSever1.8 &lt;= 4] &lt;- 5 +
+                      (rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-8&quot;&amp;
+                                               rust.data$rustSever1.8 &gt; 2 &amp;
+                                               rust.data$rustSever1.8 &lt;= 4]-2)*5
+rust.data$m1i[rust.data$scale==&quot;Scale 0-8&quot; &amp; 
+                rust.data$rustSever1.8 &gt; 4 &amp;
+                rust.data$rustSever1.8 &lt;= 6] &lt;- 15 +
+                      (rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-8&quot;&amp;
+                                                rust.data$rustSever1.8 &gt; 4 &amp;
+                                                rust.data$rustSever1.8 &lt;= 6]-4)*10
+rust.data$m1i[rust.data$scale==&quot;Scale 0-8&quot; &amp; 
+                rust.data$rustSever1.8 &gt; 6] &lt;- 35 +
+                      (rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-8&quot;&amp;
+                                                rust.data$rustSever1.8 &gt; 6]-6)*32.5
+# For control groups
+rust.data$m2i[rust.data$scale==&quot;Scale 0-8&quot; &amp; 
+                rust.data$rustSever1.8Cont &lt;= 2] &lt;-
+                      rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-8&quot;&amp;
+                                               rust.data$rustSever1.8Cont &lt;= 2]*2.5
+rust.data$m2i[rust.data$scale==&quot;Scale 0-8&quot; &amp; 
+                rust.data$rustSever1.8Cont &gt; 2 &amp;
+                rust.data$rustSever1.8Cont &lt;= 4] &lt;- 5 +
+                      (rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-8&quot;&amp;
+                                                rust.data$rustSever1.8Cont &gt; 2 &amp;
+                                                rust.data$rustSever1.8Cont &lt;= 4]-2)*5
+rust.data$m2i[rust.data$scale==&quot;Scale 0-8&quot; &amp; 
+                rust.data$rustSever1.8Cont &gt; 4 &amp;
+                rust.data$rustSever1.8Cont &lt;= 6] &lt;- 15 +
+                      (rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-8&quot;&amp;
+                                                rust.data$rustSever1.8Cont &gt; 4 &amp;
+                                                rust.data$rustSever1.8Cont &lt;= 6]-4)*10
+rust.data$m2i[rust.data$scale==&quot;Scale 0-8&quot; &amp; 
+                rust.data$rustSever1.8Cont &gt; 6] &lt;- 35 +
+                      (rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-8&quot;&amp;
+                                                rust.data$rustSever1.8Cont &gt; 6]-6)*32.5
+# For rust severity on 0-10 scale
+rust.data$m1i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8 &lt;= 3] &lt;-
+  rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-10&quot;&amp;
+                           rust.data$rustSever1.8 &lt;= 3]*(2.5/3)
+rust.data$m1i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8 &gt; 3 &amp;
+                rust.data$rustSever1.8 &lt;= 4] &lt;- 2.5 +
+  (rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                           rust.data$rustSever1.8 &gt; 3 &amp;
+                           rust.data$rustSever1.8 &lt;= 4]-3)*2.5
+rust.data$m1i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8 &gt; 4 &amp;
+                rust.data$rustSever1.8 &lt;= 6] &lt;- 5 +
+  (rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                           rust.data$rustSever1.8 &gt; 4 &amp;
+                           rust.data$rustSever1.8 &lt;= 6]-4)*5
+rust.data$m1i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8 &gt; 6 &amp;
+                rust.data$rustSever1.8 &lt;= 8] &lt;- 15 +
+  (rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                           rust.data$rustSever1.8 &gt; 6 &amp;
+                           rust.data$rustSever1.8 &lt;= 8]-6)*10
+rust.data$m1i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8 &gt; 8] &lt;- 35 +
+  (rust.data$rustSever1.8[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                            rust.data$rustSever1.8 &gt; 8]-8)*32.5
+# Control
+rust.data$m2i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8Cont &lt;= 3] &lt;-
+  rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-10&quot;&amp;
+                           rust.data$rustSever1.8Cont &lt;= 3]*(2.5/3)
+rust.data$m2i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8Cont &gt; 3 &amp;
+                rust.data$rustSever1.8Cont &lt;= 4] &lt;- 2.5 +
+  (rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                            rust.data$rustSever1.8Cont &gt; 3 &amp;
+                            rust.data$rustSever1.8Cont &lt;= 4]-3)*2.5
+rust.data$m2i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8Cont &gt; 4 &amp;
+                rust.data$rustSever1.8Cont &lt;= 6] &lt;- 5 +
+  (rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                            rust.data$rustSever1.8Cont &gt; 4 &amp;
+                            rust.data$rustSever1.8Cont &lt;= 6]-4)*5
+rust.data$m2i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8Cont &gt; 6 &amp;
+                rust.data$rustSever1.8Cont &lt;= 8] &lt;- 15 +
+  (rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                            rust.data$rustSever1.8Cont &gt; 6 &amp;
+                            rust.data$rustSever1.8Cont &lt;= 8]-6)*10
+rust.data$m2i[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                rust.data$rustSever1.8Cont &gt; 8] &lt;- 35 +
+  (rust.data$rustSever1.8Cont[rust.data$scale==&quot;Scale 0-10&quot; &amp; 
+                            rust.data$rustSever1.8Cont &gt; 8]-8)*32.5
+# For rust severity in percent originally
+rust.data$m1i[rust.data$scale==&quot;Percent&quot;] &lt;- rust.data$rustSeverPerc[rust.data$scale==&quot;Percent&quot;]
+rust.data$m2i[rust.data$scale==&quot;Percent&quot;] &lt;- rust.data$rustSeverPercCont[rust.data$scale==&quot;Percent&quot;]
+# Assume 20% as std deviation
+rust.data$sd1i &lt;- rust.data$sd2i &lt;- 20
+# Sample sizes
+rust.data$n1i &lt;- rust.data$n2i &lt;- rust.data$replications
+</code></pre>
+
+<p>Yield data</p>
+
+<pre><code class="r">yield.data$yield.kg.ha &lt;- yield.data$yield*67.25 # convert to kg ha-1
+yield.data$yieldCont.kg.ha &lt;- yield.data$yieldCont*67.25 # convert to kg ha-1
+  # conversion info from https://www.extension.iastate.edu/agdm/wholefarm/html/c6-80.html
+yield.data$m1i &lt;- yield.data$yield.kg.ha # Yield for treatment group
+yield.data$sd1i &lt;- yield.data$yield.kg.ha*0.2 # Std is 20% of mean
+yield.data$m2i &lt;- yield.data$yieldCont.kg.ha # Yield for control group
+yield.data$sd2i &lt;- yield.data$yieldCont.kg.ha*0.2 # Std is 20% of the mean
+yield.data$n1i &lt;- yield.data$n2i &lt;- yield.data$replications
+</code></pre>
+
+<p>100 seed weight data</p>
+
+<pre><code class="r">seedwt.data$m1i &lt;- seedwt.data$seedWt # Yield for treatment group
+seedwt.data$sd1i &lt;- seedwt.data$seedWt*0.2 # Std is 20% of mean
+seedwt.data$m2i &lt;- seedwt.data$seedWtCont # Yield for control group
+seedwt.data$sd2i &lt;- seedwt.data$seedWtCont*0.2 # Std is 20% of the mean
+seedwt.data$n1i &lt;- seedwt.data$n2i &lt;- seedwt.data$replications
+</code></pre>
+
+<p>Cercospora data</p>
+
+<pre><code class="r"># Scale 0-10
+cerco.data$m1i[cerco.data$scale==&quot;Scale 0-10&quot;] &lt;- 
+  cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-10&quot;]*10
+cerco.data$m2i[cerco.data$scale==&quot;Scale 0-10&quot;] &lt;- 
+  cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-10&quot;]*10
+# Scale 0-8
+cerco.data$m1i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
+                cerco.data$CercoSever &lt;= 2] &lt;-
+  cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
+                           cerco.data$CercoSever &lt;= 2]*2.5
+cerco.data$m1i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
+                cerco.data$CercoSever &gt; 2 &amp;
+                cerco.data$CercoSever &lt;= 4] &lt;- 5 +
+  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
+                            cerco.data$CercoSever &gt; 2 &amp;
+                            cerco.data$CercoSever &lt;= 4]-2)*5
+cerco.data$m1i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
+                cerco.data$CercoSever &gt; 4 &amp;
+                cerco.data$CercoSever &lt;= 6] &lt;- 15 +
+  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
+                            cerco.data$CercoSever &gt; 4 &amp;
+                            cerco.data$CercoSever &lt;= 6]-4)*10
+cerco.data$m1i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
+                cerco.data$CercoSever &gt; 6] &lt;- 35 +
+  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
+                            cerco.data$CercoSever &gt; 6]-6)*32.5
+# Control
+cerco.data$m2i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
+                 cerco.data$CercoSeverCont &lt;= 2] &lt;-
+  cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
+                          cerco.data$CercoSeverCont &lt;= 2]*2.5
+cerco.data$m2i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
+                 cerco.data$CercoSeverCont &gt; 2 &amp;
+                 cerco.data$CercoSeverCont &lt;= 4] &lt;- 5 +
+  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
+                           cerco.data$CercoSeverCont &gt; 2 &amp;
+                           cerco.data$CercoSeverCont &lt;= 4]-2)*5
+cerco.data$m2i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
+                 cerco.data$CercoSeverCont &gt; 4 &amp;
+                 cerco.data$CercoSeverCont &lt;= 6] &lt;- 15 +
+  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
+                           cerco.data$CercoSeverCont &gt; 4 &amp;
+                           cerco.data$CercoSeverCont &lt;= 6]-4)*10
+cerco.data$m2i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
+                 cerco.data$CercoSeverCont &gt; 6] &lt;- 35 +
+  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
+                           cerco.data$CercoSeverCont &gt; 6]-6)*32.5
+</code></pre>
+
+<p>Scale 0-5</p>
+
+<ul>
+<li>if scale is less than or equal to 1; 10*scale</li>
+<li>if scale is greater than 1, less than or equal to 2; 10 + 15*(scale-1)</li>
+<li>if scale is greater than 2; 25 + 25*(scale-2)</li>
+</ul>
+
+<pre><code class="r">cerco.data$m1i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 cerco.data$CercoSever &lt;= 1] &lt;-
+  cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-5&quot;&amp;
+                          cerco.data$CercoSever &lt;= 1]*10
+cerco.data$m1i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 cerco.data$CercoSever &gt; 1 &amp;
+                 cerco.data$CercoSever &lt;= 2] &lt;- 10 +
+  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
+                           cerco.data$CercoSever &gt; 1 &amp;
+                           cerco.data$CercoSever &lt;= 2]-1)*15
+cerco.data$m1i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 cerco.data$CercoSever &gt; 2 ] &lt;- 25 +
+  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
+                           cerco.data$CercoSever &gt; 2]-2)*25
+# Control
+cerco.data$m2i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 cerco.data$CercoSeverCont &lt;= 1] &lt;-
+  cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-5&quot;&amp;
+                          cerco.data$CercoSeverCont &lt;= 1]*10
+cerco.data$m2i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 cerco.data$CercoSeverCont &gt; 1 &amp;
+                 cerco.data$CercoSeverCont &lt;= 2] &lt;- 10 +
+  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
+                           cerco.data$CercoSeverCont &gt; 1 &amp;
+                           cerco.data$CercoSeverCont &lt;= 2]-1)*15
+cerco.data$m2i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 cerco.data$CercoSeverCont &gt; 2 ] &lt;- 25 +
+  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
+                           cerco.data$CercoSeverCont &gt; 2]-2)*25
+# SD and replications
+cerco.data$sd1i &lt;- cerco.data$sd2i &lt;- 20
+cerco.data$n1i &lt;- cerco.data$n2i &lt;- cerco.data$replications
+</code></pre>
+
+<p>Target spot data</p>
+
+<pre><code class="r"># Scale 0-10
+target.spot.data$m1i[target.spot.data$scale==&quot;Scale 0-10&quot;] &lt;- 
+  target.spot.data$Tsseverity[target.spot.data$scale==&quot;Scale 0-10&quot;]*10
+target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-10&quot;] &lt;- 
+  target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-10&quot;]*10
+# Percentage
+target.spot.data$m1i[target.spot.data$scale==&quot;Percent&quot;] &lt;- 
+  target.spot.data$Tsincidence[target.spot.data$scale==&quot;Percent&quot;]
+target.spot.data$m2i[target.spot.data$scale==&quot;Percent&quot;] &lt;- 
+  target.spot.data$TSincidenceCont[target.spot.data$scale==&quot;Percent&quot;]
+# Scale 0-5
+target.spot.data$m1i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 target.spot.data$Tsseverity &lt;= 1] &lt;-
+  target.spot.data$Tsseverity[target.spot.data$scale==&quot;Scale 0-5&quot;&amp;
+                          target.spot.data$Tsseverity &lt;= 1]*10
+target.spot.data$m1i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 target.spot.data$Tsseverity &gt; 1 &amp;
+                 target.spot.data$Tsseverity &lt;= 2] &lt;- 10 +
+  (target.spot.data$Tsseverity[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
+                           target.spot.data$Tsseverity &gt; 1 &amp;
+                           target.spot.data$Tsseverity &lt;= 2]-1)*15
+target.spot.data$m1i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 target.spot.data$Tsseverity &gt; 2 ] &lt;- 25 +
+  (target.spot.data$Tsseverity[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
+                           target.spot.data$Tsseverity &gt; 2]-2)*25
+# Control
+target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 target.spot.data$TSseverityCont &lt;= 1] &lt;-
+  target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-5&quot;&amp;
+                              target.spot.data$TSseverityCont &lt;= 1]*10
+target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 target.spot.data$TSseverityCont &gt; 1 &amp;
+                 target.spot.data$TSseverityCont &lt;= 2] &lt;- 10 +
+  (target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
+                               target.spot.data$TSseverityCont &gt; 1 &amp;
+                               target.spot.data$TSseverityCont &lt;= 2]-1)*15
+target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
+                 target.spot.data$TSseverityCont &gt; 2 ] &lt;- 25 +
+  (target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
+                               target.spot.data$TSseverityCont &gt; 2]-2)*25
+# SD and replications
+target.spot.data$sd1i &lt;- target.spot.data$sd2i &lt;- 20
+target.spot.data$n1i &lt;- target.spot.data$n2i &lt;- target.spot.data$replications
+</code></pre>
+
+<h3>5. Take out categorical moderators with n &lt; 5</h3>
+
+<p>Rust data</p>
+
+<pre><code class="r"># Active ingredients
+sort(table(rust.data$activeIngClean))
+</code></pre>
+
+<pre><code>## 
+##  cypr   myc  thio   azo   gly  flus tetra  dual  pyra  tebu   oth  flut 
+##     2     4     5     6     6     7    10    15    25    31    37    44 
+## mixed 
+##   132
+</code></pre>
+
+<pre><code class="r">small.ing &lt;- c(&quot;cypr&quot;, &quot;flus&quot;, &quot;thio&quot;, &quot;azo&quot;, &quot;myc&quot;)
+rust.data$activeIngClean[rust.data$activeIngClean %in% small.ing] &lt;- &quot;oth&quot;
+table(rust.data$activeIngClean)
+</code></pre>
+
+<pre><code>## 
+##  dual  flut   gly mixed   oth  pyra  tebu tetra 
+##    15    44     6   132    61    25    31    10
+</code></pre>
+
+<pre><code class="r"># Class
+sort(table(rust.data$classClean))
+</code></pre>
+
+<pre><code>## 
+## thiophanate   herbicide strobilurin       other    triazole         mma 
+##           4           6          32          34         102         146
+</code></pre>
+
+<pre><code class="r">rust.data$classClean[rust.data$classClean==&quot;thiophanate&quot;] &lt;- &quot;other&quot;
+table(rust.data$classClean)
+</code></pre>
+
+<pre><code>## 
+##   herbicide         mma       other strobilurin    triazole 
+##           6         146          38          32         102
+</code></pre>
+
+<pre><code class="r"># R-stage
+sort(table(rust.data$growthStateClean))
+</code></pre>
+
+<pre><code>## 
+##       2       V       1       4 unknown       5      1+      2+       3 
+##       8      10      11      16      18      27      51      75     108
+</code></pre>
+
+<pre><code class="r"># Applications 
+sort(table(rust.data$applicationsNumb))
+</code></pre>
+
+<pre><code>## 
+##   5   3   1   2 
+##   6  15 133 170
+</code></pre>
+
+<p>Yield data</p>
+
+<pre><code class="r"># Applications
+sort(table(yield.data$applicationsNumb))
+</code></pre>
+
+<pre><code>## 
+##   5   3   2   1 
+##   3  22 241 254
+</code></pre>
+
+<pre><code class="r">yield.data &lt;- yield.data[yield.data$applicationsNumb!=5,]
+# R-stage
+sort(table(yield.data$growthStateClean))
+</code></pre>
+
+<pre><code>## 
+##       V       4       1       2 unknown      1+       5      2+       3 
+##       4      16      17      22      23      57      63     123     192
+</code></pre>
+
+<pre><code class="r">yield.data &lt;- yield.data[yield.data$growthStateClean!=&quot;V&quot;,]
+# Active ingredients
+sort(table(yield.data$activeIngClean))
+</code></pre>
+
+<pre><code>## 
+##   gly  cypr  flus  thio   myc   azo tetra  dual  pyra  tebu   oth  flut 
+##     2     6     7    10    11    27    35    42    46    48    52    63 
+## mixed 
+##   164
+</code></pre>
+
+<pre><code class="r">yield.data$activeIngClean[yield.data$activeIngClean==&quot;gly&quot;] &lt;- &quot;oth&quot;
+sort(table(yield.data$activeIngClean))
+</code></pre>
+
+<pre><code>## 
+##  cypr  flus  thio   myc   azo tetra  dual  pyra  tebu   oth  flut mixed 
+##     6     7    10    11    27    35    42    46    48    54    63   164
+</code></pre>
+
+<pre><code class="r"># Class
+sort(table(yield.data$classClean))
+</code></pre>
+
+<pre><code>## 
+##   herbicide thiophanate       other strobilurin    triazole         mma 
+##           2           9          43          79         175         205
+</code></pre>
+
+<pre><code class="r">yield.data$classClean[yield.data$classClean==&quot;herbicide&quot;] &lt;- &quot;other&quot;
+sort(table(yield.data$classClean))
+</code></pre>
+
+<pre><code>## 
+## thiophanate       other strobilurin    triazole         mma 
+##           9          45          79         175         205
+</code></pre>
+
+<p>100-seed weight data</p>
+
+<pre><code class="r"># Applications and growth stage
+sort(table(seedwt.data$applicationsNumb))
+</code></pre>
+
+<pre><code>## 
+##   3   2   1 
+##   1  91 120
+</code></pre>
+
+<pre><code class="r">sort(table(seedwt.data$growthStateClean))
+</code></pre>
+
+<pre><code>## 
+##       1 unknown       5       4       2      1+      2+       3 
+##       4       9      15      16      21      23      44      80
+</code></pre>
+
+<pre><code class="r">seedwt.data &lt;- seedwt.data[seedwt.data$applicationsNumb!=3 &amp; 
+                             seedwt.data$growthStateClean!=1,]
+# Active ingredients
+sort(table(seedwt.data$activeIngClean))
+</code></pre>
+
+<pre><code>## 
+##   gly  thio  cypr   myc  dual   azo   oth tetra  pyra  tebu  flut mixed 
+##     2     2     3     3     4     9    14    17    19    19    42    73
+</code></pre>
+
+<pre><code class="r">small.ing.100 &lt;- c(&quot;gly&quot;, &quot;thio&quot; ,&quot;cypr&quot;, &quot;myc&quot;, &quot;dual&quot;)
+seedwt.data$activeIngClean[seedwt.data$activeIngClean %in% small.ing.100] &lt;- &quot;oth&quot;
+sort(table(seedwt.data$activeIngClean))
+</code></pre>
+
+<pre><code>## 
+##   azo tetra  pyra  tebu   oth  flut mixed 
+##     9    17    19    19    28    42    73
+</code></pre>
+
+<pre><code class="r"># Class
+sort(table(seedwt.data$classClean))
+</code></pre>
+
+<pre><code>## 
+##   herbicide thiophanate       other strobilurin         mma    triazole 
+##           2           2          12          24          78          89
+</code></pre>
+
+<pre><code class="r">small.class.100 &lt;- c(&quot;herbicide&quot;, &quot;thiophanate&quot;)
+seedwt.data$classClean[seedwt.data$classClean %in% small.class.100] &lt;- &quot;other&quot;
+sort(table(seedwt.data$classClean))
+</code></pre>
+
+<pre><code>## 
+##       other strobilurin         mma    triazole 
+##          16          24          78          89
+</code></pre>
+
+<h3>6. Calculate effect sizes</h3>
+
+<p>Overall means (raw mean difference)</p>
+
+<pre><code class="r">rust.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+                    sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                    data = rust.data)
+yield.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+                     sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                     data = yield.data)
+seedwt.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+                      sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                      data = seedwt.data)
+cerco.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+                              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                              data = cerco.data)
+target.spot.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+                              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                              data = target.spot.data)
+</code></pre>
+
+<p>Standardized mean difference</p>
+
+<pre><code class="r">rust.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i, 
+              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+              data = rust.data)
+yield.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i, 
+                     sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                     data = yield.data)
+seedwt.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i, 
+                             sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                             data = seedwt.data)
+</code></pre>
+
+<h3>7. Save files for analysis</h3>
+
+<pre><code class="r">save(rust.data.SMD, yield.data.SMD, seedwt.data.SMD,
+     rust.data.MD, yield.data.MD, seedwt.data.MD,
+     cerco.data.MD, target.spot.data.MD,
+     file=&quot;data/output_data/data_cleaned.R&quot;)
+</code></pre>
+
+<h3>Footer</h3>
+
+<p>Spun with ezspin(&ldquo;programs/data_processing.R&rdquo;, out_dir=&ldquo;output&rdquo;, fig_dir=&ldquo;figures&rdquo;, keep_md=FALSE)</p>
+
+<p>Session Info:</p>
+
+<pre><code class="r">sessionInfo()
+</code></pre>
+
+<pre><code>## R version 3.3.0 (2016-05-03)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.10.5 (Yosemite)
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] metafor_1.9-8 Matrix_1.2-6  doBy_4.5-15   knitr_1.13    ezknitr_0.4  
+## 
+## loaded via a namespace (and not attached):
+##  [1] lattice_0.20-33   R.methodsS3_1.7.1 MASS_7.3-45      
+##  [4] grid_3.3.0        formatR_1.4       magrittr_1.5     
+##  [7] evaluate_0.9      stringi_1.1.1     R.oo_1.20.0      
+## [10] R.utils_2.3.0     tools_3.3.0       stringr_1.0.0    
+## [13] markdown_0.7.7
+</code></pre>
+
+</body>
+
+</html>

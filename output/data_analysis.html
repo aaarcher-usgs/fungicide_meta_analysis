@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Data analysis</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>Data analysis</h1>
+
+<h3>Preamble</h3>
+
+<p>Load Libraries</p>
+
+<pre><code class="r">library(ezknitr)
+library(knitr)
+library(metafor)
+</code></pre>
+
+<p>Clear environment</p>
+
+<pre><code class="r">remove(list=ls())
+</code></pre>
+
+<p>Document settings</p>
+
+<pre><code class="r">opts_chunk$set(fig.width = 6, fig.height = 4)
+</code></pre>
+
+<h3>Load data</h3>
+
+<pre><code class="r">load(file=&quot;data/output_data/data_cleaned.R&quot;)
+</code></pre>
+
+<h2>Meta-analysis of rust severity</h2>
+
+<p>Overall raw mean difference</p>
+
+<pre><code class="r">overall.rust &lt;- rma.uni(yi = yi, vi = vi, data = rust.data.MD, method=&quot;ML&quot;)
+summary(overall.rust)
+</code></pre>
+
+<pre><code>## 
+## Random-Effects Model (k = 324; tau^2 estimator: ML)
+## 
+##     logLik    deviance         AIC         BIC        AICc  
+## -1558.2544    808.4819   3120.5088   3128.0703   3120.5462  
+## 
+## tau^2 (estimated amount of total heterogeneity): 690.3940 (SE = 69.8629)
+## tau (square root of estimated tau^2 value):      26.2753
+## I^2 (total heterogeneity / total variability):   78.16%
+## H^2 (total variability / sampling variability):  4.58
+## 
+## Test for Heterogeneity: 
+## Q(df = 323) = 1604.9995, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate       se     zval     pval    ci.lb    ci.ub          
+## -35.7289   1.6571 -21.5611   &lt;.0001 -38.9768 -32.4810      *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Active Ingredient on SMD</p>
+
+<pre><code class="r">rust.active &lt;- rma.uni(yi = yi, vi = vi, data=rust.data.SMD,
+                      method = &quot;REML&quot;, mods = ~activeIngClean-1)
+summary(rust.active)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 324; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -493.8552   987.7104  1005.7104  1039.5121  1006.2986  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.4897 (SE = 0.0915)
+## tau (square root of estimated tau^2 value):             0.6998
+## I^2 (residual heterogeneity / unaccounted variability): 42.84%
+## H^2 (unaccounted variability / sampling variability):   1.75
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 316) = 569.6912, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4,5,6,7,8): 
+## QM(df = 8) = 539.9271, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                      estimate      se      zval    pval    ci.lb    ci.ub
+## activeIngCleandual    -3.1664  0.2749  -11.5191  &lt;.0001  -3.7052  -2.6277
+## activeIngCleanflut    -1.5948  0.1692   -9.4244  &lt;.0001  -1.9264  -1.2631
+## activeIngCleangly     -0.4996  0.4075   -1.2259  0.2202  -1.2982   0.2991
+## activeIngCleanmixed   -1.1789  0.0940  -12.5366  &lt;.0001  -1.3632  -0.9946
+## activeIngCleanoth     -1.0471  0.1364   -7.6789  &lt;.0001  -1.3144  -0.7798
+## activeIngCleanpyra    -1.2782  0.2165   -5.9047  &lt;.0001  -1.7025  -0.8539
+## activeIngCleantebu    -1.4347  0.1967   -7.2930  &lt;.0001  -1.8202  -1.0491
+## activeIngCleantetra   -1.2268  0.3438   -3.5682  0.0004  -1.9007  -0.5529
+##                         
+## activeIngCleandual   ***
+## activeIngCleanflut   ***
+## activeIngCleangly       
+## activeIngCleanmixed  ***
+## activeIngCleanoth    ***
+## activeIngCleanpyra   ***
+## activeIngCleantebu   ***
+## activeIngCleantetra  ***
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Class on SMD</p>
+
+<pre><code class="r">rust.class &lt;- rma.uni(yi = yi, vi = vi, data=rust.data.SMD,
+                      method = &quot;REML&quot;, mods = ~classClean-1)
+summary(rust.class)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 324; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -517.2490  1034.4979  1046.4979  1069.0891  1046.7672  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.6891 (SE = 0.1075)
+## tau (square root of estimated tau^2 value):             0.8301
+## I^2 (residual heterogeneity / unaccounted variability): 51.35%
+## H^2 (unaccounted variability / sampling variability):   2.06
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 319) = 657.1024, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4,5): 
+## QM(df = 5) = 438.5411, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                        estimate      se      zval    pval    ci.lb
+## classCleanherbicide     -0.5089  0.4467   -1.1393  0.2546  -1.3844
+## classCleanmma           -1.3931  0.0967  -14.4137  &lt;.0001  -1.5825
+## classCleanother         -1.0389  0.1871   -5.5526  &lt;.0001  -1.4056
+## classCleanstrobilurin   -1.0313  0.2053   -5.0227  &lt;.0001  -1.4337
+## classCleantriazole      -1.5641  0.1188  -13.1693  &lt;.0001  -1.7969
+##                          ci.ub     
+## classCleanherbicide     0.3666     
+## classCleanmma          -1.2037  ***
+## classCleanother        -0.6722  ***
+## classCleanstrobilurin  -0.6288  ***
+## classCleantriazole     -1.3313  ***
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Growth stage on SMD</p>
+
+<pre><code class="r">rust.growth.stage &lt;- rma.uni(yi = yi, vi = vi, 
+                            data=rust.data.SMD[rust.data.SMD$growthStateClean!=&quot;unknown&quot;,],
+                            method = &quot;REML&quot;, mods = ~growthStateClean-1)
+summary(rust.growth.stage)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 306; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -450.8324   901.6647   919.6647   952.9385   920.2897  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.4318 (SE = 0.0890)
+## tau (square root of estimated tau^2 value):             0.6571
+## I^2 (residual heterogeneity / unaccounted variability): 39.90%
+## H^2 (unaccounted variability / sampling variability):   1.66
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 298) = 507.3941, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4,5,6,7,8): 
+## QM(df = 8) = 554.8558, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                     estimate      se      zval    pval    ci.lb    ci.ub
+## growthStateClean1    -0.8845  0.3240   -2.7298  0.0063  -1.5195  -0.2494
+## growthStateClean1+   -1.6147  0.1527  -10.5715  &lt;.0001  -1.9141  -1.3153
+## growthStateClean2    -2.4927  0.4070   -6.1241  &lt;.0001  -3.2905  -1.6949
+## growthStateClean2+   -2.1057  0.1263  -16.6721  &lt;.0001  -2.3532  -1.8581
+## growthStateClean3    -0.9136  0.0983   -9.2900  &lt;.0001  -1.1063  -0.7209
+## growthStateClean4    -1.0194  0.2496   -4.0848  &lt;.0001  -1.5086  -0.5303
+## growthStateClean5    -0.8014  0.1991   -4.0250  &lt;.0001  -1.1916  -0.4111
+## growthStateCleanV    -0.3088  0.3097   -0.9972  0.3187  -0.9157   0.2981
+##                        
+## growthStateClean1    **
+## growthStateClean1+  ***
+## growthStateClean2   ***
+## growthStateClean2+  ***
+## growthStateClean3   ***
+## growthStateClean4   ***
+## growthStateClean5   ***
+## growthStateCleanV      
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of application number on SMD</p>
+
+<pre><code class="r">table(rust.data.SMD$applicationsNumb)
+</code></pre>
+
+<pre><code>## 
+##   1   2   3   5 
+## 133 170  15   6
+</code></pre>
+
+<pre><code class="r">rust.applications &lt;- rma.uni(yi = yi, vi = vi, 
+                            data=rust.data.SMD,
+                            method = &quot;REML&quot;, mods = ~applicationsNumb)
+summary(rust.applications)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 324; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -525.4152  1050.8304  1056.8304  1068.1541  1056.9059  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.7201 (SE = 0.1095)
+## tau (square root of estimated tau^2 value):             0.8486
+## I^2 (residual heterogeneity / unaccounted variability): 52.48%
+## H^2 (unaccounted variability / sampling variability):   2.10
+## R^2 (amount of heterogeneity accounted for):            0.24%
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 322) = 677.7382, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient(s) 2): 
+## QM(df = 1) = 2.1017, p-val = 0.1471
+## 
+## Model Results:
+## 
+##                   estimate      se     zval    pval    ci.lb    ci.ub     
+## intrcpt            -1.1351  0.1622  -6.9990  &lt;.0001  -1.4530  -0.8173  ***
+## applicationsNumb   -0.1276  0.0880  -1.4497  0.1471  -0.3000   0.0449     
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<pre><code class="r"># Categorical
+rust.data.SMD$applicationsCat &lt;- as.character(rust.data.SMD$applicationsNumb)
+rust.applications.cat &lt;- rma.uni(yi = yi, vi = vi, 
+                            data=rust.data.SMD,
+                            method = &quot;REML&quot;, mods = ~applicationsCat-1)
+summary(rust.applications.cat)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 324; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -506.4060  1012.8121  1022.8121  1041.6537  1023.0031  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.5800 (SE = 0.0983)
+## tau (square root of estimated tau^2 value):             0.7616
+## I^2 (residual heterogeneity / unaccounted variability): 47.06%
+## H^2 (unaccounted variability / sampling variability):   1.89
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 320) = 612.5926, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4): 
+## QM(df = 4) = 492.5922, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                   estimate      se      zval    pval    ci.lb    ci.ub
+## applicationsCat1   -0.9808  0.0957  -10.2483  &lt;.0001  -1.1683  -0.7932
+## applicationsCat2   -1.6748  0.0877  -19.1016  &lt;.0001  -1.8466  -1.5029
+## applicationsCat3   -1.4124  0.2966   -4.7618  &lt;.0001  -1.9937  -0.8310
+## applicationsCat5   -0.0577  0.4245   -0.1359  0.8919  -0.8896   0.7742
+##                      
+## applicationsCat1  ***
+## applicationsCat2  ***
+## applicationsCat3  ***
+## applicationsCat5     
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<h2>Meta-analysis of yield</h2>
+
+<p>Overall mean difference</p>
+
+<pre><code class="r">overall.yield &lt;- rma.uni(yi = yi, vi = vi, data = yield.data.MD, method = &quot;REML&quot;)
+summary(overall.yield)
+</code></pre>
+
+<pre><code>## 
+## Random-Effects Model (k = 513; tau^2 estimator: REML)
+## 
+##     logLik    deviance         AIC         BIC        AICc  
+## -3963.2069   7926.4138   7930.4138   7938.8904   7930.4374  
+## 
+## tau^2 (estimated amount of total heterogeneity): 119824.4635 (SE = 18147.5135)
+## tau (square root of estimated tau^2 value):      346.1567
+## I^2 (total heterogeneity / total variability):   43.49%
+## H^2 (total variability / sampling variability):  1.77
+## 
+## Test for Heterogeneity: 
+## Q(df = 512) = 887.3935, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate       se     zval     pval    ci.lb    ci.ub          
+## 525.0076  24.6017  21.3403   &lt;.0001 476.7892 573.2260      *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Active Ingredient on SMD</p>
+
+<pre><code class="r">yield.active &lt;- rma.uni(yi = yi, vi = vi, data=yield.data.SMD,
+                      method = &quot;REML&quot;, mods = ~activeIngClean-1)
+summary(yield.active)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 513; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -526.1748  1052.3496  1078.3496  1133.1654  1079.0970  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0342)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 501) = 419.8387, p-val = 0.9965
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4,5,6,7,8,9,10,11,12): 
+## QM(df = 12) = 467.2884, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                      estimate      se     zval    pval    ci.lb   ci.ub
+## activeIngCleanazo      0.2080  0.1412   1.4732  0.1407  -0.0687  0.4847
+## activeIngCleancypr     0.3131  0.2966   1.0559  0.2910  -0.2681  0.8944
+## activeIngCleandual     1.1559  0.1049  11.0143  &lt;.0001   0.9502  1.3616
+## activeIngCleanflus     0.7149  0.2806   2.5478  0.0108   0.1650  1.2649
+## activeIngCleanflut     0.7107  0.0985   7.2124  &lt;.0001   0.5176  0.9038
+## activeIngCleanmixed    0.6782  0.0583  11.6359  &lt;.0001   0.5639  0.7924
+## activeIngCleanmyc      0.7688  0.2268   3.3902  0.0007   0.3243  1.2133
+## activeIngCleanoth      0.5584  0.0990   5.6415  &lt;.0001   0.3644  0.7524
+## activeIngCleanpyra     0.6662  0.1104   6.0324  &lt;.0001   0.4497  0.8826
+## activeIngCleantebu     0.7252  0.1098   6.6039  &lt;.0001   0.5100  0.9405
+## activeIngCleantetra    0.5792  0.1244   4.6544  &lt;.0001   0.3353  0.8231
+## activeIngCleanthio     0.4634  0.2377   1.9494  0.0513  -0.0025  0.9292
+##                         
+## activeIngCleanazo       
+## activeIngCleancypr      
+## activeIngCleandual   ***
+## activeIngCleanflus     *
+## activeIngCleanflut   ***
+## activeIngCleanmixed  ***
+## activeIngCleanmyc    ***
+## activeIngCleanoth    ***
+## activeIngCleanpyra   ***
+## activeIngCleantebu   ***
+## activeIngCleantetra  ***
+## activeIngCleanthio     .
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Class on SMD</p>
+
+<pre><code class="r">yield.class &lt;- rma.uni(yi = yi, vi = vi, data=yield.data.SMD,
+                     method = &quot;REML&quot;, mods = ~classClean-1)
+summary(yield.class)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 513; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -541.6601  1083.3202  1095.3202  1120.7030  1095.4878  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.0000 (SE = 0.0339)
+## tau (square root of estimated tau^2 value):             0.0029
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 508) = 442.1905, p-val = 0.9838
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4,5): 
+## QM(df = 5) = 444.9295, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                        estimate      se     zval    pval    ci.lb   ci.ub
+## classCleanmma            0.7923  0.0511  15.5101  &lt;.0001   0.6922  0.8925
+## classCleanother          0.6390  0.1092   5.8520  &lt;.0001   0.4250  0.8530
+## classCleanstrobilurin    0.4391  0.0831   5.2835  &lt;.0001   0.2762  0.6020
+## classCleanthiophanate    0.4310  0.2514   1.7144  0.0864  -0.0617  0.9236
+## classCleantriazole       0.6775  0.0574  11.8011  &lt;.0001   0.5650  0.7900
+##                           
+## classCleanmma          ***
+## classCleanother        ***
+## classCleanstrobilurin  ***
+## classCleanthiophanate    .
+## classCleantriazole     ***
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Growth stage on SMD</p>
+
+<pre><code class="r">yield.growth.stage &lt;- rma.uni(yi = yi, vi = vi, 
+                            data=yield.data.SMD[yield.data.SMD$growthStateClean!=&quot;unknown&quot;,],
+                            method = &quot;REML&quot;, mods = ~growthStateClean-1)
+summary(yield.growth.stage)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 490; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -511.1338  1022.2675  1038.2675  1071.7077  1038.5713  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0347)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 483) = 414.1355, p-val = 0.9895
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4,5,6,7): 
+## QM(df = 7) = 443.9602, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                     estimate      se     zval    pval   ci.lb   ci.ub     
+## growthStateClean1     0.4066  0.1863   2.1828  0.0291  0.0415  0.7717    *
+## growthStateClean1+    0.7522  0.0992   7.5814  &lt;.0001  0.5577  0.9466  ***
+## growthStateClean2     0.5839  0.1554   3.7587  0.0002  0.2794  0.8884  ***
+## growthStateClean2+    0.7995  0.0643  12.4296  &lt;.0001  0.6734  0.9256  ***
+## growthStateClean3     0.6083  0.0540  11.2615  &lt;.0001  0.5024  0.7142  ***
+## growthStateClean4     1.6593  0.2212   7.5005  &lt;.0001  1.2257  2.0929  ***
+## growthStateClean5     0.5119  0.0934   5.4787  &lt;.0001  0.3288  0.6950  ***
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of application number on SMD</p>
+
+<pre><code class="r">table(yield.data.SMD$applicationsNumb)
+</code></pre>
+
+<pre><code>## 
+##   1   2   3 
+## 254 238  21
+</code></pre>
+
+<pre><code class="r">yield.applications &lt;- rma.uni(yi = yi, vi = vi, 
+                            data=yield.data.SMD,
+                            method = &quot;REML&quot;, mods = ~applicationsNumb)
+summary(yield.applications)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 513; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -546.4379  1092.8757  1098.8757  1111.5848  1098.9230  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.0000 (SE = 0.0338)
+## tau (square root of estimated tau^2 value):             0.0025
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## R^2 (amount of heterogeneity accounted for):            0.00%
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 511) = 448.0084, p-val = 0.9792
+## 
+## Test of Moderators (coefficient(s) 2): 
+## QM(df = 1) = 8.5465, p-val = 0.0035
+## 
+## Model Results:
+## 
+##                   estimate      se    zval    pval   ci.lb   ci.ub     
+## intrcpt             0.4211  0.0944  4.4582  &lt;.0001  0.2360  0.6062  ***
+## applicationsNumb    0.1667  0.0570  2.9234  0.0035  0.0550  0.2785   **
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<pre><code class="r"># Categorical
+yield.data.SMD$applicationsCat &lt;- as.character(yield.data.SMD$applicationsNumb)
+yield.applications.cat &lt;- rma.uni(yi = yi, vi = vi, 
+                                data=yield.data.SMD,
+                                method = &quot;REML&quot;, mods = ~applicationsCat-1)
+summary(yield.applications.cat)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 513; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -544.2503  1088.5007  1096.5007  1113.4383  1096.5799  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.0000 (SE = 0.0338)
+## tau (square root of estimated tau^2 value):             0.0027
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 510) = 444.8633, p-val = 0.9827
+## 
+## Test of Moderators (coefficient(s) 1,2,3): 
+## QM(df = 3) = 442.2577, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                   estimate      se     zval    pval   ci.lb   ci.ub     
+## applicationsCat1    0.5676  0.0469  12.1043  &lt;.0001  0.4757  0.6595  ***
+## applicationsCat2    0.7965  0.0478  16.6646  &lt;.0001  0.7029  0.8902  ***
+## applicationsCat3    0.6833  0.1609   4.2466  &lt;.0001  0.3679  0.9987  ***
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<h2>Meta-analysis of seedwt</h2>
+
+<p>Overall mean difference</p>
+
+<pre><code class="r">overall.seedwt &lt;- rma.uni(yi = yi, vi = vi, data = seedwt.data.MD, method = &quot;REML&quot;)
+summary(overall.seedwt)
+</code></pre>
+
+<pre><code>## 
+## Random-Effects Model (k = 207; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -275.9736   551.9472   555.9472   562.6030   556.0063  
+## 
+## tau^2 (estimated amount of total heterogeneity): 0.0028 (SE = 0.0014)
+## tau (square root of estimated tau^2 value):      0.0529
+## I^2 (total heterogeneity / total variability):   14.28%
+## H^2 (total variability / sampling variability):  1.17
+## 
+## Test for Heterogeneity: 
+## Q(df = 206) = 221.5038, p-val = 0.2183
+## 
+## Model Results:
+## 
+## estimate       se     zval     pval    ci.lb    ci.ub          
+##   0.1302   0.0119  10.9485   &lt;.0001   0.1069   0.1535      *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Active Ingredient on SMD</p>
+
+<pre><code class="r">seedwt.active &lt;- rma.uni(yi = yi, vi = vi, data=seedwt.data.SMD,
+                       method = &quot;REML&quot;, mods = ~activeIngClean-1)
+summary(seedwt.active)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 207; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -178.4013   356.8026   372.8026   399.1891   373.5565  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0534)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 200) = 112.2592, p-val = 1.0000
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4,5,6,7): 
+## QM(df = 7) = 125.1656, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                      estimate      se    zval    pval    ci.lb   ci.ub
+## activeIngCleanazo      0.1393  0.2361  0.5899  0.5553  -0.3235  0.6020
+## activeIngCleanflut     0.7203  0.1159  6.2129  &lt;.0001   0.4931  0.9475
+## activeIngCleanmixed    0.5333  0.0853  6.2502  &lt;.0001   0.3661  0.7005
+## activeIngCleanoth      0.4773  0.1372  3.4792  0.0005   0.2084  0.7461
+## activeIngCleanpyra     0.5750  0.1668  3.4481  0.0006   0.2482  0.9018
+## activeIngCleantebu     0.7533  0.1704  4.4197  &lt;.0001   0.4192  1.0873
+## activeIngCleantetra    0.3335  0.1751  1.9042  0.0569  -0.0098  0.6767
+##                         
+## activeIngCleanazo       
+## activeIngCleanflut   ***
+## activeIngCleanmixed  ***
+## activeIngCleanoth    ***
+## activeIngCleanpyra   ***
+## activeIngCleantebu   ***
+## activeIngCleantetra    .
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Class on SMD</p>
+
+<pre><code class="r">seedwt.class &lt;- rma.uni(yi = yi, vi = vi, data=seedwt.data.SMD,
+                      method = &quot;REML&quot;, mods = ~classClean-1)
+summary(seedwt.class)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 207; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -181.2380   362.4760   372.4760   389.0421   372.7806  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0530)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 203) = 114.2499, p-val = 1.0000
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4): 
+## QM(df = 4) = 123.1749, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                        estimate      se    zval    pval    ci.lb   ci.ub
+## classCleanmma            0.5990  0.0832  7.1965  &lt;.0001   0.4358  0.7621
+## classCleanother          0.2338  0.1761  1.3275  0.1844  -0.1114  0.5789
+## classCleanstrobilurin    0.3470  0.1460  2.3757  0.0175   0.0607  0.6332
+## classCleantriazole       0.6278  0.0785  7.9987  &lt;.0001   0.4740  0.7816
+##                           
+## classCleanmma          ***
+## classCleanother           
+## classCleanstrobilurin    *
+## classCleantriazole     ***
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of Growth stage on SMD</p>
+
+<pre><code class="r">seedwt.growth.stage &lt;- rma.uni(yi = yi, vi = vi, 
+                             data=seedwt.data.SMD[seedwt.data.SMD$growthStateClean!=&quot;unknown&quot;,],
+                             method = &quot;REML&quot;, mods = ~growthStateClean-1)
+summary(seedwt.growth.stage)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 198; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -161.0261   322.0522   336.0522   358.8546   336.6609  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0546)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 192) = 86.8329, p-val = 1.0000
+## 
+## Test of Moderators (coefficient(s) 1,2,3,4,5,6): 
+## QM(df = 6) = 149.4960, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                     estimate      se    zval    pval    ci.lb   ci.ub     
+## growthStateClean1+    0.8785  0.1589  5.5275  &lt;.0001   0.5670  1.1900  ***
+## growthStateClean2     0.2754  0.1561  1.7640  0.0777  -0.0306  0.5813    .
+## growthStateClean2+    0.3292  0.1077  3.0565  0.0022   0.1181  0.5402   **
+## growthStateClean3     0.5470  0.0823  6.6499  &lt;.0001   0.3858  0.7082  ***
+## growthStateClean4     1.4361  0.1977  7.2647  &lt;.0001   1.0486  1.8235  ***
+## growthStateClean5     0.5853  0.1900  3.0811  0.0021   0.2130  0.9576   **
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p>Effects of application number on SMD</p>
+
+<pre><code class="r">table(seedwt.data.SMD$applicationsNumb)
+</code></pre>
+
+<pre><code>## 
+##   1   2 
+## 116  91
+</code></pre>
+
+<pre><code class="r">seedwt.applications &lt;- rma.uni(yi = yi, vi = vi, 
+                             data=seedwt.data.SMD,
+                             method = &quot;REML&quot;, mods = ~applicationsNumb)
+summary(seedwt.applications)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 207; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -183.4827   366.9653   372.9653   382.9344   373.0847  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0527)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## R^2 (amount of heterogeneity accounted for):            NA%
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 205) = 116.4111, p-val = 1.0000
+## 
+## Test of Moderators (coefficient(s) 2): 
+## QM(df = 1) = 4.3252, p-val = 0.0376
+## 
+## Model Results:
+## 
+##                   estimate      se    zval    pval    ci.lb   ci.ub   
+## intrcpt             0.2443  0.1555  1.5708  0.1162  -0.0605  0.5491   
+## applicationsNumb    0.2140  0.1029  2.0797  0.0376   0.0123  0.4156  *
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<pre><code class="r"># Categorical
+seedwt.data.SMD$applicationsCat &lt;- as.character(seedwt.data.SMD$applicationsNumb)
+seedwt.applications.cat &lt;- rma.uni(yi = yi, vi = vi, 
+                                 data=seedwt.data.SMD,
+                                 method = &quot;REML&quot;, mods = ~applicationsCat-1)
+summary(seedwt.applications.cat)
+</code></pre>
+
+<pre><code>## 
+## Mixed-Effects Model (k = 207; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -183.4827   366.9653   372.9653   382.9344   373.0847  
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0527)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 205) = 116.4111, p-val = 1.0000
+## 
+## Test of Moderators (coefficient(s) 1,2): 
+## QM(df = 2) = 121.0136, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                   estimate      se    zval    pval   ci.lb   ci.ub     
+## applicationsCat1    0.4583  0.0673  6.8045  &lt;.0001  0.3263  0.5903  ***
+## applicationsCat2    0.6722  0.0778  8.6436  &lt;.0001  0.5198  0.8246  ***
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<h2>Meta-analysis of Cercospora severity</h2>
+
+<p>Overall mean difference</p>
+
+<pre><code class="r">overall.cerco &lt;- rma.uni(yi = yi, vi = vi, data = cerco.data.MD, method = &quot;REML&quot;)
+summary(overall.cerco)
+</code></pre>
+
+<pre><code>## 
+## Random-Effects Model (k = 40; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -151.1431   302.2862   306.2862   309.6134   306.6196  
+## 
+## tau^2 (estimated amount of total heterogeneity): 0 (SE = 57.1784)
+## tau (square root of estimated tau^2 value):      0
+## I^2 (total heterogeneity / total variability):   0.00%
+## H^2 (total variability / sampling variability):  1.00
+## 
+## Test for Heterogeneity: 
+## Q(df = 39) = 14.4324, p-val = 0.9999
+## 
+## Model Results:
+## 
+## estimate       se     zval     pval    ci.lb    ci.ub          
+##  -9.6508   2.5198  -3.8300   0.0001 -14.5894  -4.7121      *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<h2>Meta-analysis of Target spot severity</h2>
+
+<p>Overall mean difference</p>
+
+<pre><code class="r">overall.target.spot &lt;- rma.uni(yi = yi, vi = vi, data = target.spot.data.MD, method = &quot;REML&quot;)
+summary(overall.target.spot)
+</code></pre>
+
+<pre><code>## 
+## Random-Effects Model (k = 31; tau^2 estimator: REML)
+## 
+##    logLik   deviance        AIC        BIC       AICc  
+## -135.3497   270.6994   274.6994   277.5018   275.1439  
+## 
+## tau^2 (estimated amount of total heterogeneity): 285.6250 (SE = 125.3878)
+## tau (square root of estimated tau^2 value):      16.9004
+## I^2 (total heterogeneity / total variability):   58.82%
+## H^2 (total variability / sampling variability):  2.43
+## 
+## Test for Heterogeneity: 
+## Q(df = 30) = 72.8437, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate       se     zval     pval    ci.lb    ci.ub          
+## -18.9129   3.9579  -4.7785   &lt;.0001 -26.6703 -11.1555      *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<h2>Save for graphing</h2>
+
+<pre><code class="r">save(overall.rust, overall.yield, overall.seedwt, overall.cerco, overall.target.spot,
+     rust.active, rust.class, rust.growth.stage, rust.applications, rust.applications.cat,
+     yield.active, yield.class, yield.growth.stage, yield.applications, yield.applications.cat,
+     seedwt.active, seedwt.class, seedwt.growth.stage, seedwt.applications, seedwt.applications.cat,
+     file=&quot;data/output_data/analysis_results.R&quot;)
+</code></pre>
+
+<h3>Footer</h3>
+
+<p>Spun with ezspin(&ldquo;programs/data_analysis.R&rdquo;, out_dir=&ldquo;output&rdquo;, fig_dir=&ldquo;figures&rdquo;, keep_md=FALSE)</p>
+
+<p>Session Info:</p>
+
+<pre><code class="r">sessionInfo()
+</code></pre>
+
+<pre><code>## R version 3.3.0 (2016-05-03)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.10.5 (Yosemite)
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] ggplot2_2.1.0 metafor_1.9-8 Matrix_1.2-6  knitr_1.13    ezknitr_0.4  
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.5       lattice_0.20-33   mime_0.4         
+##  [4] R.methodsS3_1.7.1 plyr_1.8.4        grid_3.3.0       
+##  [7] gtable_0.2.0      formatR_1.4       magrittr_1.5     
+## [10] scales_0.4.0      evaluate_0.9      stringi_1.1.1    
+## [13] R.oo_1.20.0       R.utils_2.3.0     labeling_0.3     
+## [16] tools_3.3.0       stringr_1.0.0     munsell_0.4.3    
+## [19] markdown_0.7.7    colorspace_1.2-6
+</code></pre>
+
+</body>
+
+</html>
