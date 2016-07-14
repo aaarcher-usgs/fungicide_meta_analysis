@@ -1,7 +1,7 @@
 # fungicide_meta_analysis
 Meta-analysis of the effects of fungicide to control soybean rust in the southeastern US
 
-This codebook.txt file was generated on <20160714> by <AA ArchMiller>
+This codebook.txt file was generated on 20160714 by A.A. ArchMiller
 
 
 -------------------
@@ -18,16 +18,14 @@ United States 2004-2014:  A Meta-Analysis
 
 
   Principal Data Contact Information
-        Name: A.A. ArchMiller
-           Institution: University of Minnesota-Twin Cities
-           Address: Department of Fish, Wildlife, & Cons Bio; 135 Skok Hall; 2003 Upper Buford Circle; Saint Paul 55108
+        A.A. ArchMiller
+           Department of Fish, Wildlife, & Cons Bio; University of Minnesota; 135 Skok Hall; 2003 Upper Buford Circle; Saint Paul 55108
            Email: althea.archmiller@gmail.com
 
 
-  Corresponding Author Contact Information
-        Name: Mary Delaney
-           Institution:Auburn University
-           Address: Department of Entomology and Plant Pathology, Auburn University, AL 36849 USA
+  Manuscript Corresponding Author Contact Information
+        Mary Delaney
+          Department of Entomology and Plant Pathology, Auburn University, AL 36849 USA
            Email: delanma@auburn.edu
 
 
@@ -63,6 +61,7 @@ United States 2004-2014: A Meta-Analysis. Journal of Plant Disease
 
 5. Was data derived from another source?
 References used for meta analysis:
+
 Allen, T.W.  2011a.  Evaluation of foliar fungicide applications to prevent yield loss from aerial web blight in Mississippi, 2010a.  Plant Dis. Manag. Rep. 5:FC120.  Online publication. doi:  10.1094/PDMR05.  
 
 Allen, T.W.  2011b.  Evaluation of foliar fungicide applications to prevent yield loss from aerial web blight in Mississippi, 2010b.  Plant Dis. Manag. Rep. 5:FC119.  Online publication. doi: 10.1094/PDMR05. 
@@ -211,47 +210,69 @@ DATA & FILE OVERVIEW
 
 1. File List
    A. Folder:Programs (All written in R-Oxygen programming language)
+
       1. data_analysis.R
+      
         Code used to for meta-analysis, including raw differences for soybean rust severity, 
         yield, 100-seed-weight, and ancillary diseases (Cercospora blight and target spot) and 
         the standardized mean differences for these variables under differing moderator variables.
+        
       2. data_processing.R
+      
         Code used to take the raw data and clean it up, make moderator variable names consistent,
         and calculated the effect sizes for each study
+        
       3. publication_bias.R
+      
         Code used to calculate the fail safe numbers for soybean rust severity, 
         yield, 100-seed-weight, and ancillary diseases
+        
       4. result_graphing.R
+      
         Code used to create the graphs used in the manuscript
+        
       5. sensitivity_analysis.R
+      
         Code used to determine any influential data points and to test for changes in the analysis 
         conclusions without influential data points. Also tests the conclusions when study is treated 
         as a random variable
 
 
         
-   B. Folder:Data        
+   B. Folder: Data     
+   
       1. workspace.csv
+      
         This is the data that is cleaned up and pulled into the R program "data_processing.R"
+        
       2. workspace.xlsx
+      
         This is the data (copy of workspace.csv) that also includes a tab for references
-      Folder: output_data
+        
+      3. Folder: output_data
+      
         i. analysis_results.R
+        
           This is the dataset that contains the results of the analysis from the R program "data_analysis.R"
+          
         ii. data_cleaned.R
+        
           This is the dataset with cleaned and consistent data with effect sizes that is exported from the
           R program "data_processing.R"
 
 
         
    C. Folder: output  
+   
     This folder contains the spun (knitr package) code and output from all the R programs listed above
+    
       1. data_analysis.html
       2. data_processing.R
       3. publication_bias.R
       4. result_graphing.R
       5. sensitivity_analysis.R
-      Folder: figures
+      6. Folder: figures
+      
         This folder contains all the figures that are produced by spinning the R program "result_graphing.R"
 
 
@@ -280,7 +301,7 @@ METHODOLOGICAL INFORMATION
   We recorded data from each study including a unique study ID, study year, study location (state), fungicide trade name, active ingredients, fungicide class, number of applications, the growth stage of the soybean plants at each application, number of experimental replications, disease severity (i.e., SBR, Cercospora blight, and target spot), soybean yield, and 100-seed-weight. 
 
 
-2. Methods for processing the data: <describe how the submitted data were generated from the raw or collected data>
+2. Methods for processing the data:
   First, the full raw data was subset to include only relevant fields needed for analysis. Secondly, moderator categorical variables and names were standardized. When there were less than 5 effect sizes for a particular moderator category, those records were included in the "other" category. After these steps, data was subset into five separate files, including one dataset each for the soybean rust data; the yield data; the 100-seed-weight data; the Cercospora blight data and the target spot data.
 
   Disease severity was either reported directly in percentages or on varying scales, so we transformed disease severity scales into percentages for cross-study comparisons. Values on the 0-5 scale represented disease severity as follows: 0 to 1 = 0 to 10%, >1 to 2 = 10 to 25%, >2 to 3 = 25 to 50%, >3 to 4 = 50 to 75%, and >4 to 5 = 75 to 100%. Values on the 0-8 scale represented disease severity as follows: 0 to 1 = 0 to 2.5%, >1 to 2 = 2.5 to 5%, >2 to 3 = 5 to 10%, >3 to 4 = 10-15%, >4 to 5 = 15 to 25%, >5 to 6 = 25 to 35%, >6 to 7 = 35 to 67.5%, and >7 to 8 = 67.5 to 100%. Soybean rust values on the 0-10 scale represented severity as follows: 1 to 3 = 0 to 2.5%, >3 to 4 = 2.5 to 5%, >4 to 5 = 5 to 10%, >5 to 6 = 10-15%, >6 to 7 = 15 to 25%, >7 to 8 = 25 to 35%, >8 to 9 = 35 to 67.5%, >9 to 10 = 67.5 to 100%. We imputed percentages from these scalar values by assuming linear trends over the range in scalar values. 
@@ -306,12 +327,10 @@ METHODOLOGICAL INFORMATION
 
 
 
-
 -----------------------------------------
 DATA-SPECIFIC INFORMATION FOR: workspace.csv and workspace.xlsx
 -----------------------------------------
-<create sections for each dataset included>
-
+The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") are identical. The additional tab in workspace.xlsx includes a list of the references that corresponds with variables "Reference" and "ReferenceNumb"
 
 1. Number of variables: 56
 
@@ -319,130 +338,186 @@ DATA-SPECIFIC INFORMATION FOR: workspace.csv and workspace.xlsx
 2. Number of cases/rows: 569
 
 
-
-
 3. Missing data codes:
      NA       Data was not available in the corresponding publication for that variable
 
-
 4. Variable List
-    A. FID
+
+    A. FID:
        Unique number for each record
 
-    B. Reference 
+    B. Reference:
        Short identifier for each reference (cross-references with "Complete References" tab in "workspace.xlsx")
 
-    C. ReferenceNumb
+    C. ReferenceNumb:
        Unique number for each reference (cross-references with "Complete References" tab in "workspace.xlsx")
 
-    D. studyYear
+    D. studyYear:
        Year in which study was conducted
        
-    E. State
+    E. State:
        State in which study was conducted
        
-    F. location
+    F. location:
        Study location
        
-    G. soil
+    G. soil:
        Soil type at study location
        
-    H. planted.date
+    H. planted.date:
        Date the soybean was planted
        
-    I. Date.rust.first.appeared
+    I. Date.rust.first.appeared:
        The date that soybean rust was first detected
        
-    J. Growth.stage.applied
+    J. Growth.stage.applied:
        The growth stage(s) during which fungicide was applied to the soybean plants
        
-    K. applicationsNumb
+    K. applicationsNumb:
        The total number of fungicide applications
        
-    L. trade.name
+    L. trade.name:
        The specific fungicide name
-            "fb" means followed by (i.e., more than 1 application)
-            "+" means mixture 
             
-    M. active.ingredient
+            * "fb" means followed by (i.e., more than 1 application)
+            * "+" means mixture 
+            
+    M. active.ingredient:
        The specific fungicide active ingredient(s)
-            "fb" means followed by (i.e., more than 1 application)
-            "+" means mixture 
+
+            * "fb" means followed by (i.e., more than 1 application)
+            * "+" means mixture 
             
-    N. active.ingredient.coded
+    N. active.ingredient.coded:
         The coded identifier for each active ingredient
-            "fb" means followed by (i.e., more than 1 application)
-            "+" means mixture 
+
+            * "fb" means followed by (i.e., more than 1 application)
+            * "+" means mixture 
             
-    O. class
+    O. class:
         The specific fungicide class
         
-    P. class.code
+    P. class.code:
         The specific fungicide class coded/abbreviated
         
-    Q. amount
+    Q. amount:
         The amount of fungicide applied in either fluid oz per acre or pound per acre
         
-    R. stats
+    R. stats:
         Experimental protocol. In all cases, rcb = Randomized Complete Block
         
-    S. replications
+    S. replications:
        Number of replcations for each treatment
 
-    T. mean.sep
+    T. mean.sep:
        The significance level and statistical test used to test for mean separation between treatment and control 
        
-    U. rustSeverPerc
+    U. rustSeverPerc:
        The mean percentage of rust severity for treated plants
     
-    V. rustSeverPercLSD
+    V. rustSeverPercLSD:
        Fisher's least squared difference for rust severity in percentage 
        
-    W. rustSeverPercCont
+    W. rustSeverPercCont:
        The mean percentage of rust severity for control plants
       
-    X. rustSeverPercContLSD
+    X. rustSeverPercContLSD:
        Fisher's least squared difference for rust severity in percentage 
        
-    Y. rustSever1.8
+    Y. rustSever1.8:
        Rust severity as measured on a scalar (usually from 1-8) for treated plants
        
-    Z. rustSever1.8LSD
+    Z. rustSever1.8LSD:
        Fisher's least squared difference for rust severity as a scale
        
-    AA. rustSever1.8Cont
+    AA. rustSever1.8Cont:
        Rust severity as measured on a scalar (usually from 1-8) for control plants
        
-    AB. rustSever1.8ContLSD
+    AB. rustSever1.8ContLSD:
        Fisher's least squared difference for rust severity as a scale
        
-    AC. Tsincidence
-    AD. TSincidenceLSD
-    AE. TSincidenceCont
-    AF. TSincidenceContLSD
-    AG. Tsseverity
-    AH. TSseverityLSD
-    AI. TSseverityCont
-    AJ. TSseverityContLSD
-    AK. CercoSever
-    AL. CercoSeverLSD
-    AM. CercoSeverCont
-    AN. CercoSeverContLSD
-    AO. yield
-    AP. yieldLSD
-    AQ. yieldCont
-    AR. yieldContLSD
-    AS. seedWt
-    AT. seedWtLSD
-    AU. seedWtCont
-    AV. seedWtContLSD
-    AW. defoliation
+    AC. Tsincidence:
+       Mean target spot incidence rate for treated plants
+       
+    AD. TSincidenceLSD:
+       Fisher's least squared difference for target spot incidence rate
+       
+    AE. TSincidenceCont:
+       Mean target spot incidence rate for control plants
+       
+    AF. TSincidenceContLSD:
+       Fisher's least squared difference for target spot incidence as a scale
+       
+    AG. Tsseverity:
+       Mean target spot severity for treatment plants
+       
+    AH. TSseverityLSD:
+       Fisher's least squared difference for target spot severity
+       
+    AI. TSseverityCont:
+       Mean target spot severity for control plants
+       
+    AJ. TSseverityContLSD:
+       Fisher's least squared difference for target spot severity
+       
+    AK. CercoSever:
+       Mean Cercospora blight severity for treatment plants
+       
+    AL. CercoSeverLSD:
+       Fisher's least squared difference for Cercospora severity
+    
+    AM. CercoSeverCont:
+       Mean Cercospora blight severity for control plants
+       
+    AN. CercoSeverContLSD:
+       Fisher's least squared difference for Cercospora severity
+       
+    AO. yield:
+       Mean yield (bushels per hectare) of soybeans for treatment plants
+       
+    AP. yieldLSD:
+       Fisher's least squared difference for yield (bushels per hectare)
+       
+    AQ. yieldCont:
+       Mean yield (bushels per hectare) of soybeans for control plants
+       
+    AR. yieldContLSD:
+       Fisher's least squared difference for yield (bushels per hectare)
+       
+    AS. seedWt:
+       Mean 100-seed-weight (g) for soybean from treatment plants
+       
+    AT. seedWtLSD:
+       Fisher's least squared difference for 100-seed-weight (g)
+       
+    AU. seedWtCont:
+       Mean 100-seed-weight (g) for soybena from control plants
+       
+    AV. seedWtContLSD:
+       Fisher's least squared difference for 100-seed-weight (g)
+       
+    AW. defoliation:
+       Mean defoliation of treatment plants
+       
     AX. lsd
+       Fisher's least squared difference for defoliation
+       
     AY. control.defol
+       Mean defoliation of control plants
+       
     AZ. conrol.lsd
+       Fisher's least squared difference for defoliation
+       
     BA. aerial.web
+       Unknown values
+       
     BB. lsd.arial
+       Unknown values
+       
     BC. control.arial.web
+       Unknown values
+       
     BD. lsd.arial.1
+       Unknown values
     
     
