@@ -267,10 +267,10 @@ DATA & FILE OVERVIEW
     This folder contains the spun (knitr package) code and output from all the R programs listed above
     
       1. data_analysis.html
-      2. data_processing.R
-      3. publication_bias.R
-      4. result_graphing.R
-      5. sensitivity_analysis.R
+      2. data_processing.html
+      3. publication_bias.html
+      4. result_graphing.html
+      5. sensitivity_analysis.html
       6. Folder: figures
       
         This folder contains all the figures that are produced by spinning the R program "result_graphing.R"
