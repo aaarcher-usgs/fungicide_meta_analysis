@@ -416,97 +416,97 @@ The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") 
        The mean percentage of rust severity for treated plants
     
     V. rustSeverPercLSD:
-       Fisher's least squared difference for rust severity in percentage 
+       Fisher's protected least significant difference for rust severity in percentage 
        
     W. rustSeverPercCont:
        The mean percentage of rust severity for control plants
       
     X. rustSeverPercContLSD:
-       Fisher's least squared difference for rust severity in percentage 
+       Fisher's protected least significant difference for rust severity in percentage 
        
     Y. rustSever1.8:
        Rust severity as measured on a scalar (usually from 1-8) for treated plants
        
     Z. rustSever1.8LSD:
-       Fisher's least squared difference for rust severity as a scale
+       Fisher's protected least significant difference for rust severity as a scale
        
     AA. rustSever1.8Cont:
        Rust severity as measured on a scalar (usually from 1-8) for control plants
        
     AB. rustSever1.8ContLSD:
-       Fisher's least squared difference for rust severity as a scale
+       Fisher's protected least significant difference for rust severity as a scale
        
     AC. Tsincidence:
        Mean target spot incidence rate for treated plants
        
     AD. TSincidenceLSD:
-       Fisher's least squared difference for target spot incidence rate
+       Fisher's protected least significant difference for target spot incidence rate
        
     AE. TSincidenceCont:
        Mean target spot incidence rate for control plants
        
     AF. TSincidenceContLSD:
-       Fisher's least squared difference for target spot incidence as a scale
+       Fisher's protected least significant difference for target spot incidence as a scale
        
     AG. Tsseverity:
        Mean target spot severity for treatment plants
        
     AH. TSseverityLSD:
-       Fisher's least squared difference for target spot severity
+       Fisher's protected least significant difference for target spot severity
        
     AI. TSseverityCont:
        Mean target spot severity for control plants
        
     AJ. TSseverityContLSD:
-       Fisher's least squared difference for target spot severity
+       Fisher's protected least significant difference for target spot severity
        
     AK. CercoSever:
        Mean Cercospora blight severity for treatment plants
        
     AL. CercoSeverLSD:
-       Fisher's least squared difference for Cercospora severity
+       Fisher's protected least significant difference for Cercospora severity
     
     AM. CercoSeverCont:
        Mean Cercospora blight severity for control plants
        
     AN. CercoSeverContLSD:
-       Fisher's least squared difference for Cercospora severity
+       Fisher's protected least significant difference for Cercospora severity
        
     AO. yield:
        Mean yield (bushels per hectare) of soybeans for treatment plants
        
     AP. yieldLSD:
-       Fisher's least squared difference for yield (bushels per hectare)
+       Fisher's protected least significant difference for yield (bushels per hectare)
        
     AQ. yieldCont:
        Mean yield (bushels per hectare) of soybeans for control plants
        
     AR. yieldContLSD:
-       Fisher's least squared difference for yield (bushels per hectare)
+       Fisher's protected least significant difference for yield (bushels per hectare)
        
     AS. seedWt:
        Mean 100-seed-weight (g) for soybean from treatment plants
        
     AT. seedWtLSD:
-       Fisher's least squared difference for 100-seed-weight (g)
+       Fisher's protected least significant difference for 100-seed-weight (g)
        
     AU. seedWtCont:
        Mean 100-seed-weight (g) for soybena from control plants
        
     AV. seedWtContLSD:
-       Fisher's least squared difference for 100-seed-weight (g)
+       Fisher's protected least significant difference for 100-seed-weight (g)
        
     AW. defoliation:
        Mean defoliation of treatment plants
        
     AX. lsd
-       Fisher's least squared difference for defoliation
+       Fisher's protected least significant difference for defoliation
        
     AY. control.defol
        Mean defoliation of control plants
        
     AZ. conrol.lsd
-       Fisher's least squared difference for defoliation
+       Fisher's protected least significant difference for defoliation
        
     BA. aerial.web
        Unknown values
