@@ -12,6 +12,7 @@
 library(ezknitr)
 library(knitr)
 library(metafor)
+library(ggplot2)
 
 #' Clear environment
 #+ clear

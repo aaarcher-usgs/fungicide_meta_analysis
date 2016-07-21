@@ -168,13 +168,13 @@ applications.cat$CategoryNumb <- as.numeric(applications.cat$Category)
 # 100 seed weight = red circle
 # Yield = blue square
 # Rust Severity = green triangle
-ggplot(data=applications.cat, aes(x = as.numeric(Category), y = mean, colour=dependent)) +
+ggplot(data=applications.cat, aes(x = mean, y = as.numeric(Category), colour=dependent)) +
   geom_point(aes(shape=dependent), size=3)+
-  geom_errorbar(aes(ymin=LL, ymax=UL), width=0.4)+
-  geom_hline(yintercept = 0, lty=2, color="grey")+
+  geom_errorbarh(aes(xmin=LL, xmax=UL), height=0.4)+
+  geom_vline(xintercept = 0, lty=2, color="grey")+
   theme_bw()+
-  xlab("Applications")+
-  ylab("Standardized Mean Difference")+
+  ylab("Applications")+
+  xlab("Standardized Mean Difference")+
   theme(legend.position="none")
 # Add lines for regression
 pred.app.yield <- predict(yield.applications, newmods = seq(from=0, to=6, by=0.01))

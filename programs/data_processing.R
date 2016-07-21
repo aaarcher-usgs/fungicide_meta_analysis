@@ -36,7 +36,7 @@ raw.data <- read.csv("data/workspace.csv")
 #' 
 #' ### 1. New dataset with only selected fields
 #+ selectFields
-data.reduced <- raw.data[,c(1:5,10:11,13:17,20:49)]
+data.reduced <- raw.data[,c(1:7,10:16,19:48)]
 # take out three data points with information on control treatments only
 data.reduced <- data.reduced[data.reduced$FID!=105 &
                                data.reduced$FID!=154 &
