@@ -182,11 +182,11 @@ data.reduced <- data.reduced[data.reduced$applicationsNumb!=8,]
 #+ rustData
 # Data that had rust severity in percentage originally
     # Column #15 is rustSeverPerc
-rust.perc.orig <- data.reduced[!rowSums(is.na(data.reduced[15])),]
+rust.perc.orig <- data.reduced[!is.na(data.reduced$rustSeverPerc),]
 rust.perc.orig$scale <- "Percent"
 # Data that had rust severity on scale originally
     # Column #19 is rustSever1-8
-rust.scale.orig <- data.reduced[!rowSums(is.na(data.reduced[19])),]
+rust.scale.orig <- data.reduced[!is.na(data.reduced$rustSever1.8),]
 # Data from Lawrence references are actually on 0-10 Scale
 scale.1to10.refs <- c(3,4,53,55,62,68,16,41)
 rust.scale.orig$scale[rust.scale.orig$ReferenceNumb %in% scale.1to10.refs] <- "Scale 0-10"
@@ -200,18 +200,18 @@ rust.data <- rbind(rust.perc.orig, rust.scale.orig)
 #+ yieldData
 # Data that had yield data
     # Column #35 is yield
-yield.data <- data.reduced[!rowSums(is.na(data.reduced[35])),] 
+yield.data <- data.reduced[!is.na(data.reduced$yield),] 
 
 #' 100sw data
 #+ seedData
 # Data that had 100sw data
     # Column #39 is 100sw
-seedwt.data <- data.reduced[!rowSums(is.na(data.reduced[39])),] 
+seedwt.data <- data.reduced[!is.na(data.reduced$seedWt),] 
 
 #' Cercospora data
 #+ cercosporaData
 # Data that had Cercospora data
-cerco.data <- data.reduced[!rowSums(is.na(data.reduced[31])),]
+cerco.data <- data.reduced[!is.na(data.reduced$CercoSever),]
 # Define the scale used
 cerco.data$scale <- "empty"
 # Data from Padgett et al. studies used scale 0-10
@@ -224,8 +224,8 @@ cerco.data$scale[cerco.data$scale=="empty"] <- "Scale 0-5"
 #' Target spot data
 #+ targetSpotData
 # Data that had Target Spot data
-target.spot.data <- data.reduced[!rowSums(is.na(data.reduced[28]))|
-                                   !rowSums(is.na(data.reduced[23])),]
+target.spot.data <- data.reduced[!is.na(data.reduced$Tsseverity)|
+                                   !is.na(data.reduced$Tsincidence),]
 # Define the scale used
 target.spot.data$scale <- "empty"
 # Percentage originally
@@ -520,7 +520,7 @@ target.spot.data$n1i <- target.spot.data$n2i <- target.spot.data$replications
 #+ removeSmallRst
 # Active ingredients
 sort(table(rust.data$activeIngClean))
-small.ing <- c("cypr", "flus", "thio", "azo", "myc")
+small.ing <- c("cypr", "myc")
 rust.data$activeIngClean[rust.data$activeIngClean %in% small.ing] <- "oth"
 table(rust.data$activeIngClean)
 # Class

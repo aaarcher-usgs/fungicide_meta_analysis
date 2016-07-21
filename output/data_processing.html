@@ -277,51 +277,46 @@ data.reduced &lt;- data.reduced[data.reduced$FID!=105 &amp;
 ## 20   Douglas et al ref 66            66      2008    FL         13
 ## 21   Douglas et al ref 67            67      2009    FL         11
 ## 22          Harmon ref 47            47      2006    FL          6
-## 23          Harmon ref 48            48      2006    FL          1
-## 24          Harmon ref 48            48      2007    FL          1
-## 25          Harmon ref 48            48      2008    FL          1
-## 26          Harmon ref 48            48      2009    FL          1
-## 27          Harmon ref 48            48      2010    FL          1
-## 28          Harmon ref 48            48      2011    FL          1
-## 29  Kemerait et al ref 59            59      2006    GA         15
-## 30  Kemerait et al ref 71            71      2005    GA          8
-## 31        Kemerait ref 46            46      2006    GA          5
-## 32        Kemerait ref 49            49      2006    GA         12
-## 33        Kemerait ref 50            50      2006    GA         10
-## 34        Kemerait ref 51            51      2006    GA          7
-## 35   Lawrence et al ref 3             3      2007    AL          7
-## 36   lawrence et al ref 4             4      2005    AL          6
-## 37  Lawrence et al ref 53            53      2007    AL          6
-## 38  Lawrence et al ref 55            55      2006    AL         10
-## 39  Lawrence et al ref 62            62      2007    AL          7
-## 40  Lawrence et al ref 68            68      2013    AL          5
-## 41        Lawrence ref 16            16      2008    AL         13
-## 42        Lawrence ref 18            18      2006    AL          3
-## 43        Lawrence ref 21            21      2005    AL          6
-## 44        Lawrence ref 22            22      2008    AL          9
-## 45        Lawrence ref 41            41      2006   AL          11
-## 46   Mueller et al  ref 1             1      2007    FL          3
-## 47   Mueller et al ref 63            63      2006    FL          6
-## 48    Mueller et al ref 9             9      2007    FL          9
-## 49         Mueller ref 36            36      2006    FL         23
-## 50         Mueller ref 37            37      2006    FL         15
-## 51         Mueller ref 38            38      2006    FL          6
-## 52         Mueller ref 39            39      2006    FL         11
-## 53         Mueller ref 40            40      2006    FL          4
-## 54         Mueller ref 43            43      2006    GA         15
-## 55         Mueller ref 45            45      2006    FL         17
-## 56   O&#39;Brien et al ref 69            69      2013    FL         13
-## 57         O&#39;Brien ref 25            25      2012    FL          7
-## 58   Padgett et al ref 54            54      2007    LA          9
-## 59   Padgett et al ref 72            72      2005    LA         15
-## 60   Padgett et al ref 73            73      2005    LA         15
-## 61     Price et al ref 35            35      2012    LA         12
-## 62 Schneider et al ref 60            60      2006    LA         23
-## 63     Sikora et al ref 7             7      2011    AL          4
-## 64    Sikora et al ref 70            70      2005    AL         13
-## 65    Sikora et al ref 74            74      2006    AL         12
-## 66          Sikora ref 23            23      2007    AL         12
-## 67          Sikora ref 42            42      2005    AL          7
+## 23          Harmon ref 48            48      2006    FL          6
+## 24  Kemerait et al ref 59            59      2006    GA         15
+## 25  Kemerait et al ref 71            71      2005    GA          8
+## 26        Kemerait ref 46            46      2006    GA          5
+## 27        Kemerait ref 49            49      2006    GA         12
+## 28        Kemerait ref 50            50      2006    GA         10
+## 29        Kemerait ref 51            51      2006    GA          7
+## 30   Lawrence et al ref 3             3      2007    AL          7
+## 31   lawrence et al ref 4             4      2005    AL          6
+## 32  Lawrence et al ref 53            53      2007    AL          6
+## 33  Lawrence et al ref 55            55      2006    AL         10
+## 34  Lawrence et al ref 62            62      2007    AL          7
+## 35  Lawrence et al ref 68            68      2013    AL          5
+## 36        Lawrence ref 16            16      2008    AL         13
+## 37        Lawrence ref 18            18      2006    AL          3
+## 38        Lawrence ref 21            21      2005    AL          6
+## 39        Lawrence ref 22            22      2008    AL          9
+## 40        Lawrence ref 41            41      2006   AL          11
+## 41   Mueller et al  ref 1             1      2007    FL          3
+## 42   Mueller et al ref 63            63      2006    FL          6
+## 43    Mueller et al ref 9             9      2007    FL          9
+## 44         Mueller ref 36            36      2006    FL         23
+## 45         Mueller ref 37            37      2006    FL         15
+## 46         Mueller ref 38            38      2006    FL          6
+## 47         Mueller ref 39            39      2006    FL         11
+## 48         Mueller ref 40            40      2006    FL          4
+## 49         Mueller ref 43            43      2006    GA         15
+## 50         Mueller ref 45            45      2006    FL         17
+## 51   O&#39;Brien et al ref 69            69      2013    FL         13
+## 52         O&#39;Brien ref 25            25      2012    FL          7
+## 53   Padgett et al ref 54            54      2007    LA          9
+## 54   Padgett et al ref 72            72      2005    LA         15
+## 55   Padgett et al ref 73            73      2005    LA         15
+## 56     Price et al ref 35            35      2012    LA         12
+## 57 Schneider et al ref 60            60      2006    LA         23
+## 58     Sikora et al ref 7             7      2011    AL          4
+## 59    Sikora et al ref 70            70      2005    AL         13
+## 60    Sikora et al ref 74            74      2006    AL         12
+## 61          Sikora ref 23            23      2007    AL         12
+## 62          Sikora ref 42            42      2005    AL          7
 </code></pre>
 
 <pre><code class="r">#summaryBy(FID~ReferenceNumb+Reference+studyYear+State, data = data.reduced, FUN = length)
@@ -380,11 +375,11 @@ table(data.reduced$activeIngClean)
 
 <pre><code>## 
 ##     azo    chlo     cop    cypr    dual     eth    febu    flus    flut 
-##      29       2       2       6      44       2       1       8      66 
+##      29       2       2       6      46       2       1       7      67 
 ##     gly    met    mixed     myc     org     oth    pico    prop    prot 
-##       6       1     177      14       3      16       4       2       4 
+##       6       1     174      12       3      15       4       2       4 
 ##    pyra     sul    tebu   tetra    thio    tria    trif unknown 
-##      54       3      54      37      10       1       2      18
+##      59       3      51      35      10       3       2      20
 </code></pre>
 
 <p>When sample size is &lt; 5, make &ldquo;oth&rdquo;</p>
@@ -398,7 +393,7 @@ table(data.reduced$activeIngClean)
 
 <pre><code>## 
 ##   azo  cypr  dual  flus  flut   gly mixed   myc   oth  pyra  tebu tetra 
-##    29     6    44     8    66     6   177    14    61    54    54    37 
+##    29     6    46     7    67     6   174    12    64    59    51    35 
 ##  thio 
 ##    10
 </code></pre>
@@ -588,11 +583,11 @@ table(data.reduced$applicationsNumb)
 
 <pre><code class="r"># Data that had rust severity in percentage originally
     # Column #15 is rustSeverPerc
-rust.perc.orig &lt;- data.reduced[!rowSums(is.na(data.reduced[15])),]
+rust.perc.orig &lt;- data.reduced[!is.na(data.reduced$rustSeverPerc),]
 rust.perc.orig$scale &lt;- &quot;Percent&quot;
 # Data that had rust severity on scale originally
     # Column #19 is rustSever1-8
-rust.scale.orig &lt;- data.reduced[!rowSums(is.na(data.reduced[19])),]
+rust.scale.orig &lt;- data.reduced[!is.na(data.reduced$rustSever1.8),]
 # Data from Lawrence references are actually on 0-10 Scale
 scale.1to10.refs &lt;- c(3,4,53,55,62,68,16,41)
 rust.scale.orig$scale[rust.scale.orig$ReferenceNumb %in% scale.1to10.refs] &lt;- &quot;Scale 0-10&quot;
@@ -607,20 +602,20 @@ rust.data &lt;- rbind(rust.perc.orig, rust.scale.orig)
 
 <pre><code class="r"># Data that had yield data
     # Column #35 is yield
-yield.data &lt;- data.reduced[!rowSums(is.na(data.reduced[35])),] 
+yield.data &lt;- data.reduced[!is.na(data.reduced$yield),] 
 </code></pre>
 
 <p>100sw data</p>
 
 <pre><code class="r"># Data that had 100sw data
     # Column #39 is 100sw
-seedwt.data &lt;- data.reduced[!rowSums(is.na(data.reduced[39])),] 
+seedwt.data &lt;- data.reduced[!is.na(data.reduced$seedWt),] 
 </code></pre>
 
 <p>Cercospora data</p>
 
 <pre><code class="r"># Data that had Cercospora data
-cerco.data &lt;- data.reduced[!rowSums(is.na(data.reduced[31])),]
+cerco.data &lt;- data.reduced[!is.na(data.reduced$CercoSever),]
 # Define the scale used
 cerco.data$scale &lt;- &quot;empty&quot;
 # Data from Padgett et al. studies used scale 0-10
@@ -634,8 +629,8 @@ cerco.data$scale[cerco.data$scale==&quot;empty&quot;] &lt;- &quot;Scale 0-5&quot
 <p>Target spot data</p>
 
 <pre><code class="r"># Data that had Target Spot data
-target.spot.data &lt;- data.reduced[!rowSums(is.na(data.reduced[28]))|
-                                   !rowSums(is.na(data.reduced[23])),]
+target.spot.data &lt;- data.reduced[!is.na(data.reduced$Tsseverity)|
+                                   !is.na(data.reduced$Tsincidence),]
 # Define the scale used
 target.spot.data$scale &lt;- &quot;empty&quot;
 # Percentage originally
@@ -948,19 +943,19 @@ sort(table(rust.data$activeIngClean))
 
 <pre><code>## 
 ##  cypr   myc  thio   azo   gly  flus tetra  dual  pyra  tebu   oth  flut 
-##     2     4     5     6     6     7    10    15    25    31    37    44 
+##     2     3     5     6     6     7     8    17    27    31    39    45 
 ## mixed 
-##   132
+##   128
 </code></pre>
 
-<pre><code class="r">small.ing &lt;- c(&quot;cypr&quot;, &quot;flus&quot;, &quot;thio&quot;, &quot;azo&quot;, &quot;myc&quot;)
+<pre><code class="r">small.ing &lt;- c(&quot;cypr&quot;, &quot;myc&quot;)
 rust.data$activeIngClean[rust.data$activeIngClean %in% small.ing] &lt;- &quot;oth&quot;
 table(rust.data$activeIngClean)
 </code></pre>
 
 <pre><code>## 
-##  dual  flut   gly mixed   oth  pyra  tebu tetra 
-##    15    44     6   132    61    25    31    10
+##   azo  dual  flus  flut   gly mixed   oth  pyra  tebu tetra  thio 
+##     6    17     7    45     6   128    44    27    31     8     5
 </code></pre>
 
 <pre><code class="r"># Class
@@ -1026,10 +1021,10 @@ sort(table(yield.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##   gly  cypr  flus  thio   myc   azo tetra  dual  pyra  tebu   oth  flut 
-##     2     6     7    10    11    27    35    42    46    48    52    63 
+##   gly  cypr  flus   myc  thio   azo tetra  dual  tebu  pyra   oth  flut 
+##     2     6     6    10    10    27    34    42    45    50    54    64 
 ## mixed 
-##   164
+##   163
 </code></pre>
 
 <pre><code class="r">yield.data$activeIngClean[yield.data$activeIngClean==&quot;gly&quot;] &lt;- &quot;oth&quot;
@@ -1037,8 +1032,8 @@ sort(table(yield.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##  cypr  flus  thio   myc   azo tetra  dual  pyra  tebu   oth  flut mixed 
-##     6     7    10    11    27    35    42    46    48    54    63   164
+##  cypr  flus   myc  thio   azo tetra  dual  tebu  pyra   oth  flut mixed 
+##     6     6    10    10    27    34    42    45    50    56    64   163
 </code></pre>
 
 <pre><code class="r"># Class
@@ -1085,8 +1080,8 @@ sort(table(seedwt.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##   gly  thio  cypr   myc  dual   azo   oth tetra  pyra  tebu  flut mixed 
-##     2     2     3     3     4     9    14    17    19    19    42    73
+##   gly  thio  cypr   myc  dual   azo   oth tetra  tebu  pyra  flut mixed 
+##     2     2     3     3     4     9    14    16    19    20    43    72
 </code></pre>
 
 <pre><code class="r">small.ing.100 &lt;- c(&quot;gly&quot;, &quot;thio&quot; ,&quot;cypr&quot;, &quot;myc&quot;, &quot;dual&quot;)
@@ -1095,8 +1090,8 @@ sort(table(seedwt.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##   azo tetra  pyra  tebu   oth  flut mixed 
-##     9    17    19    19    28    42    73
+##   azo tetra  tebu  pyra   oth  flut mixed 
+##     9    16    19    20    28    43    72
 </code></pre>
 
 <pre><code class="r"># Class
@@ -1125,18 +1120,41 @@ sort(table(seedwt.data$classClean))
 <pre><code class="r">rust.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
                     sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                     data = rust.data)
-yield.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;n1i&#39; not found
+</code></pre>
+
+<pre><code class="r">yield.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
                      sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                      data = yield.data)
-seedwt.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;n1i&#39; not found
+</code></pre>
+
+<pre><code class="r">seedwt.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
                       sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                       data = seedwt.data)
-cerco.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;n1i&#39; not found
+</code></pre>
+
+<pre><code class="r">cerco.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
                               sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                               data = cerco.data)
-target.spot.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;n1i&#39; not found
+</code></pre>
+
+<pre><code class="r">target.spot.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i, 
                               sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                               data = target.spot.data)
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;n1i&#39; not found
 </code></pre>
 
 <p>Standardized mean difference</p>
@@ -1144,12 +1162,25 @@ target.spot.data.MD &lt;- escalc(measure = &quot;MD&quot;, m1i = m1i, m2i = m2i,
 <pre><code class="r">rust.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i, 
               sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
               data = rust.data)
-yield.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i, 
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;n1i&#39; not found
+</code></pre>
+
+<pre><code class="r">yield.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i, 
                      sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                      data = yield.data)
-seedwt.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i, 
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;n1i&#39; not found
+</code></pre>
+
+<pre><code class="r">seedwt.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i, 
                              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                              data = seedwt.data)
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;n1i&#39; not found
 </code></pre>
 
 <h3>7. Save files for analysis</h3>
@@ -1158,6 +1189,9 @@ seedwt.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i,
      rust.data.MD, yield.data.MD, seedwt.data.MD,
      cerco.data.MD, target.spot.data.MD,
      file=&quot;data/output_data/data_cleaned.R&quot;)
+</code></pre>
+
+<pre><code>## Error in save(rust.data.SMD, yield.data.SMD, seedwt.data.SMD, rust.data.MD, : objects &#39;rust.data.SMD&#39;, &#39;yield.data.SMD&#39;, &#39;seedwt.data.SMD&#39;, &#39;rust.data.MD&#39;, &#39;yield.data.MD&#39;, &#39;seedwt.data.MD&#39;, &#39;cerco.data.MD&#39;, &#39;target.spot.data.MD&#39; not found
 </code></pre>
 
 <h3>Footer</h3>
@@ -1180,7 +1214,7 @@ seedwt.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i,
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] metafor_1.9-8 Matrix_1.2-6  doBy_4.5-15   knitr_1.13    ezknitr_0.4  
+## [1] doBy_4.5-15   metafor_1.9-8 Matrix_1.2-6  knitr_1.13    ezknitr_0.4  
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] lattice_0.20-33   R.methodsS3_1.7.1 MASS_7.3-45      
