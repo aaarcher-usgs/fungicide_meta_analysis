@@ -276,47 +276,46 @@ data.reduced &lt;- data.reduced[data.reduced$FID!=105 &amp;
 ## 19   Douglas et al ref 65            65      2008    FL         18
 ## 20   Douglas et al ref 66            66      2008    FL         13
 ## 21   Douglas et al ref 67            67      2009    FL         11
-## 22          Harmon ref 47            47      2006    FL          6
-## 23          Harmon ref 48            48      2006    FL          6
-## 24  Kemerait et al ref 59            59      2006    GA         15
-## 25  Kemerait et al ref 71            71      2005    GA          8
-## 26        Kemerait ref 46            46      2006    GA          5
-## 27        Kemerait ref 49            49      2006    GA         12
-## 28        Kemerait ref 50            50      2006    GA         10
-## 29        Kemerait ref 51            51      2006    GA          7
-## 30   Lawrence et al ref 3             3      2007    AL          7
-## 31   lawrence et al ref 4             4      2005    AL          6
-## 32  Lawrence et al ref 53            53      2007    AL          6
-## 33  Lawrence et al ref 55            55      2006    AL         10
-## 34  Lawrence et al ref 62            62      2007    AL          7
-## 35  Lawrence et al ref 68            68      2013    AL          5
-## 36        Lawrence ref 16            16      2008    AL         13
-## 37        Lawrence ref 18            18      2006    AL          3
-## 38        Lawrence ref 21            21      2005    AL          6
-## 39        Lawrence ref 22            22      2008    AL          9
-## 40        Lawrence ref 41            41      2006   AL          11
-## 41   Mueller et al  ref 1             1      2007    FL          3
-## 42   Mueller et al ref 63            63      2006    FL          6
-## 43    Mueller et al ref 9             9      2007    FL          9
-## 44         Mueller ref 36            36      2006    FL         23
-## 45         Mueller ref 37            37      2006    FL         15
-## 46         Mueller ref 38            38      2006    FL          6
-## 47         Mueller ref 39            39      2006    FL         11
-## 48         Mueller ref 40            40      2006    FL          4
-## 49         Mueller ref 43            43      2006    GA         15
-## 50         Mueller ref 45            45      2006    FL         17
-## 51   O&#39;Brien et al ref 69            69      2013    FL         13
-## 52         O&#39;Brien ref 25            25      2012    FL          7
-## 53   Padgett et al ref 54            54      2007    LA          9
-## 54   Padgett et al ref 72            72      2005    LA         15
-## 55   Padgett et al ref 73            73      2005    LA         15
-## 56     Price et al ref 35            35      2012    LA         12
-## 57 Schneider et al ref 60            60      2006    LA         23
-## 58     Sikora et al ref 7             7      2011    AL          4
-## 59    Sikora et al ref 70            70      2005    AL         13
-## 60    Sikora et al ref 74            74      2006    AL         12
-## 61          Sikora ref 23            23      2007    AL         12
-## 62          Sikora ref 42            42      2005    AL          7
+## 22          Harmon ref 47            47      2006    FL         12
+## 23  Kemerait et al ref 59            59      2006    GA         15
+## 24  Kemerait et al ref 71            71      2005    GA          8
+## 25        Kemerait ref 46            46      2006    GA          5
+## 26        Kemerait ref 49            49      2006    GA         12
+## 27        Kemerait ref 50            50      2006    GA         10
+## 28        Kemerait ref 51            51      2006    GA          7
+## 29   Lawrence et al ref 3             3      2007    AL          7
+## 30   lawrence et al ref 4             4      2005    AL          6
+## 31  Lawrence et al ref 53            53      2007    AL          6
+## 32  Lawrence et al ref 55            55      2006    AL         10
+## 33  Lawrence et al ref 62            62      2007    AL          7
+## 34  Lawrence et al ref 68            68      2013    AL          5
+## 35        Lawrence ref 16            16      2008    AL         13
+## 36        Lawrence ref 18            18      2006    AL          3
+## 37        Lawrence ref 21            21      2005    AL          6
+## 38        Lawrence ref 22            22      2008    AL          9
+## 39        Lawrence ref 41            41      2006   AL          11
+## 40   Mueller et al  ref 1             1      2007    FL          3
+## 41   Mueller et al ref 63            63      2006    FL          6
+## 42    Mueller et al ref 9             9      2007    FL          9
+## 43         Mueller ref 36            36      2006    FL         23
+## 44         Mueller ref 37            37      2006    FL         15
+## 45         Mueller ref 38            38      2006    FL          6
+## 46         Mueller ref 39            39      2006    FL         11
+## 47         Mueller ref 40            40      2006    FL          4
+## 48         Mueller ref 43            43      2006    GA         15
+## 49         Mueller ref 45            45      2006    FL         17
+## 50   O&#39;Brien et al ref 69            69      2013    FL         13
+## 51         O&#39;Brien ref 25            25      2012    FL          7
+## 52   Padgett et al ref 54            54      2007    LA          9
+## 53   Padgett et al ref 72            72      2005    LA         15
+## 54   Padgett et al ref 73            73      2005    LA         15
+## 55     Price et al ref 35            35      2012    LA         12
+## 56 Schneider et al ref 60            60      2006    LA         23
+## 57     Sikora et al ref 7             7      2011    AL          4
+## 58    Sikora et al ref 70            70      2005    AL         13
+## 59    Sikora et al ref 74            74      2006    AL         12
+## 60          Sikora ref 23            23      2007    AL         12
+## 61          Sikora ref 42            42      2005    AL          7
 </code></pre>
 
 <pre><code class="r">#summaryBy(FID~ReferenceNumb+Reference+studyYear+State, data = data.reduced, FUN = length)
@@ -1178,11 +1177,10 @@ seedwt.data.SMD &lt;- escalc(measure = &quot;SMD&quot;, m1i = m1i, m2i = m2i,
 ## [1] doBy_4.5-15   metafor_1.9-8 Matrix_1.2-6  knitr_1.13    ezknitr_0.4  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] lattice_0.20-33   R.methodsS3_1.7.1 MASS_7.3-45      
-##  [4] grid_3.3.0        formatR_1.4       magrittr_1.5     
-##  [7] evaluate_0.9      stringi_1.1.1     R.oo_1.20.0      
-## [10] R.utils_2.3.0     tools_3.3.0       stringr_1.0.0    
-## [13] markdown_0.7.7
+##  [1] MASS_7.3-45       magrittr_1.5      formatR_1.4      
+##  [4] tools_3.3.0       stringi_1.1.1     R.methodsS3_1.7.1
+##  [7] grid_3.3.0        stringr_1.0.0     R.utils_2.3.0    
+## [10] evaluate_0.9      R.oo_1.20.0       lattice_0.20-33
 </code></pre>
 
 </body>
