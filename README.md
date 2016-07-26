@@ -1,7 +1,7 @@
 # fungicide_meta_analysis
 Meta-analysis of the effects of fungicide to control soybean rust in the southeastern US
 
-This README.md file was generated on 20160714 by A.A. ArchMiller
+This README.md file was generated on 20160726 by A.A. ArchMiller
 
 **Github version**
 
@@ -497,28 +497,37 @@ The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") 
     AV. seedWtContLSD:
        Fisher's protected least significant difference for 100-seed-weight (g)
        
-    AW. defoliation:
-       Mean defoliation of treatment plants
-       
-    AX. lsd
-       Fisher's protected least significant difference for defoliation
-       
-    AY. control.defol
-       Mean defoliation of control plants
-       
-    AZ. conrol.lsd
-       Fisher's protected least significant difference for defoliation
-       
-    BA. aerial.web
-       Unknown values
-       
-    BB. lsd.arial
-       Unknown values
-       
-    BC. control.arial.web
-       Unknown values
-       
-    BD. lsd.arial.1
-       Unknown values
-    
-    
+-----------------------------------------
+DATA-SPECIFIC INFORMATION FOR: publication_summary.xlsx
+-----------------------------------------
+
+1. Number of variables: 6
+
+
+2. Number of cases/rows: 61
+
+
+3. Missing data codes:
+
+4. Variable List
+
+    A. Reference:
+       Citation for each study used in the meta-analysis
+
+    B. Type:
+        PDMR        	   Plant Disease Management Report
+        PHP        	   Plant Health Progress Journal 
+        FNT        	   Fungicide & Nematicide Tests
+        Unpublished        Unpublished studies
+
+    C. Study Year
+	Year in which the study was conducted
+
+    D. State
+	State in which the study was conducted
+
+    E. n
+	Number of experimental treatments (Effect sizes) derived from that study
+
+    F. ReferenceNumb
+	Unique number for each reference (cross-references with ReferenceNumb in workspace.csv)
