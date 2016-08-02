@@ -54,7 +54,7 @@ SHARING/ACCESS INFORMATION
 United States 2004-2014: A Meta-Analysis. In preparation for the Journal of Plant Disease
 
 
-3. Links to other publicly accessible locations of the data: Forthcoming on the Data Repository for the University of Minnesota
+3. Links to other publicly accessible locations of the data: http://conservancy.umn.edu/handle/11299/181538
 
 
 4. Links/relationships to ancillary data sets:
