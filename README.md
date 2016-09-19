@@ -333,7 +333,7 @@ DATA-SPECIFIC INFORMATION FOR: workspace.csv and workspace.xlsx
 -----------------------------------------
 The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") are identical. The additional tab in workspace.xlsx includes a list of the references that corresponds with variables "Reference" and "ReferenceNumb"
 
-1. Number of variables: 56
+1. Number of variables: 48
 
 
 2. Number of cases/rows: 569
@@ -362,18 +362,48 @@ The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") 
     F. location:
        Study location
        
+       		NFREC = North Florida Research & Education Center, Quincy, FL
+		GCREC = Gulf Coast Research & Education Center, Wimauma, FL
+		EV Smith or EVS or EVSREC = Auburn University E.V. Smith Research Center, Shorter, AL
+		TVREC or TVRREC = Tennessee Valley Research & Education Center, Tennessee River, AL
+		Noxubee Co = Noxubee County, MS
+		Clay Co = Clay County, MS
+		ARC or ATC = Attapulgus Research and Education Center, Attapulgus, GA
+		bhrs = Ben Hur Research Station, Baton Rouge, LA
+		Brewton = Auburn University Brewton Agricultural Research Unit, Brewton, AL
+		CPES = University of Georgia Coastal Plain Experiment Station, Tifton, GA
+		DLRS = Dean Lee Research Station, Alexandria, AL
+		ifas = Institute of Food and Agriculture as in: University of Florida, Institute of Food and Agriculture Plant Science Research and Education Unit, Citra, FL
+		Lang farm = University of Georgia Coastal Plain Experiment Station, Lang Research Farm, Tifton, GA
+		NRS = Northeast Research Station, Winnsboro, LA
+		SAER = Sunbelt Ag Expo Research Farm, Moultrie, GA
+		SMREC = Sand Mountain Research and Extension Center
+		UGRF = University of Georgia Research Farm, Attapulgus, GA
+
+       
     G. soil:
        Soil type at study location
        
     H. planted.date:
-       Date the soybean was planted
+       Date the soybean was planted. In the 1900 date system, the first day that is supported is January 1, 1900. When you enter a date, the date is converted into a serial number that represents the number of elapsed days since January 1, 1900. For example, if you enter July 5, 1998, Excel converts the date to the serial number 35981. To convert to R date format in your data frame “df”, use:
+	df$newplantdate <- as.Date(df$planted.date, origin=“1900-01-01”)
        
     I. Date.rust.first.appeared:
-       The date that soybean rust was first detected
+       The date that soybean rust was first detected. In the 1900 date system, the first day that is supported is January 1, 1900. When you enter a date, the date is converted into a serial number that represents the number of elapsed days since January 1, 1900. For example, if you enter July 5, 1998, Excel converts the date to the serial number 35981. To convert to R date format in your data frame “df”, use:
+	df$newrustdate <- as.Date(df$Date.rust.first.appeared, origin=“1900-01-01”)
        
     J. Growth.stage.applied:
        The growth stage(s) during which fungicide was applied to the soybean plants
-       
+    V : Vegetative
+		R1 : Beginning Bloom
+		R2 : Full Bloom
+		R3 : Beginning Pod
+		R4 : Full Pod
+		R5 : Beginning Seed
+		R6 : Full Seed
+		R7 : Beginning Maturity
+		R8 : Full Maturity
+		
     K. applicationsNumb:
        The total number of fungicide applications
        
@@ -402,7 +432,11 @@ The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") 
         The specific fungicide class coded/abbreviated
         
     Q. amount:
-        The amount of fungicide applied in either fluid oz per acre or pound per acre
+        The amount of fungicide applied in either fluid oz per acre or pound per acre or volume percent (v/v or %). 
+            * "fb" means followed by (i.e., more than 1 application)
+            * "+" or “,” means mixture of two quantities
+	     * “?” signifies when the amount of fungicide was not provided in the reference.
+
         
     R. stats:
         Experimental protocol. In all cases, rcb = Randomized Complete Block
