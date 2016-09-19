@@ -397,15 +397,15 @@ The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") 
     J. Growth.stage.applied:
        The growth stage(s) during which fungicide was applied to the soybean plants
        
-    - V : Vegetative
-		- R1 : Beginning Bloom
-		- R2 : Full Bloom
-		- R3 : Beginning Pod
-		- R4 : Full Pod
-		- R5 : Beginning Seed
-		- R6 : Full Seed
-		- R7 : Beginning Maturity
-		- R8 : Full Maturity
+- V : Vegetative
+- R1 : Beginning Bloom
+- R2 : Full Bloom
+- R3 : Beginning Pod
+- R4 : Full Pod
+- R5 : Beginning Seed
+- R6 : Full Seed
+- R7 : Beginning Maturity
+- R8 : Full Maturity
 		
     K. applicationsNumb:
        The total number of fungicide applications
