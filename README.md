@@ -362,7 +362,7 @@ The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") 
     F. location:
        Study location
        
-    NFREC = North Florida Research & Education Center, Quincy, FL
+    - NFREC = North Florida Research & Education Center, Quincy, FL
 		GCREC = Gulf Coast Research & Education Center, Wimauma, FL
 		EV Smith or EVS or EVSREC = Auburn University E.V. Smith Research Center, Shorter, AL
 		TVREC or TVRREC = Tennessee Valley Research & Education Center, Tennessee River, AL
@@ -387,7 +387,7 @@ The data in workspace.csv and the first tab of workspace.xlsx ("workspace.csv") 
     H. planted.date:
        Date the soybean was planted. In the 1900 date system, the first day that is supported is January 1, 1900. When you enter a date, the date is converted into a serial number that represents the number of elapsed days since January 1, 1900. For example, if you enter July 5, 1998, Excel converts the date to the serial number 35981. To convert to R date format in your data frame “df”, use:
        
-       df$newplantdate <- as.Date(df$planted.date, origin=“1900-01-01”)
+  df$newplantdate <- as.Date(df$planted.date, origin=“1900-01-01”)
        
     I. Date.rust.first.appeared:
        The date that soybean rust was first detected. In the 1900 date system, the first day that is supported is January 1, 1900. When you enter a date, the date is converted into a serial number that represents the number of elapsed days since January 1, 1900. For example, if you enter July 5, 1998, Excel converts the date to the serial number 35981. To convert to R date format in your data frame “df”, use:
