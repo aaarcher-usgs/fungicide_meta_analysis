@@ -569,40 +569,44 @@ sort(table(seedwt.data$classClean))
 
 #' ### 6. Calculate effect sizes
 #' 
+#' Using log response ratio, cannot have 0s in data; so changing 0 to 0.0001
+rust.data$m1i[rust.data$m1i==1] <- 0
+rust.data$m2i[rust.data$m2i==1] <- 0
+
+yield.data$m1i[yield.data$m1i==1] <- 0
+yield.data$m2i[yield.data$m2i==1] <- 0
+
+seedwt.data$m1i[seedwt.data$m1i==1] <- 0
+seedwt.data$m2i[seedwt.data$m2i==1] <- 0
+
+cerco.data$m1i[cerco.data$m1i==1] <- 0
+cerco.data$m2i[cerco.data$m2i==1] <- 0
+
+target.spot.data$m1i[target.spot.data$m1i==1] <- 0
+target.spot.data$m2i[target.spot.data$m2i==1] <- 0
+#' 
 #' Overall means (raw mean difference)
 #+ effectSizeMD
-rust.data.MD <- escalc(measure = "MD", m1i = m1i, m2i = m2i, 
+rust.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
                     sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                     data = rust.data)
-yield.data.MD <- escalc(measure = "MD", m1i = m1i, m2i = m2i, 
+yield.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
                      sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                      data = yield.data)
-seedwt.data.MD <- escalc(measure = "MD", m1i = m1i, m2i = m2i, 
+seedwt.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
                       sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                       data = seedwt.data)
-cerco.data.MD <- escalc(measure = "MD", m1i = m1i, m2i = m2i, 
+cerco.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
                               sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                               data = cerco.data)
-target.spot.data.MD <- escalc(measure = "MD", m1i = m1i, m2i = m2i, 
+target.spot.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
                               sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
                               data = target.spot.data)
-#' Standardized mean difference
-#+ effectSizeStd
-rust.data.SMD <- escalc(measure = "SMD", m1i = m1i, m2i = m2i, 
-              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
-              data = rust.data)
-yield.data.SMD <- escalc(measure = "SMD", m1i = m1i, m2i = m2i, 
-                     sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
-                     data = yield.data)
-seedwt.data.SMD <- escalc(measure = "SMD", m1i = m1i, m2i = m2i, 
-                             sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
-                             data = seedwt.data)
 
 #' ### 7. Save files for analysis
 #+ save
-save(rust.data.SMD, yield.data.SMD, seedwt.data.SMD,
-     rust.data.MD, yield.data.MD, seedwt.data.MD,
-     cerco.data.MD, target.spot.data.MD,
+save(rust.data.ROM, yield.data.ROM, seedwt.data.ROM,
+     cerco.data.ROM, target.spot.data.ROM,
      file="data/output_data/data_cleaned.R")
 
 #' ### Footer
