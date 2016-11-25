@@ -570,20 +570,20 @@ sort(table(seedwt.data$classClean))
 #' ### 6. Calculate effect sizes
 #' 
 #' Using log response ratio, cannot have 0s in data; so changing 0 to 0.0001
-rust.data$m1i[rust.data$m1i==1] <- 0
-rust.data$m2i[rust.data$m2i==1] <- 0
+rust.data$m1i[rust.data$m1i==0] <- 0.0001
+rust.data$m2i[rust.data$m2i==0] <- 0.0001
 
-yield.data$m1i[yield.data$m1i==1] <- 0
-yield.data$m2i[yield.data$m2i==1] <- 0
+yield.data$m1i[yield.data$m1i==0] <- 0.0001
+yield.data$m2i[yield.data$m2i==0] <- 0.0001
 
-seedwt.data$m1i[seedwt.data$m1i==1] <- 0
-seedwt.data$m2i[seedwt.data$m2i==1] <- 0
+seedwt.data$m1i[seedwt.data$m1i==0] <- 0.0001
+seedwt.data$m2i[seedwt.data$m2i==0] <- 0.0001
 
-cerco.data$m1i[cerco.data$m1i==1] <- 0
-cerco.data$m2i[cerco.data$m2i==1] <- 0
+cerco.data$m1i[cerco.data$m1i==0] <- 0.0001
+cerco.data$m2i[cerco.data$m2i==0] <- 0.0001
 
-target.spot.data$m1i[target.spot.data$m1i==1] <- 0
-target.spot.data$m2i[target.spot.data$m2i==1] <- 0
+target.spot.data$m1i[target.spot.data$m1i==0] <- 0.0001
+target.spot.data$m2i[target.spot.data$m2i==0] <- 0.0001
 #' 
 #' Overall means (raw mean difference)
 #+ effectSizeMD
