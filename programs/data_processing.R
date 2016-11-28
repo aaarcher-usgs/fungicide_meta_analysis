@@ -341,13 +341,15 @@ data.reduced$activeIngClean[data.reduced$activeIngClean=="cyp"] <- "CYPR"
 data.reduced$activeIngClean[data.reduced$activeIngClean=="tebu "] <- "TEBU"
 #     Check progress
 sort(table(data.reduced$activeIngClean))
-#' When sample size is < 5, make "oth"
-#+ standardizeActive2
-less.than.five <- c("chlo", "cop", "eth", "febu", "met ", "org", "pico", "prop",
-                    "prot", "sul", "tria", "trif", "unknown")
-data.reduced$activeIngClean[data.reduced$activeIngClean %in% less.than.five] <- "oth"
-# Check with table
-table(data.reduced$activeIngClean)
+
+#' Convert to capital letters
+data.reduced$activeIngClean <- toupper(data.reduced$activeIngClean) 
+sort(table(data.reduced$activeIngClean))
+
+data.reduced$activeIngClean[data.reduced$activeIngClean=="PYRA"] <- "PYR"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="FEBU"] <- "FENB"
+
+
 
 #' Class of fungicide: clean up labels to be consistent and if <5, relabel as "oth"
 #' 
