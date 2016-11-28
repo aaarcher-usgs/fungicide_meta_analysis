@@ -122,7 +122,7 @@ data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="oth+flus"] <-
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus+pyra"] <-
   "FLUS + PYR"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra+myc"] <- 
-  "MYC + PYRA"
+  "MYC + PYR"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra+flut"] <- 
   "FLUT + PYR"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+trif+myc"] <-
@@ -339,6 +339,7 @@ data.reduced$activeIngClean[data.reduced$activeIngClean=="thi"] <- "THIO"
 data.reduced$activeIngClean[data.reduced$activeIngClean==""] <- "unknown"
 data.reduced$activeIngClean[data.reduced$activeIngClean=="cyp"] <- "CYPR"
 data.reduced$activeIngClean[data.reduced$activeIngClean=="tebu "] <- "TEBU"
+data.reduced$activeIngClean[data.reduced$active.ingredient.coded=="tria"] <- "TEBU"
 #     Check progress
 sort(table(data.reduced$activeIngClean))
 
@@ -348,6 +349,7 @@ sort(table(data.reduced$activeIngClean))
 
 data.reduced$activeIngClean[data.reduced$activeIngClean=="PYRA"] <- "PYR"
 data.reduced$activeIngClean[data.reduced$activeIngClean=="FEBU"] <- "FENB"
+
 
 
 
@@ -370,6 +372,41 @@ data.reduced$classClean[data.reduced$classClean=="empty"] <-
   as.character(data.reduced$class.code[data.reduced$classClean=="empty"])
 # Check with table
 sort(table(data.reduced$classClean))
+
+summaryBy(FID~activeIngClean+classClean,data = data.reduced,FUN=length)
+# Fix the classes
+data.reduced$classClean[data.reduced$activeIngClean=="AZO"] <- "strobilurin"
+data.reduced$classClean[data.reduced$activeIngClean=="COP"] <- "copper sulfate"
+data.reduced$classClean[data.reduced$activeIngClean=="MYC"] <- "myc"
+data.reduced$classClean[data.reduced$activeIngClean=="PYR"] <- "strobilurin"
+data.reduced$classClean[data.reduced$activeIngClean=="TETR"] <- "triazole"
+data.reduced$classClean[data.reduced$activeIngClean=="TEBU"] <- "triazole"
+data.reduced$classClean[data.reduced$activeIngClean=="THIO"] <- "thiophanate"
+
+summaryBy(FID~classClean + activeIngClean,data = data.reduced,FUN=length)
+
+
+head(data.reduced[data.reduced$classClean=="mma",c(10:12,45:48)])
+
+data.reduced$classClean[data.reduced$alphaIngred=="TEBU + THIO"] <- "triaz + thio"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP + TRIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="TEBU + TRIF + OTH"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + PROP"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + CYPR"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="PYR + TEBU"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="TEBU + TRIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP + TEBU + TRIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUT + PYR"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUS + PYR"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + PROP + TRIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + PROP + TEBU"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + FLUT + PROP"] <- "triaz + strob"
+
+head(data.reduced[data.reduced$classClean=="mma",c(10:12,45:48)],12)
+
+
+
+
 
 
 #' Growth stages of application
