@@ -370,13 +370,7 @@ data.reduced$classClean[data.reduced$classClean=="empty"] <-
   as.character(data.reduced$class.code[data.reduced$classClean=="empty"])
 # Check with table
 sort(table(data.reduced$classClean))
-#' When sample size is < 5, make "oth"
-#+ standardizeClass2
-less.than.five <- c("chloronitrile", "copper sulfate", "mancozeb", "metconazole",
-                    "myc", "tebu", "unknown")
-data.reduced$classClean[data.reduced$classClean %in% less.than.five] <- "other"
-# Check with table
-table(data.reduced$classClean)
+
 
 #' Growth stages of application
 #' 
