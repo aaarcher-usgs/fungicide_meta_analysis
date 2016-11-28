@@ -52,13 +52,13 @@ summaryBy(FID~Reference+ReferenceNumb+studyYear+State, data = data.reduced, FUN 
 #+ standardizeActive
 # Active ingredients - fix typos in original dataset
 data.reduced$active.ingredient.coded <- as.character(data.reduced$active.ingredient.coded)
-data.reduced$active.ingredient.coded[data.reduced$trade.name=="ACT Plus"] <- "oth"
-data.reduced$active.ingredient.coded[data.reduced$trade.name=="Domark"] <- "tetra"
-data.reduced$active.ingredient.coded[data.reduced$trade.name=="Folicur"] <- "tebu"
+data.reduced$active.ingredient.coded[data.reduced$trade.name=="ACT Plus"] <- "other"
+data.reduced$active.ingredient.coded[data.reduced$trade.name=="Domark"] <- "TETR"
+data.reduced$active.ingredient.coded[data.reduced$trade.name=="Folicur"] <- "TEBU"
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Folicur fb Headline"] <- "tebu + pyra"
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Folicur + Headline"] <- "tebu + pyra"
-data.reduced$active.ingredient.coded[data.reduced$trade.name=="Laredo"] <- "myc"
-data.reduced$active.ingredient.coded[data.reduced$trade.name=="Punch fb Punch"] <- "flus"
+data.reduced$active.ingredient.coded[data.reduced$trade.name=="Laredo"] <- "MYC"
+data.reduced$active.ingredient.coded[data.reduced$trade.name=="Punch fb Punch"] <- "FLUS"
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Stratego"] <- "mixed"
 
 
@@ -71,30 +71,276 @@ data.reduced$activeIngClean[mixed.indices] <- "mixed"
 #     Dual applications
 dual.apps <- grep("fb", data.reduced$active.ingredient.coded, fixed=TRUE)
 data.reduced$activeIngClean[dual.apps] <- "dual"
-data.reduced$activeIngClean[grep("azo fb azo", data.reduced$active.ingredient.coded, fixed=F)] <- "azo"
-data.reduced$activeIngClean[grep("myc fb myc", data.reduced$active.ingredient.coded, fixed=T)] <- "myc"
-data.reduced$activeIngClean[grep("tetr fb tetr", data.reduced$active.ingredient.coded, fixed=T)] <- "tetra"
-data.reduced$activeIngClean[grep("tetra fb tetra", data.reduced$active.ingredient.coded, fixed=T)] <- "tetra"
-data.reduced$activeIngClean[grep("tebu fb tebu", data.reduced$active.ingredient.coded, fixed=T)] <- "tebu"
-data.reduced$activeIngClean[grep("prop fb prop", data.reduced$active.ingredient.coded, fixed=T)] <- "prop"
-data.reduced$activeIngClean[grep("pyra fb pyra", data.reduced$active.ingredient.coded, fixed=T)] <- "pyra"
-data.reduced$activeIngClean[grep("pyra fb prya", data.reduced$active.ingredient.coded, fixed=T)] <- "pyra"
-data.reduced$activeIngClean[grep("flut fb flut", data.reduced$active.ingredient.coded, fixed=T)] <- "flut"
+data.reduced$activeIngClean[grep("azo fb azo", data.reduced$active.ingredient.coded, fixed=F)] <- "AZO"
+data.reduced$activeIngClean[grep("myc fb myc", data.reduced$active.ingredient.coded, fixed=T)] <- "MYC"
+data.reduced$activeIngClean[grep("tetr fb tetr", data.reduced$active.ingredient.coded, fixed=T)] <- "TETR"
+data.reduced$activeIngClean[grep("tetra fb tetra", data.reduced$active.ingredient.coded, fixed=T)] <- "TETR"
+data.reduced$activeIngClean[grep("tebu fb tebu", data.reduced$active.ingredient.coded, fixed=T)] <- "TEBU"
+data.reduced$activeIngClean[grep("prop fb prop", data.reduced$active.ingredient.coded, fixed=T)] <- "PROP"
+data.reduced$activeIngClean[grep("pyra fb pyra", data.reduced$active.ingredient.coded, fixed=T)] <- "PYR"
+data.reduced$activeIngClean[grep("pyra fb prya", data.reduced$active.ingredient.coded, fixed=T)] <- "PYR"
+data.reduced$activeIngClean[grep("flut fb flut", data.reduced$active.ingredient.coded, fixed=T)] <- "FLUT"
+
+#' Rewrite combinations so that they are alphabetical
+data.reduced$combo_complete <- NA
+data.reduced$combo_complete[data.reduced$activeIngClean!="mixed"&
+                              data.reduced$activeIngClean!="dual"] <- "single"
+
+head(data.reduced[is.na(data.reduced$combo_complete),c(10:12,45:47)])
+
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu+thi"] <- 
+  "TEBU + THIO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="fluz+famo"] <- 
+  "FAMO + FLUZ"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu+sur"] <-
+  "SURF + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu+trif+oth"] <-
+  "TEBU + TRIF + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu+trif"] <-
+  "TEBU + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+azo"] <- 
+  "AZO + PROP"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flux+pyra"] <- 
+  "FLUX + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+azo"|
+                           data.reduced$active.ingredient.coded=="pro+azo"] <-
+  "AZO + PROP"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus+pic"] <- 
+  "FLUS + PICO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+trif+prot"] <-
+  "PROP + PROT + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo+cypr"] <-
+  "AZO + CYPR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra+tebu"] <-
+  "PYR + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+trif"] <- 
+  "PROP + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+trif+tebu"] <-
+  "PROP + TEBU + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="oth+flus"] <-
+  "FLUS + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus+pyra"] <-
+  "FLUS + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra+myc"] <- 
+  "MYC + PYRA"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra+flut"] <- 
+  "FLUT + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+trif+myc"] <-
+  "MYC + PROP + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+azo+tebu"] <- 
+  "AZO + PROP + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+azo+myc"] <- 
+  "AZO + MYC + PROP"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+azo+flut"] <- 
+  "AZO + FLUT + PROP"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+trif+flut"] <- 
+  "FLUT + PROP + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="oth+flut"] <- 
+  "FLUT + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo+prop"] <- 
+  "AZO + PROP"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo+dife"] <-
+  "AZO + DIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prot+trif"] <- 
+  "PROT + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flux+flut"] <- 
+  "FLUT + FLUX"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flut+azo"] <- 
+  "AZO + FLUT"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + pyra"] <- 
+  "PYR + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo+flut"] <- 
+  "AZO + FLUT"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="chl+tebu"] <- 
+  "CHL + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo+tebu"] <- 
+  "AZO + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo+myc"] <- 
+  "AZO + MYC"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo+pyra"] <- 
+  "AZO + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="myc+pyra"] <- 
+  "MYC + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="fenb+pyra"] <-
+  "FEN + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu+sul"] <-
+   "SUL + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="teb+cop"] <-
+  "COPPER + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="teb+eth"] <- 
+  "ETH + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="teb+thio"] <- 
+  "TEBU + THIO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tetr+azo"] <- 
+  "AZO + TETR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tetr+ort"] <- 
+  "ORTH + TETR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tetr+cro"] <- 
+  "CROP + TETR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="cop+oth"] <- 
+  "COPPER + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="eth+oth"] <- 
+  "ETH + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="sul+oth"] <- 
+  "SUL + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="thio+oth"] <- 
+  "OTH + THIO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="org+azo"] <- 
+  "AZO + ORG" 
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra fb tebu"] <- 
+  "PYR fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flut+eth"] <- 
+  "ETH + FLUT"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="sul+ unknown"] <- 
+  "SUL + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+azo fb teb"] <-
+  "AZO + PROP fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra + other fb tebu"] <- 
+  "OTH + PYR fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+trif fb tebu"] <- 
+  "PROP + TRIF fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flut+pyra"] <- 
+  "FLUT + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop+azo fb tebu"] <- 
+  "AZO + PROP fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo fb tebu"] <- 
+  "AZO fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo fb myc"] <- 
+  "AZO fb MYC"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo fb pyro"] <- 
+  "AZO fb PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo fb pyro + tebu"] <- 
+  "AZO fb PYR + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo fb flut"] <- 
+  "AZO fb FLUT"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="chl fb tebu+chl"] <- 
+  "CHL + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="chl fb tebu"|
+                           data.reduced$active.ingredient.coded=="chl fb tebu "] <- 
+  "CHL fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra+met"] <- 
+  "MET + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra+teb"] <- 
+  "PYR + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="myc + pyra"] <- 
+  "MYC + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="fenb+other"] <- 
+  "FEN + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="unknown + flus"] <- 
+  "FLUS + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra + flus"] <- 
+  "FLUS + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="cypr + azo"] <- 
+  "AZO + CYPR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra + met"] <- 
+  "MET + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + fam"] <-
+  "FAMO + FLUS"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + pyra"] <- 
+  "FLUS + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + azo"] <- 
+  "AZO + FLUS"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra + tebu fb pyra"] <-
+  "PYR + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra fb met"] <- 
+  "PYR fb MET"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + carb"] <- 
+  "CARB + FLUS" 
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="cyp + azo"] <- 
+  "AZO + CYPR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="thio + other"] <- 
+  "OTH + THIO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="chlo fb tebu"] <- 
+  "CHL fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + azo fb prop + azo"] <- 
+  "AZO + PROP"
+data.reduced$activeIngClean[data.reduced$active.ingredient.coded=="tria fb tria"] <- 
+  "cypr"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tria fb tria"] <- "single"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + azo"] <- 
+  "AZO + PROP"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + thio"] <- 
+  "TEBU + THIO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + pyra + pyra"] <- 
+  "PYR + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + adj"] <- 
+  "ADJ + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + trif"] <- 
+  "PROP + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra + adj"] <- 
+  "ADJ + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + carb + picoxy"] <- 
+  "CARB + FLUS + PICO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="unknown + myc"] <- 
+  "MYC + OTH"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="cyp + azo fb cyp"] <- 
+  "AZO + CYPR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flut + pyra"] <- 
+  "FLUT + PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flut + thio"] <- 
+  "FLUT + THIO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="thio fb tebu"] <- 
+  "THIO fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="thio + tebu"] <- 
+  "TEBU + THIO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pico + cypr"] <- 
+  "CYPR + PICO"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prot + trif"] <- 
+  "PROT + TRIF"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + pyra fb tebu + pyra"] <- 
+  "PYR + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + pyra fb myc"] <- 
+  "PYR + TEBU fb MYC"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop +trif fb tebu"] <- 
+  "PROP + TRIF fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + trif fb prya"] <- 
+  "PROP + TRIF fb PYR"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop +azo fb tebu"] <- 
+  "AZO + PROP fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + azo fb myc"] <-
+  "AZO + PROP fb MYC"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + azy"] <- 
+  "AZO + PROP"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + chlor"] <- 
+  "CHL + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + pyra fb tebu"] <- 
+  "PYR + TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu +pyra fb flut"] <- 
+  "PYR + TEBU fb FLUT"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + trif fb tebu"] <- 
+  "PROP + TRIF fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + trif fb myc"] <- 
+  "PROP + TRIF fb MYC"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop fb tebu"] <- 
+  "PROP fb TEBU"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop fb myc"] <- 
+  "PROP fb MYC"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop fb flut"] <- 
+  "PROP fb FLUT"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + trif fb flut"] <- 
+  "PROP + TRIF fb FLUT"
+data.reduced$combo_complete[!is.na(data.reduced$alphaIngred)] <- "complete"
+
+#' Look at results, do any have n >= 15?
+sort(table(data.reduced$alphaIngred))
+#  only pyr + tebu and azo + prop have >15
+
+
 #     Single applications
 data.reduced$activeIngClean[data.reduced$activeIngClean=="empty"] <- 
   as.character(data.reduced$active.ingredient.coded[data.reduced$activeIngClean=="empty"])
 #     Clean up so labels are consistent (e.g., "pyr" vs "pyra")
-data.reduced$activeIngClean[data.reduced$activeIngClean=="pyr"] <- "pyra"
-data.reduced$activeIngClean[data.reduced$activeIngClean=="pyraclostrobin"] <- "pyra"
-data.reduced$activeIngClean[data.reduced$activeIngClean=="pyro"] <- "pyra"
-data.reduced$activeIngClean[data.reduced$activeIngClean=="teb"] <- "tebu"
-data.reduced$activeIngClean[data.reduced$activeIngClean=="tetr"] <- "tetra"
-data.reduced$activeIngClean[data.reduced$activeIngClean=="thi"] <- "thio"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="pyr"] <- "PYR"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="pyraclostrobin"] <- "PYR"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="pyro"] <- "PYR"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="teb"] <- "TEBU"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="tetr"] <- "TETR"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="thi"] <- "THIO"
 data.reduced$activeIngClean[data.reduced$activeIngClean==""] <- "unknown"
-data.reduced$activeIngClean[data.reduced$activeIngClean=="cyp"] <- "cypr"
-data.reduced$activeIngClean[data.reduced$activeIngClean=="tebu "] <- "tebu"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="cyp"] <- "CYPR"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="tebu "] <- "TEBU"
 #     Check progress
-table(data.reduced$activeIngClean)
+sort(table(data.reduced$activeIngClean))
 #' When sample size is < 5, make "oth"
 #+ standardizeActive2
 less.than.five <- c("chlo", "cop", "eth", "febu", "met ", "org", "pico", "prop",
