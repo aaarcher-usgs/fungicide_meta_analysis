@@ -55,11 +55,11 @@ data.reduced$active.ingredient.coded <- as.character(data.reduced$active.ingredi
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="ACT Plus"] <- "other"
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Domark"] <- "TETR"
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Folicur"] <- "TEBU"
-data.reduced$active.ingredient.coded[data.reduced$trade.name=="Folicur fb Headline"] <- "tebu + pyra"
+data.reduced$active.ingredient.coded[data.reduced$trade.name=="Folicur fb Headline"] <- "tebu fb pyra"
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Folicur + Headline"] <- "tebu + pyra"
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Laredo"] <- "MYC"
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Punch fb Punch"] <- "FLUS"
-data.reduced$active.ingredient.coded[data.reduced$trade.name=="Stratego"] <- "mixed"
+data.reduced$active.ingredient.coded[data.reduced$trade.name=="Stratego"] <- "prop + trif"
 
 
 # Active ingredients - new code for analysis (e.g. >5 obs)
@@ -86,7 +86,7 @@ data.reduced$combo_complete <- NA
 data.reduced$combo_complete[data.reduced$activeIngClean!="mixed"&
                               data.reduced$activeIngClean!="dual"] <- "single"
 
-head(data.reduced[is.na(data.reduced$combo_complete),c(10:12,45:47)])
+head(data.reduced[is.na(data.reduced$combo_complete),c(10:12,45:46)])
 
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu+thi"] <- 
   "TEBU + THIO"
@@ -364,11 +364,12 @@ data.reduced$classClean[data.reduced$class.code=="other "] <- "other"
 data.reduced$classClean[data.reduced$class.code=="strobilurin "] <- "strobilurin"
 data.reduced$classClean[data.reduced$class.code=="strobulurin"] <- "strobilurin"
 data.reduced$classClean[data.reduced$class.code=="triaz+AL384:AM384ole"] <- "triazole"
+data.reduced$classClean[data.reduced$class.code=="tebu"] <- "strobilurin"
 # Fill in the rest
 data.reduced$classClean[data.reduced$classClean=="empty"] <- 
   as.character(data.reduced$class.code[data.reduced$classClean=="empty"])
 # Check with table
-table(data.reduced$classClean)
+sort(table(data.reduced$classClean))
 #' When sample size is < 5, make "oth"
 #+ standardizeClass2
 less.than.five <- c("chloronitrile", "copper sulfate", "mancozeb", "metconazole",
