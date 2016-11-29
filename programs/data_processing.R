@@ -562,13 +562,13 @@ rust.data <- rbind(rust.perc.orig, rust.scale.orig)
 #+ yieldData
 # Data that had yield data
     # Column #35 is yield
-yield.data <- data.reduced[!is.na(data.reduced$yield),] 
+yield.data <- rust.data[!is.na(rust.data$yield),] 
 
 #' 100sw data
 #+ seedData
 # Data that had 100sw data
     # Column #39 is 100sw
-seedwt.data <- data.reduced[!is.na(data.reduced$seedWt),] 
+seedwt.data <- rust.data[!is.na(rust.data$seedWt),] 
 
 #' Cercospora data
 #+ cercosporaData
