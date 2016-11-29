@@ -901,18 +901,28 @@ table(rust.data$number_applications)
 #+ removeSmallYield
 # Applications
 sort(table(yield.data$applicationsNumb))
-yield.data <- yield.data[yield.data$applicationsNumb!=5,]
+yield.data$number_applications[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2] <- 
+  yield.data$applicationsNumb[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2]
+table(yield.data$number_applications)
+
 # R-stage
 sort(table(yield.data$growthStateClean))
-yield.data <- yield.data[yield.data$growthStateClean!="V",]
+yield.data$category_rstage[yield.data$growthStateClean %in% analyze.rstage] <- 
+  yield.data$growthStateClean[yield.data$growthStateClean %in% analyze.rstage]
+table(yield.data$category_rstage)
+
 # Active ingredients
 sort(table(yield.data$activeIngClean))
-yield.data$activeIngClean[yield.data$activeIngClean=="gly"] <- "oth"
-sort(table(yield.data$activeIngClean))
+analyze.ai <- c("PYR","TEBU","FLUT","MIXED")
+yield.data$category_ai[yield.data$activeIngClean %in% analyze.ai] <- 
+  yield.data$activeIngClean[yield.data$activeIngClean %in% analyze.ai]
+sort(table(yield.data$category_ai))
+
 # Class
 sort(table(yield.data$classClean))
-yield.data$classClean[yield.data$classClean=="herbicide"] <- "other"
-sort(table(yield.data$classClean))
+yield.data$category_class[yield.data$classClean %in% analyze.class] <- 
+  yield.data$classClean[yield.data$classClean %in% analyze.class]
+sort(table(yield.data$category_class))
 
 #' 100-seed weight data
 #+ removeSmall100sw
