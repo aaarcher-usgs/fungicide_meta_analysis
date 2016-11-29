@@ -872,17 +872,30 @@ target.spot.data$n1i <- target.spot.data$n2i <- target.spot.data$replications
 #+ removeSmallRst
 # Active ingredients
 sort(table(rust.data$activeIngClean))
-small.ing <- c("cypr", "myc")
-rust.data$activeIngClean[rust.data$activeIngClean %in% small.ing] <- "oth"
-table(rust.data$activeIngClean)
+analyze.ai <- c("DUAL", "PYR","TEBU","FLUT","MIXED")
+rust.data$category_ai[rust.data$activeIngClean %in% analyze.ai] <- 
+  rust.data$activeIngClean[rust.data$activeIngClean %in% analyze.ai]
+table(rust.data$category_ai)
+
 # Class
 sort(table(rust.data$classClean))
-rust.data$classClean[rust.data$classClean=="thiophanate"] <- "other"
-table(rust.data$classClean)
+analyze.class <- c("strobilurin","triaz + strob","triazole")
+rust.data$category_class[rust.data$classClean %in% analyze.class] <- 
+  rust.data$classClean[rust.data$classClean %in% analyze.class]
+table(rust.data$category_class)
+
 # R-stage
 sort(table(rust.data$growthStateClean))
+analyze.rstage <- c("4","5","1+","2+","3")
+rust.data$category_rstage[rust.data$growthStateClean %in% analyze.rstage] <- 
+  rust.data$growthStateClean[rust.data$growthStateClean %in% analyze.rstage]
+table(rust.data$category_rstage)
+
 # Applications 
 sort(table(rust.data$applicationsNumb))
+rust.data$number_applications[rust.data$applicationsNumb!=5] <- 
+  rust.data$applicationsNumb[rust.data$applicationsNumb!=5]
+table(rust.data$number_applications)
 
 #' Yield data
 #+ removeSmallYield
