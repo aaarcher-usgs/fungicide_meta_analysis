@@ -227,6 +227,9 @@ library(devtools)
 <h3>Load data</h3>
 
 <pre><code class="r">raw.data &lt;- read.csv(&quot;data/workspace.csv&quot;)
+
+# FID #279 is repeated twice, replace one with 999
+raw.data$FID[raw.data$FID==279&amp;raw.data$trade.name==&quot;Folicur&quot;] &lt;- 999
 </code></pre>
 
 <h3>Processing data Steps</h3>
@@ -1999,6 +2002,7 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 ##  knitr       * 1.14    2016-08-13 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
+##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
 ##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.0)
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.0)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
@@ -2006,6 +2010,7 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 ##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
 ##  R.oo          1.20.0  2016-02-17 CRAN (R 3.3.0)
 ##  R.utils       2.4.0   2016-09-14 CRAN (R 3.3.0)
+##  rstudioapi    0.6     2016-06-27 CRAN (R 3.3.0)
 ##  stringi       1.1.2   2016-10-01 CRAN (R 3.3.0)
 ##  stringr       1.1.0   2016-08-19 CRAN (R 3.3.0)
 ##  withr         1.0.2   2016-06-20 CRAN (R 3.3.0)
