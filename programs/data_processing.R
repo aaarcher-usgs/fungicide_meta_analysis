@@ -22,6 +22,8 @@ opts_chunk$set(fig.width = 6, fig.height = 4)
 #+ data
 raw.data <- read.csv("data/workspace.csv")
 
+# FID #279 is repeated twice, replace one with 999
+raw.data$FID[raw.data$FID==279&raw.data$trade.name=="Folicur"] <- 999
 
 
 #' ### Processing data Steps
