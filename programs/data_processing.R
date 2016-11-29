@@ -926,21 +926,31 @@ sort(table(yield.data$category_class))
 
 #' 100-seed weight data
 #+ removeSmall100sw
-# Applications and growth stage
+# Applications 
 sort(table(seedwt.data$applicationsNumb))
+seedwt.data$number_applications[seedwt.data$applicationsNumb!=3] <-
+  seedwt.data$applicationsNumb[seedwt.data$applicationsNumb!=3]
+table(seedwt.data$number_applications)
+
+# growth stage
 sort(table(seedwt.data$growthStateClean))
-seedwt.data <- seedwt.data[seedwt.data$applicationsNumb!=3 & 
-                             seedwt.data$growthStateClean!=1,]
+analyze.rstage <- c("4","1+","2+","3")
+seedwt.data$category_rstage[seedwt.data$growthStateClean %in% analyze.rstage] <-
+  seedwt.data$growthStateClean[seedwt.data$growthStateClean %in% analyze.rstage]
+table(seedwt.data$category_rstage)
+
 # Active ingredients
 sort(table(seedwt.data$activeIngClean))
-small.ing.100 <- c("gly", "thio" ,"cypr", "myc", "dual")
-seedwt.data$activeIngClean[seedwt.data$activeIngClean %in% small.ing.100] <- "oth"
-sort(table(seedwt.data$activeIngClean))
+analyze.ai <- c("TEBU","FLUT","MIXED")
+seedwt.data$category_ai[seedwt.data$activeIngClean %in% analyze.ai] <- 
+  seedwt.data$activeIngClean[seedwt.data$activeIngClean %in% analyze.ai]
+table(seedwt.data$category_ai)
+
 # Class
 sort(table(seedwt.data$classClean))
-small.class.100 <- c("herbicide", "thiophanate")
-seedwt.data$classClean[seedwt.data$classClean %in% small.class.100] <- "other"
-sort(table(seedwt.data$classClean))
+seedwt.data$category_class[seedwt.data$classClean %in% analyze.class] <- 
+  seedwt.data$classClean[seedwt.data$classClean %in% analyze.class]
+table(seedwt.data$category_class)
 
 #' ### 6. Calculate effect sizes
 #' 
