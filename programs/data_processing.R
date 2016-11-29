@@ -214,7 +214,7 @@ data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo fb pyro + te
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="azo fb flut"] <- 
   "AZO fb FLUT"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="chl fb tebu+chl"] <- 
-  "CHL + TEBU"
+  "CHL fb CHL + TEBU"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="chl fb tebu"|
                            data.reduced$active.ingredient.coded=="chl fb tebu "] <- 
   "CHL fb TEBU"
@@ -241,7 +241,7 @@ data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + pyra"] <-
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + azo"] <- 
   "AZO + FLUS"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra + tebu fb pyra"] <-
-  "PYR + TEBU"
+  "PYR + TEBU fb PYR"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="pyra fb met"] <- 
   "PYR fb MET"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + carb"] <- 
@@ -274,7 +274,7 @@ data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flus + carb + pi
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="unknown + myc"] <- 
   "MYC + OTH"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="cyp + azo fb cyp"] <- 
-  "AZO + CYPR"
+  "AZO + CYPR fb CYPR"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flut + pyra"] <- 
   "FLUT + PYR"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="flut + thio"] <- 
@@ -304,7 +304,7 @@ data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + azy"] <-
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + chlor"] <- 
   "CHL + TEBU"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu + pyra fb tebu"] <- 
-  "PYR + TEBU"
+  "PYR + TEBU fb TEBU"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu +pyra fb flut"] <- 
   "PYR + TEBU fb FLUT"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + trif fb tebu"] <- 
@@ -319,6 +319,8 @@ data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop fb flut"] <
   "PROP fb FLUT"
 data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="prop + trif fb flut"] <- 
   "PROP + TRIF fb FLUT"
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded=="tebu fb pyra"] <- 
+  "TEBU fb PYR"
 data.reduced$combo_complete[!is.na(data.reduced$alphaIngred)] <- "complete"
 
 #' Look at results, do any have n >= 15?
@@ -352,7 +354,6 @@ data.reduced$activeIngClean[data.reduced$activeIngClean=="FEBU"] <- "FENB"
 
 
 
-
 #' Class of fungicide: clean up labels to be consistent and if <5, relabel as "oth"
 #' 
 #+ standardizeClass
@@ -373,7 +374,9 @@ data.reduced$classClean[data.reduced$classClean=="empty"] <-
 # Check with table
 sort(table(data.reduced$classClean))
 
+# View relation between classes and active ingredients
 summaryBy(FID~activeIngClean+classClean,data = data.reduced,FUN=length)
+
 # Fix the classes
 data.reduced$classClean[data.reduced$activeIngClean=="AZO"] <- "strobilurin"
 data.reduced$classClean[data.reduced$activeIngClean=="COP"] <- "copper sulfate"
@@ -383,11 +386,11 @@ data.reduced$classClean[data.reduced$activeIngClean=="TETR"] <- "triazole"
 data.reduced$classClean[data.reduced$activeIngClean=="TEBU"] <- "triazole"
 data.reduced$classClean[data.reduced$activeIngClean=="THIO"] <- "thiophanate"
 
+# View relation between classes and active ingredients
 summaryBy(FID~classClean + activeIngClean,data = data.reduced,FUN=length)
 
-
+# Instead of "mma", specify the mixed classes
 head(data.reduced[data.reduced$classClean=="mma",c(10:12,45:48)])
-
 data.reduced$classClean[data.reduced$alphaIngred=="TEBU + THIO"] <- "triaz + thio"
 data.reduced$classClean[data.reduced$alphaIngred=="PROP + TRIF"] <- "triaz + strob"
 data.reduced$classClean[data.reduced$alphaIngred=="TEBU + TRIF + OTH"] <- "triaz + strob"
@@ -401,9 +404,91 @@ data.reduced$classClean[data.reduced$alphaIngred=="FLUS + PYR"] <- "triaz + stro
 data.reduced$classClean[data.reduced$alphaIngred=="AZO + PROP + TRIF"] <- "triaz + strob"
 data.reduced$classClean[data.reduced$alphaIngred=="AZO + PROP + TEBU"] <- "triaz + strob"
 data.reduced$classClean[data.reduced$alphaIngred=="AZO + FLUT + PROP"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUS + PICO"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="MYC + PYR"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUT + PROP + TRIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + DIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="PROT + TRIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + MYC + PROP"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$classClean=="copper sulfate"] <- "inorganic"
+data.reduced$classClean[data.reduced$classClean=="mancozeb"] <- "dithiocarbamates"
+data.reduced$classClean[data.reduced$classClean=="metconazole"] <- "triazole"
+data.reduced$classClean[data.reduced$classClean=="myc"] <- "triazole"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP + PROT + TRIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUX + PYR"] <- "strobilurin"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUT + FLUX"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + FLUT"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + PYR"] <- "strobilurin"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + MYC"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + TEBU"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + PYR"] <- "strobilurin"
+data.reduced$classClean[data.reduced$alphaIngred=="FEN + PYR"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="SUL + TEBU"] <- "inorg + triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="MYC + PROP + TRIF"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="CHL + TEBU"] <- "chlor + triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + TETR"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="ORTH + TETR"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="CROP + TETR"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="SURF + TEBU"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="COPPER + OTH"] <- "inorg + other"
+data.reduced$classClean[data.reduced$alphaIngred=="COPPER + TEBU"] <- "inorg + triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + ORG"] <- "organic + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="PYR fb TEBU"] <- "series strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="TEBU fb PYR"] <- "series triaz fb strob"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + PROP fb TEBU"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="OTH + PYR fb TEBU"] <- "series strob + other fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP + TRIF fb TEBU"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO fb TEBU"] <- "series strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO fb MYC"] <- "series strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO fb PYR"] <- "strobilurin"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO fb FLUT"] <- "series strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO fb PYR + TEBU"] <- "series strob fb triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="CHL fb CHL + TEBU"] <- "series chlor fb chlor + triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="ETH + OTH"] <- "other"
+data.reduced$classClean[data.reduced$alphaIngred=="ETH + TEBU"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="MET + PYR"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="CHL fb TEBU"] <- "series chlor fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="SUL + OTH"] <- "inorg + other"
+data.reduced$classClean[data.reduced$alphaIngred=="OTH + THIO"] <- "thio + other"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUS + OTH"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="ETH + FLUT"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="PYR + TEBU fb PYR"] <- "series triaz + strob fb strob"
+data.reduced$classClean[data.reduced$alphaIngred=="ADJ + TEBU"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="ADJ + PYR"] <- "strob + other"
+data.reduced$classClean[data.reduced$alphaIngred=="CARB + FLUS + PICO"] <- "triaz + strob + thio"
+data.reduced$classClean[data.reduced$alphaIngred=="MYC + OTH"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="CYPR + PICO"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$alphaIngred=="PYR + TEBU fb MYC"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="THIO fb TEBU"] <- "series thio fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + CYPR fb CYPR"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP + TRIF fb PYR"] <- "series triaz + strob fb strob"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP + TRIF fb MYC"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="PYR + TEBU fb TEBU"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="PYR + TEBU fb FLUT"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="AZO + PROP fb MYC"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP fb MYC"] <- "triazole"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUT + THIO"] <- "triaz + thio"
+data.reduced$classClean[data.reduced$alphaIngred=="FLUT + OTH"] <- "triaz + other"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP fb TEBU"] <- "triazole"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP fb FLUT"] <- "triazole"
+data.reduced$classClean[data.reduced$alphaIngred=="PROP + TRIF fb FLUT"] <- "series triaz + strob fb triaz"
+data.reduced$classClean[data.reduced$trade.name=="Charisma"] <- "triaz + strob"
+data.reduced$classClean[data.reduced$classClean=="dithiocarbamates"] <- "other"
 
-head(data.reduced[data.reduced$classClean=="mma",c(10:12,45:48)],12)
+# Checking data
+head(data.reduced[data.reduced$classClean=="other",c(10:12,45:48)],32)
+sort(table(data.reduced$classClean))
+sort(table(data.reduced$activeIngClean))
 
+# Final clean up of specific cases
+data.reduced$activeIngClean[data.reduced$active.ingredient.coded=="sul"] <- "SUL"
+data.reduced$classClean[data.reduced$active.ingredient.coded=="sul"] <- "inorganic"
+data.reduced$classClean[data.reduced$trade.name=="Ballad"] <- "organic"
+data.reduced$activeIngClean[data.reduced$active.ingredient.coded=="eth"] <- "OTH"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="OTH"] <- "other"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="OTHER"] <- "other"
+data.reduced$activeIngClean[data.reduced$activeIngClean=="UNKNOWN"] <- "other"
+data.reduced$classClean[data.reduced$classClean=="unknown"] <- "other"
 
 
 
