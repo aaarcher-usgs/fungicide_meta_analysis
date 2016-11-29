@@ -537,9 +537,6 @@ table(data.reduced$growthStateClean)
 #+ standardizeNumbApps
 # Check with table
 table(data.reduced$applicationsNumb)
-#' When sample size is < 5, delete
-#+ standardizeNumbApps2
-data.reduced <- data.reduced[data.reduced$applicationsNumb!=8,]
 
 #' ### 3. Partition data
 #' 
