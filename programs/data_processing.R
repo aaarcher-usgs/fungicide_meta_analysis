@@ -973,19 +973,29 @@ target.spot.data$m2i[target.spot.data$m2i==0] <- 0.0001
 #' Overall means (raw mean difference)
 #+ effectSizeMD
 rust.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
-                    sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                    sd1i = rep(1,nrow(rust.data)), 
+                    sd2i = rep(1,nrow(rust.data)), 
+                    n1i = n1i, n2i = n2i,
                     data = rust.data)
 yield.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
-                     sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                     sd1i = rep(1,nrow(yield.data)), 
+                     sd2i = rep(1,nrow(yield.data)), 
+                     n1i = n1i, n2i = n2i,
                      data = yield.data)
 seedwt.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
-                      sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                      sd1i = rep(1,nrow(seedwt.data)), 
+                      sd2i = rep(1,nrow(seedwt.data)), 
+                      n1i = n1i, n2i = n2i,
                       data = seedwt.data)
 cerco.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
-                              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                              sd1i = rep(1,nrow(cerco.data)), 
+                         sd2i = rep(1,nrow(cerco.data)), 
+                         n1i = n1i, n2i = n2i,
                               data = cerco.data)
 target.spot.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
-                              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                              sd1i = rep(1,nrow(target.spot.data)), 
+                              sd2i = rep(1,nrow(target.spot.data)), 
+                              n1i = n1i, n2i = n2i,
                               data = target.spot.data)
 
 #' ### 7. Save files for analysis
