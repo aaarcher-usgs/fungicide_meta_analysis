@@ -211,6 +211,7 @@ hr {
 library(knitr)
 library(metafor)
 library(doBy)
+library(devtools)
 </code></pre>
 
 <p>Clear environment</p>
@@ -327,14 +328,14 @@ data.reduced &lt;- data.reduced[data.reduced$FID!=105 &amp;
 
 <pre><code class="r"># Active ingredients - fix typos in original dataset
 data.reduced$active.ingredient.coded &lt;- as.character(data.reduced$active.ingredient.coded)
-data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;ACT Plus&quot;] &lt;- &quot;oth&quot;
-data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Domark&quot;] &lt;- &quot;tetra&quot;
-data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur&quot;] &lt;- &quot;tebu&quot;
-data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur fb Headline&quot;] &lt;- &quot;tebu + pyra&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;ACT Plus&quot;] &lt;- &quot;other&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Domark&quot;] &lt;- &quot;TETR&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur&quot;] &lt;- &quot;TEBU&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur fb Headline&quot;] &lt;- &quot;tebu fb pyra&quot;
 data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur + Headline&quot;] &lt;- &quot;tebu + pyra&quot;
-data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Laredo&quot;] &lt;- &quot;myc&quot;
-data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Punch fb Punch&quot;] &lt;- &quot;flus&quot;
-data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Stratego&quot;] &lt;- &quot;mixed&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Laredo&quot;] &lt;- &quot;MYC&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Punch fb Punch&quot;] &lt;- &quot;FLUS&quot;
+data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Stratego&quot;] &lt;- &quot;prop + trif&quot;
 
 
 # Active ingredients - new code for analysis (e.g. &gt;5 obs)
@@ -346,55 +347,391 @@ data.reduced$activeIngClean[mixed.indices] &lt;- &quot;mixed&quot;
 #     Dual applications
 dual.apps &lt;- grep(&quot;fb&quot;, data.reduced$active.ingredient.coded, fixed=TRUE)
 data.reduced$activeIngClean[dual.apps] &lt;- &quot;dual&quot;
-data.reduced$activeIngClean[grep(&quot;azo fb azo&quot;, data.reduced$active.ingredient.coded, fixed=F)] &lt;- &quot;azo&quot;
-data.reduced$activeIngClean[grep(&quot;myc fb myc&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;myc&quot;
-data.reduced$activeIngClean[grep(&quot;tetr fb tetr&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;tetra&quot;
-data.reduced$activeIngClean[grep(&quot;tetra fb tetra&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;tetra&quot;
-data.reduced$activeIngClean[grep(&quot;tebu fb tebu&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;tebu&quot;
-data.reduced$activeIngClean[grep(&quot;prop fb prop&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;prop&quot;
-data.reduced$activeIngClean[grep(&quot;pyra fb pyra&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;pyra&quot;
-data.reduced$activeIngClean[grep(&quot;pyra fb prya&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;pyra&quot;
-data.reduced$activeIngClean[grep(&quot;flut fb flut&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;flut&quot;
+data.reduced$activeIngClean[grep(&quot;azo fb azo&quot;, data.reduced$active.ingredient.coded, fixed=F)] &lt;- &quot;AZO&quot;
+data.reduced$activeIngClean[grep(&quot;myc fb myc&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;MYC&quot;
+data.reduced$activeIngClean[grep(&quot;tetr fb tetr&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;TETR&quot;
+data.reduced$activeIngClean[grep(&quot;tetra fb tetra&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;TETR&quot;
+data.reduced$activeIngClean[grep(&quot;tebu fb tebu&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;TEBU&quot;
+data.reduced$activeIngClean[grep(&quot;prop fb prop&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;PROP&quot;
+data.reduced$activeIngClean[grep(&quot;pyra fb pyra&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;PYR&quot;
+data.reduced$activeIngClean[grep(&quot;pyra fb prya&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;PYR&quot;
+data.reduced$activeIngClean[grep(&quot;flut fb flut&quot;, data.reduced$active.ingredient.coded, fixed=T)] &lt;- &quot;FLUT&quot;
+</code></pre>
+
+<p>Rewrite combinations so that they are alphabetical</p>
+
+<pre><code class="r">data.reduced$combo_complete &lt;- NA
+data.reduced$combo_complete[data.reduced$activeIngClean!=&quot;mixed&quot;&amp;
+                              data.reduced$activeIngClean!=&quot;dual&quot;] &lt;- &quot;single&quot;
+
+head(data.reduced[is.na(data.reduced$combo_complete),c(10:12,45:46)])
+</code></pre>
+
+<pre><code>##            trade.name                active.ingredient
+## 5   Tebuzol + Topsin        tebuconazole + thiophanate
+## 9  Tebuzol  + Topsin        tebuconazole + thiophanate
+## 13           Charisma         fluzilazole + famoxidone
+## 14           Charisma         fluzilazole + famoxidone
+## 21           Stratego propriconizole + trifloxystrobin
+## 22           Stratego propriconizole + trifloxystrobin
+##    active.ingredient.coded activeIngClean combo_complete
+## 5                 tebu+thi          mixed           &lt;NA&gt;
+## 9                 tebu+thi          mixed           &lt;NA&gt;
+## 13               fluz+famo          mixed           &lt;NA&gt;
+## 14               fluz+famo          mixed           &lt;NA&gt;
+## 21             prop + trif          mixed           &lt;NA&gt;
+## 22             prop + trif          mixed           &lt;NA&gt;
+</code></pre>
+
+<pre><code class="r">data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu+thi&quot;] &lt;- 
+  &quot;TEBU + THIO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;fluz+famo&quot;] &lt;- 
+  &quot;FAMO + FLUZ&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu+sur&quot;] &lt;-
+  &quot;SURF + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu+trif+oth&quot;] &lt;-
+  &quot;TEBU + TRIF + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu+trif&quot;] &lt;-
+  &quot;TEBU + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+azo&quot;] &lt;- 
+  &quot;AZO + PROP&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flux+pyra&quot;] &lt;- 
+  &quot;FLUX + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+azo&quot;|
+                           data.reduced$active.ingredient.coded==&quot;pro+azo&quot;] &lt;-
+  &quot;AZO + PROP&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flus+pic&quot;] &lt;- 
+  &quot;FLUS + PICO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+trif+prot&quot;] &lt;-
+  &quot;PROP + PROT + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo+cypr&quot;] &lt;-
+  &quot;AZO + CYPR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra+tebu&quot;] &lt;-
+  &quot;PYR + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+trif&quot;] &lt;- 
+  &quot;PROP + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+trif+tebu&quot;] &lt;-
+  &quot;PROP + TEBU + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;oth+flus&quot;] &lt;-
+  &quot;FLUS + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flus+pyra&quot;] &lt;-
+  &quot;FLUS + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra+myc&quot;] &lt;- 
+  &quot;MYC + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra+flut&quot;] &lt;- 
+  &quot;FLUT + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+trif+myc&quot;] &lt;-
+  &quot;MYC + PROP + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+azo+tebu&quot;] &lt;- 
+  &quot;AZO + PROP + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+azo+myc&quot;] &lt;- 
+  &quot;AZO + MYC + PROP&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+azo+flut&quot;] &lt;- 
+  &quot;AZO + FLUT + PROP&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+trif+flut&quot;] &lt;- 
+  &quot;FLUT + PROP + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;oth+flut&quot;] &lt;- 
+  &quot;FLUT + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo+prop&quot;] &lt;- 
+  &quot;AZO + PROP&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo+dife&quot;] &lt;-
+  &quot;AZO + DIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prot+trif&quot;] &lt;- 
+  &quot;PROT + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flux+flut&quot;] &lt;- 
+  &quot;FLUT + FLUX&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flut+azo&quot;] &lt;- 
+  &quot;AZO + FLUT&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu + pyra&quot;] &lt;- 
+  &quot;PYR + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo+flut&quot;] &lt;- 
+  &quot;AZO + FLUT&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;chl+tebu&quot;] &lt;- 
+  &quot;CHL + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo+tebu&quot;] &lt;- 
+  &quot;AZO + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo+myc&quot;] &lt;- 
+  &quot;AZO + MYC&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo+pyra&quot;] &lt;- 
+  &quot;AZO + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;myc+pyra&quot;] &lt;- 
+  &quot;MYC + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;fenb+pyra&quot;] &lt;-
+  &quot;FEN + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu+sul&quot;] &lt;-
+   &quot;SUL + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;teb+cop&quot;] &lt;-
+  &quot;COPPER + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;teb+eth&quot;] &lt;- 
+  &quot;ETH + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;teb+thio&quot;] &lt;- 
+  &quot;TEBU + THIO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tetr+azo&quot;] &lt;- 
+  &quot;AZO + TETR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tetr+ort&quot;] &lt;- 
+  &quot;ORTH + TETR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tetr+cro&quot;] &lt;- 
+  &quot;CROP + TETR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;cop+oth&quot;] &lt;- 
+  &quot;COPPER + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;eth+oth&quot;] &lt;- 
+  &quot;ETH + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;sul+oth&quot;] &lt;- 
+  &quot;SUL + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;thio+oth&quot;] &lt;- 
+  &quot;OTH + THIO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;org+azo&quot;] &lt;- 
+  &quot;AZO + ORG&quot; 
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra fb tebu&quot;] &lt;- 
+  &quot;PYR fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flut+eth&quot;] &lt;- 
+  &quot;ETH + FLUT&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;sul+ unknown&quot;] &lt;- 
+  &quot;SUL + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+azo fb teb&quot;] &lt;-
+  &quot;AZO + PROP fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra + other fb tebu&quot;] &lt;- 
+  &quot;OTH + PYR fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+trif fb tebu&quot;] &lt;- 
+  &quot;PROP + TRIF fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flut+pyra&quot;] &lt;- 
+  &quot;FLUT + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop+azo fb tebu&quot;] &lt;- 
+  &quot;AZO + PROP fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo fb tebu&quot;] &lt;- 
+  &quot;AZO fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo fb myc&quot;] &lt;- 
+  &quot;AZO fb MYC&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo fb pyro&quot;] &lt;- 
+  &quot;AZO fb PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo fb pyro + tebu&quot;] &lt;- 
+  &quot;AZO fb PYR + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;azo fb flut&quot;] &lt;- 
+  &quot;AZO fb FLUT&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;chl fb tebu+chl&quot;] &lt;- 
+  &quot;CHL fb CHL + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;chl fb tebu&quot;|
+                           data.reduced$active.ingredient.coded==&quot;chl fb tebu &quot;] &lt;- 
+  &quot;CHL fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra+met&quot;] &lt;- 
+  &quot;MET + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra+teb&quot;] &lt;- 
+  &quot;PYR + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;myc + pyra&quot;] &lt;- 
+  &quot;MYC + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;fenb+other&quot;] &lt;- 
+  &quot;FEN + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;unknown + flus&quot;] &lt;- 
+  &quot;FLUS + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra + flus&quot;] &lt;- 
+  &quot;FLUS + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;cypr + azo&quot;] &lt;- 
+  &quot;AZO + CYPR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra + met&quot;] &lt;- 
+  &quot;MET + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flus + fam&quot;] &lt;-
+  &quot;FAMO + FLUS&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flus + pyra&quot;] &lt;- 
+  &quot;FLUS + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flus + azo&quot;] &lt;- 
+  &quot;AZO + FLUS&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra + tebu fb pyra&quot;] &lt;-
+  &quot;PYR + TEBU fb PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra fb met&quot;] &lt;- 
+  &quot;PYR fb MET&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flus + carb&quot;] &lt;- 
+  &quot;CARB + FLUS&quot; 
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;cyp + azo&quot;] &lt;- 
+  &quot;AZO + CYPR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;thio + other&quot;] &lt;- 
+  &quot;OTH + THIO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;chlo fb tebu&quot;] &lt;- 
+  &quot;CHL fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + azo fb prop + azo&quot;] &lt;- 
+  &quot;AZO + PROP&quot;
+data.reduced$activeIngClean[data.reduced$active.ingredient.coded==&quot;tria fb tria&quot;] &lt;- 
+  &quot;cypr&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tria fb tria&quot;] &lt;- &quot;single&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + azo&quot;] &lt;- 
+  &quot;AZO + PROP&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu + thio&quot;] &lt;- 
+  &quot;TEBU + THIO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu + pyra + pyra&quot;] &lt;- 
+  &quot;PYR + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu + adj&quot;] &lt;- 
+  &quot;ADJ + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + trif&quot;] &lt;- 
+  &quot;PROP + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pyra + adj&quot;] &lt;- 
+  &quot;ADJ + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flus + carb + picoxy&quot;] &lt;- 
+  &quot;CARB + FLUS + PICO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;unknown + myc&quot;] &lt;- 
+  &quot;MYC + OTH&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;cyp + azo fb cyp&quot;] &lt;- 
+  &quot;AZO + CYPR fb CYPR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flut + pyra&quot;] &lt;- 
+  &quot;FLUT + PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;flut + thio&quot;] &lt;- 
+  &quot;FLUT + THIO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;thio fb tebu&quot;] &lt;- 
+  &quot;THIO fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;thio + tebu&quot;] &lt;- 
+  &quot;TEBU + THIO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;pico + cypr&quot;] &lt;- 
+  &quot;CYPR + PICO&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prot + trif&quot;] &lt;- 
+  &quot;PROT + TRIF&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu + pyra fb tebu + pyra&quot;] &lt;- 
+  &quot;PYR + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu + pyra fb myc&quot;] &lt;- 
+  &quot;PYR + TEBU fb MYC&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop +trif fb tebu&quot;] &lt;- 
+  &quot;PROP + TRIF fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + trif fb prya&quot;] &lt;- 
+  &quot;PROP + TRIF fb PYR&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop +azo fb tebu&quot;] &lt;- 
+  &quot;AZO + PROP fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + azo fb myc&quot;] &lt;-
+  &quot;AZO + PROP fb MYC&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + azy&quot;] &lt;- 
+  &quot;AZO + PROP&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu + chlor&quot;] &lt;- 
+  &quot;CHL + TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu + pyra fb tebu&quot;] &lt;- 
+  &quot;PYR + TEBU fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu +pyra fb flut&quot;] &lt;- 
+  &quot;PYR + TEBU fb FLUT&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + trif fb tebu&quot;] &lt;- 
+  &quot;PROP + TRIF fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + trif fb myc&quot;] &lt;- 
+  &quot;PROP + TRIF fb MYC&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop fb tebu&quot;] &lt;- 
+  &quot;PROP fb TEBU&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop fb myc&quot;] &lt;- 
+  &quot;PROP fb MYC&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop fb flut&quot;] &lt;- 
+  &quot;PROP fb FLUT&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;prop + trif fb flut&quot;] &lt;- 
+  &quot;PROP + TRIF fb FLUT&quot;
+data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu fb pyra&quot;] &lt;- 
+  &quot;TEBU fb PYR&quot;
+data.reduced$combo_complete[!is.na(data.reduced$alphaIngred)] &lt;- &quot;complete&quot;
+</code></pre>
+
+<p>Look at results, do any have n &gt;= 15?</p>
+
+<pre><code class="r">sort(table(data.reduced$alphaIngred))
+</code></pre>
+
+<pre><code>## 
+##  AZO + CYPR fb CYPR          AZO + FLUS   AZO + FLUT + PROP 
+##                   1                   1                   1 
+##           AZO + MYC    AZO + MYC + PROP   AZO + PROP fb MYC 
+##                   1                   1                   1 
+##           AZO + PYR          AZO + TEBU          AZO + TETR 
+##                   1                   1                   1 
+##         AZO fb FLUT          AZO fb MYC          AZO fb PYR 
+##                   1                   1                   1 
+##   AZO fb PYR + TEBU         AZO fb TEBU         CARB + FLUS 
+##                   1                   1                   1 
+##  CARB + FLUS + PICO   CHL fb CHL + TEBU        COPPER + OTH 
+##                   1                   1                   1 
+##       COPPER + TEBU         CROP + TETR          ETH + FLUT 
+##                   1                   1                   1 
+##           ETH + OTH          ETH + TEBU         FAMO + FLUS 
+##                   1                   1                   1 
+##           FEN + OTH         FLUS + PICO          FLUT + OTH 
+##                   1                   1                   1 
+##  FLUT + PROP + TRIF         FLUT + THIO           MYC + OTH 
+##                   1                   1                   1 
+##   MYC + PROP + TRIF         ORTH + TETR   OTH + PYR fb TEBU 
+##                   1                   1                   1 
+##  PROP + PROT + TRIF PROP + TRIF fb FLUT  PROP + TRIF fb MYC 
+##                   1                   1                   1 
+##  PROP + TRIF fb PYR        PROP fb FLUT         PROP fb MYC 
+##                   1                   1                   1 
+##        PROP fb TEBU  PYR + TEBU fb FLUT  PYR + TEBU fb TEBU 
+##                   1                   1                   1 
+##              single          SUL + TEBU   TEBU + TRIF + OTH 
+##                   1                   1                   1 
+##   AZO + PROP + TEBU  AZO + PROP fb TEBU          CHL + TEBU 
+##                   2                   2                   2 
+##         FAMO + FLUZ           FEN + PYR          FLUS + OTH 
+##                   2                   2                   2 
+##          OTH + THIO   PYR + TEBU fb MYC          PYR fb MET 
+##                   2                   2                   2 
+##           SUL + OTH         SURF + TEBU        THIO fb TEBU 
+##                   2                   2                   2 
+##           ADJ + PYR          ADJ + TEBU           AZO + DIF 
+##                   3                   3                   3 
+##           AZO + ORG         CHL fb TEBU         CYPR + PICO 
+##                   3                   3                   3 
+##           MET + PYR PROP + TRIF fb TEBU   PYR + TEBU fb PYR 
+##                   3                   3                   3 
+##         TEBU fb PYR          AZO + CYPR         FLUT + FLUX 
+##                   3                   4                   4 
+##         PROT + TRIF         PYR fb TEBU          FLUS + PYR 
+##                   4                   4                   5 
+##          FLUT + PYR          FLUX + PYR  PROP + TEBU + TRIF 
+##                   5                   5                   5 
+##           MYC + PYR         TEBU + TRIF          AZO + FLUT 
+##                   6                   6                   7 
+##         TEBU + THIO          PYR + TEBU         PROP + TRIF 
+##                   9                  13                  20 
+##          AZO + PROP 
+##                  25
+</code></pre>
+
+<pre><code class="r">#  only pyr + tebu and azo + prop have &gt;15
+
+
 #     Single applications
 data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;empty&quot;] &lt;- 
   as.character(data.reduced$active.ingredient.coded[data.reduced$activeIngClean==&quot;empty&quot;])
 #     Clean up so labels are consistent (e.g., &quot;pyr&quot; vs &quot;pyra&quot;)
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyr&quot;] &lt;- &quot;pyra&quot;
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyraclostrobin&quot;] &lt;- &quot;pyra&quot;
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyro&quot;] &lt;- &quot;pyra&quot;
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;teb&quot;] &lt;- &quot;tebu&quot;
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;tetr&quot;] &lt;- &quot;tetra&quot;
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;thi&quot;] &lt;- &quot;thio&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyr&quot;] &lt;- &quot;PYR&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyraclostrobin&quot;] &lt;- &quot;PYR&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyro&quot;] &lt;- &quot;PYR&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;teb&quot;] &lt;- &quot;TEBU&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;tetr&quot;] &lt;- &quot;TETR&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;thi&quot;] &lt;- &quot;THIO&quot;
 data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;&quot;] &lt;- &quot;unknown&quot;
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;cyp&quot;] &lt;- &quot;cypr&quot;
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;tebu &quot;] &lt;- &quot;tebu&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;cyp&quot;] &lt;- &quot;CYPR&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;tebu &quot;] &lt;- &quot;TEBU&quot;
+data.reduced$activeIngClean[data.reduced$active.ingredient.coded==&quot;tria&quot;] &lt;- &quot;TEBU&quot;
 #     Check progress
-table(data.reduced$activeIngClean)
+sort(table(data.reduced$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##     azo    chlo     cop    cypr    dual     eth    febu    flus    flut 
-##      29       2       2       6      44       2       1       8      66 
-##     gly    met    mixed     myc     org     oth    pico    prop    prot 
-##       6       1     177      14       3      16       4       2       4 
-##    pyra     sul    tebu   tetra    thio    tria    trif unknown 
-##      54       3      54      37      10       1       2      18
+##    febu    FLUS    met     THIO    chlo     cop    CYPR     eth   other 
+##       1       1       1       1       2       2       2       2       2 
+##    PROP    trif     org     sul     AZO    pico    prot    cypr    FLUT 
+##       2       2       3       3       4       4       4       5       6 
+##     gly    flus     PYR    thio     MYC     oth    tebu unknown     azo 
+##       6       7       7       9      14      14      16      18      25 
+##    TETR    TEBU    dual    pyra    flut   mixed 
+##      37      39      46      47      60     174
 </code></pre>
 
-<p>When sample size is &lt; 5, make &ldquo;oth&rdquo;</p>
+<p>Convert to capital letters</p>
 
-<pre><code class="r">less.than.five &lt;- c(&quot;chlo&quot;, &quot;cop&quot;, &quot;eth&quot;, &quot;febu&quot;, &quot;met &quot;, &quot;org&quot;, &quot;pico&quot;, &quot;prop&quot;,
-                    &quot;prot&quot;, &quot;sul&quot;, &quot;tria&quot;, &quot;trif&quot;, &quot;unknown&quot;)
-data.reduced$activeIngClean[data.reduced$activeIngClean %in% less.than.five] &lt;- &quot;oth&quot;
-# Check with table
-table(data.reduced$activeIngClean)
+<pre><code class="r">data.reduced$activeIngClean &lt;- toupper(data.reduced$activeIngClean) 
+sort(table(data.reduced$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##   azo  cypr  dual  flus  flut   gly mixed   myc   oth  pyra  tebu tetra 
-##    29     6    44     8    66     6   177    14    61    54    54    37 
-##  thio 
-##    10
+##    FEBU    MET     CHLO     COP     ETH   OTHER    PROP    TRIF     ORG 
+##       1       1       2       2       2       2       2       2       3 
+##     SUL    PICO    PROT     GLY    CYPR     PYR    FLUS    THIO     MYC 
+##       3       4       4       6       7       7       8      10      14 
+##     OTH UNKNOWN     AZO    TETR    DUAL    PYRA    TEBU    FLUT   MIXED 
+##      14      18      29      37      46      47      55      66     174
+</code></pre>
+
+<pre><code class="r">data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;PYRA&quot;] &lt;- &quot;PYR&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;FEBU&quot;] &lt;- &quot;FENB&quot;
 </code></pre>
 
 <p>Class of fungicide: clean up labels to be consistent and if &lt;5, relabel as &ldquo;oth&rdquo;</p>
@@ -426,34 +763,392 @@ data.reduced$classClean[data.reduced$class.code==&quot;other &quot;] &lt;- &quot
 data.reduced$classClean[data.reduced$class.code==&quot;strobilurin &quot;] &lt;- &quot;strobilurin&quot;
 data.reduced$classClean[data.reduced$class.code==&quot;strobulurin&quot;] &lt;- &quot;strobilurin&quot;
 data.reduced$classClean[data.reduced$class.code==&quot;triaz+AL384:AM384ole&quot;] &lt;- &quot;triazole&quot;
+data.reduced$classClean[data.reduced$class.code==&quot;tebu&quot;] &lt;- &quot;strobilurin&quot;
 # Fill in the rest
 data.reduced$classClean[data.reduced$classClean==&quot;empty&quot;] &lt;- 
   as.character(data.reduced$class.code[data.reduced$classClean==&quot;empty&quot;])
 # Check with table
-table(data.reduced$classClean)
+sort(table(data.reduced$classClean))
 </code></pre>
 
 <pre><code>## 
-##  chloronitrile copper sulfate      herbicide       mancozeb    metconazole 
-##              2              1              6              1              1 
-##            mma            myc          other    strobilurin           tebu 
-##            220              2             32             90              1 
-##    thiophanate       triazole        unknown 
-##              9            189             12
+## copper sulfate       mancozeb    metconazole  chloronitrile            myc 
+##              1              1              1              2              2 
+##      herbicide    thiophanate        unknown          other    strobilurin 
+##              6              9             12             32             91 
+##       triazole            mma 
+##            189            220
 </code></pre>
 
-<p>When sample size is &lt; 5, make &ldquo;oth&rdquo;</p>
+<pre><code class="r"># View relation between classes and active ingredients
+summaryBy(FID~activeIngClean+classClean,data = data.reduced,FUN=length)
+</code></pre>
 
-<pre><code class="r">less.than.five &lt;- c(&quot;chloronitrile&quot;, &quot;copper sulfate&quot;, &quot;mancozeb&quot;, &quot;metconazole&quot;,
-                    &quot;myc&quot;, &quot;tebu&quot;, &quot;unknown&quot;)
-data.reduced$classClean[data.reduced$classClean %in% less.than.five] &lt;- &quot;other&quot;
-# Check with table
-table(data.reduced$classClean)
+<pre><code>##    activeIngClean     classClean FID.length
+## 1             AZO    strobilurin         28
+## 2             AZO       triazole          1
+## 3            CHLO  chloronitrile          2
+## 4             COP copper sulfate          1
+## 5             COP          other          1
+## 6            CYPR       triazole          7
+## 7            DUAL            mma         44
+## 8            DUAL    strobilurin          2
+## 9             ETH          other          2
+## 10           FENB       triazole          1
+## 11           FLUS       triazole          8
+## 12           FLUT       triazole         66
+## 13            GLY      herbicide          6
+## 14           MET     metconazole          1
+## 15          MIXED            mma        166
+## 16          MIXED          other          1
+## 17          MIXED       triazole          6
+## 18          MIXED        unknown          1
+## 19            MYC            mma          3
+## 20            MYC            myc          2
+## 21            MYC       triazole          9
+## 22            ORG          other          3
+## 23            OTH       mancozeb          1
+## 24            OTH          other         13
+## 25          OTHER          other          1
+## 26          OTHER        unknown          1
+## 27           PICO    strobilurin          4
+## 28           PROP       triazole          2
+## 29           PROT       triazole          4
+## 30            PYR            mma          4
+## 31            PYR    strobilurin         50
+## 32            SUL          other          3
+## 33           TEBU            mma          2
+## 34           TEBU    strobilurin          1
+## 35           TEBU       triazole         52
+## 36           TETR    strobilurin          4
+## 37           TETR       triazole         33
+## 38           THIO            mma          1
+## 39           THIO    thiophanate          9
+## 40           TRIF    strobilurin          2
+## 41        UNKNOWN          other          8
+## 42        UNKNOWN        unknown         10
+</code></pre>
+
+<pre><code class="r"># Fix the classes
+data.reduced$classClean[data.reduced$activeIngClean==&quot;AZO&quot;] &lt;- &quot;strobilurin&quot;
+data.reduced$classClean[data.reduced$activeIngClean==&quot;COP&quot;] &lt;- &quot;copper sulfate&quot;
+data.reduced$classClean[data.reduced$activeIngClean==&quot;MYC&quot;] &lt;- &quot;myc&quot;
+data.reduced$classClean[data.reduced$activeIngClean==&quot;PYR&quot;] &lt;- &quot;strobilurin&quot;
+data.reduced$classClean[data.reduced$activeIngClean==&quot;TETR&quot;] &lt;- &quot;triazole&quot;
+data.reduced$classClean[data.reduced$activeIngClean==&quot;TEBU&quot;] &lt;- &quot;triazole&quot;
+data.reduced$classClean[data.reduced$activeIngClean==&quot;THIO&quot;] &lt;- &quot;thiophanate&quot;
+
+# View relation between classes and active ingredients
+summaryBy(FID~classClean + activeIngClean,data = data.reduced,FUN=length)
+</code></pre>
+
+<pre><code>##        classClean activeIngClean FID.length
+## 1   chloronitrile           CHLO          2
+## 2  copper sulfate            COP          2
+## 3       herbicide            GLY          6
+## 4        mancozeb            OTH          1
+## 5     metconazole           MET           1
+## 6             mma           DUAL         44
+## 7             mma          MIXED        166
+## 8             myc            MYC         14
+## 9           other            ETH          2
+## 10          other          MIXED          1
+## 11          other            ORG          3
+## 12          other            OTH         13
+## 13          other          OTHER          1
+## 14          other            SUL          3
+## 15          other        UNKNOWN          8
+## 16    strobilurin            AZO         29
+## 17    strobilurin           DUAL          2
+## 18    strobilurin           PICO          4
+## 19    strobilurin            PYR         54
+## 20    strobilurin           TRIF          2
+## 21    thiophanate           THIO         10
+## 22       triazole           CYPR          7
+## 23       triazole           FENB          1
+## 24       triazole           FLUS          8
+## 25       triazole           FLUT         66
+## 26       triazole          MIXED          6
+## 27       triazole           PROP          2
+## 28       triazole           PROT          4
+## 29       triazole           TEBU         55
+## 30       triazole           TETR         37
+## 31        unknown          MIXED          1
+## 32        unknown          OTHER          1
+## 33        unknown        UNKNOWN         10
+</code></pre>
+
+<pre><code class="r"># Instead of &quot;mma&quot;, specify the mixed classes
+head(data.reduced[data.reduced$classClean==&quot;mma&quot;,c(10:12,45:48)])
+</code></pre>
+
+<pre><code>##            trade.name                active.ingredient
+## 5   Tebuzol + Topsin        tebuconazole + thiophanate
+## 9  Tebuzol  + Topsin        tebuconazole + thiophanate
+## 13           Charisma         fluzilazole + famoxidone
+## 14           Charisma         fluzilazole + famoxidone
+## 21           Stratego propriconizole + trifloxystrobin
+## 22           Stratego propriconizole + trifloxystrobin
+##    active.ingredient.coded activeIngClean combo_complete alphaIngred
+## 5                 tebu+thi          MIXED       complete TEBU + THIO
+## 9                 tebu+thi          MIXED       complete TEBU + THIO
+## 13               fluz+famo          MIXED       complete FAMO + FLUZ
+## 14               fluz+famo          MIXED       complete FAMO + FLUZ
+## 21             prop + trif          MIXED       complete PROP + TRIF
+## 22             prop + trif          MIXED       complete PROP + TRIF
+##    classClean
+## 5         mma
+## 9         mma
+## 13        mma
+## 14        mma
+## 21        mma
+## 22        mma
+</code></pre>
+
+<pre><code class="r">data.reduced$classClean[data.reduced$alphaIngred==&quot;TEBU + THIO&quot;] &lt;- &quot;triaz + thio&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP + TRIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;TEBU + TRIF + OTH&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + PROP&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + CYPR&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PYR + TEBU&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;TEBU + TRIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP + TEBU + TRIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUT + PYR&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUS + PYR&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + PROP + TRIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + PROP + TEBU&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + FLUT + PROP&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUS + PICO&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;MYC + PYR&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUT + PROP + TRIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + DIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROT + TRIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + MYC + PROP&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$classClean==&quot;copper sulfate&quot;] &lt;- &quot;inorganic&quot;
+data.reduced$classClean[data.reduced$classClean==&quot;mancozeb&quot;] &lt;- &quot;dithiocarbamates&quot;
+data.reduced$classClean[data.reduced$classClean==&quot;metconazole&quot;] &lt;- &quot;triazole&quot;
+data.reduced$classClean[data.reduced$classClean==&quot;myc&quot;] &lt;- &quot;triazole&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP + PROT + TRIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUX + PYR&quot;] &lt;- &quot;strobilurin&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUT + FLUX&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + FLUT&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + PYR&quot;] &lt;- &quot;strobilurin&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + MYC&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + TEBU&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + PYR&quot;] &lt;- &quot;strobilurin&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FEN + PYR&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;SUL + TEBU&quot;] &lt;- &quot;inorg + triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;MYC + PROP + TRIF&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;CHL + TEBU&quot;] &lt;- &quot;chlor + triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + TETR&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;ORTH + TETR&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;CROP + TETR&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;SURF + TEBU&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;COPPER + OTH&quot;] &lt;- &quot;inorg + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;COPPER + TEBU&quot;] &lt;- &quot;inorg + triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + ORG&quot;] &lt;- &quot;organic + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PYR fb TEBU&quot;] &lt;- &quot;series strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;TEBU fb PYR&quot;] &lt;- &quot;series triaz fb strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + PROP fb TEBU&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;OTH + PYR fb TEBU&quot;] &lt;- &quot;series strob + other fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP + TRIF fb TEBU&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO fb TEBU&quot;] &lt;- &quot;series strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO fb MYC&quot;] &lt;- &quot;series strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO fb PYR&quot;] &lt;- &quot;strobilurin&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO fb FLUT&quot;] &lt;- &quot;series strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO fb PYR + TEBU&quot;] &lt;- &quot;series strob fb triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;CHL fb CHL + TEBU&quot;] &lt;- &quot;series chlor fb chlor + triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;ETH + OTH&quot;] &lt;- &quot;other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;ETH + TEBU&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;MET + PYR&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;CHL fb TEBU&quot;] &lt;- &quot;series chlor fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;SUL + OTH&quot;] &lt;- &quot;inorg + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;OTH + THIO&quot;] &lt;- &quot;thio + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUS + OTH&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;ETH + FLUT&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PYR + TEBU fb PYR&quot;] &lt;- &quot;series triaz + strob fb strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;ADJ + TEBU&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;ADJ + PYR&quot;] &lt;- &quot;strob + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;CARB + FLUS + PICO&quot;] &lt;- &quot;triaz + strob + thio&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;MYC + OTH&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;CYPR + PICO&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PYR + TEBU fb MYC&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;THIO fb TEBU&quot;] &lt;- &quot;series thio fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + CYPR fb CYPR&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP + TRIF fb PYR&quot;] &lt;- &quot;series triaz + strob fb strob&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP + TRIF fb MYC&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PYR + TEBU fb TEBU&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PYR + TEBU fb FLUT&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;AZO + PROP fb MYC&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP fb MYC&quot;] &lt;- &quot;triazole&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUT + THIO&quot;] &lt;- &quot;triaz + thio&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;FLUT + OTH&quot;] &lt;- &quot;triaz + other&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP fb TEBU&quot;] &lt;- &quot;triazole&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP fb FLUT&quot;] &lt;- &quot;triazole&quot;
+data.reduced$classClean[data.reduced$alphaIngred==&quot;PROP + TRIF fb FLUT&quot;] &lt;- &quot;series triaz + strob fb triaz&quot;
+data.reduced$classClean[data.reduced$trade.name==&quot;Charisma&quot;] &lt;- &quot;triaz + strob&quot;
+data.reduced$classClean[data.reduced$classClean==&quot;dithiocarbamates&quot;] &lt;- &quot;other&quot;
+
+# Checking data
+head(data.reduced[data.reduced$classClean==&quot;other&quot;,c(10:12,45:48)],32)
+</code></pre>
+
+<pre><code>##                    trade.name                  active.ingredient
+## 6                    ACT Plus                              other
+## 7                 KFD-21-01 1                              other
+## 15                    Manzate                              other
+## 57                      BASF1                              other
+## 58                      BASF1                              other
+## 59                      BASF2                              other
+## 60                      BASF2                              other
+## 61                      BASF2                              other
+## 65                      BASF7                              other
+## 106                    LEM 17                              other
+## 107                    LEM 17                              other
+## 139             carbon buffer                             other 
+## 140              liquid boron                              other
+## 141                 Restore                                other
+## 249       Microthiol Disperss                             sulfer
+## 251                 Penncozeb         ethylenebisdithiocarbamate
+## 263                 Penncozeb         ethylenebisdithiocarbamate
+## 264                Microthiol                             sulfer
+## 266            KFD-09-013.6 f                              other
+## 268 Penncozeb + KFD-09-013.6f ethylenebisdithiocarbamate + other
+## 273                    Ballad                            organic
+## 274                    Ballad                            organic
+## 275                    Ballad                            organic
+## 326                   KFD-09                             unknown
+## 328                Microthiol                             sulfer
+## 333                  Physpe G                            unknown
+## 334                  Physpe G                            unknown
+## 335                  Physpe G                            unknown
+## 339                  Physpe G                            unknown
+## 340                  Physpe G                            unknown
+## 341                  Physpe G                            unknown
+## 354                biological                            unknown
+##     active.ingredient.coded activeIngClean combo_complete alphaIngred
+## 6                     other          OTHER         single        &lt;NA&gt;
+## 7                       oth            OTH         single        &lt;NA&gt;
+## 15                      oth            OTH         single        &lt;NA&gt;
+## 57                      oth            OTH         single        &lt;NA&gt;
+## 58                      oth            OTH         single        &lt;NA&gt;
+## 59                      oth            OTH         single        &lt;NA&gt;
+## 60                      oth            OTH         single        &lt;NA&gt;
+## 61                      oth            OTH         single        &lt;NA&gt;
+## 65                      oth            OTH         single        &lt;NA&gt;
+## 106                     oth            OTH         single        &lt;NA&gt;
+## 107                     oth            OTH         single        &lt;NA&gt;
+## 139                     oth            OTH         single        &lt;NA&gt;
+## 140                     oth            OTH         single        &lt;NA&gt;
+## 141                     oth            OTH         single        &lt;NA&gt;
+## 249                     sul            SUL         single        &lt;NA&gt;
+## 251                     eth            ETH         single        &lt;NA&gt;
+## 263                     eth            ETH         single        &lt;NA&gt;
+## 264                     sul            SUL         single        &lt;NA&gt;
+## 266                     oth            OTH         single        &lt;NA&gt;
+## 268                 eth+oth          MIXED       complete   ETH + OTH
+## 273                     org            ORG         single        &lt;NA&gt;
+## 274                     org            ORG         single        &lt;NA&gt;
+## 275                     org            ORG         single        &lt;NA&gt;
+## 326                 unknown        UNKNOWN         single        &lt;NA&gt;
+## 328                     sul            SUL         single        &lt;NA&gt;
+## 333                 unknown        UNKNOWN         single        &lt;NA&gt;
+## 334                 unknown        UNKNOWN         single        &lt;NA&gt;
+## 335                 unknown        UNKNOWN         single        &lt;NA&gt;
+## 339                 unknown        UNKNOWN         single        &lt;NA&gt;
+## 340                 unknown        UNKNOWN         single        &lt;NA&gt;
+## 341                 unknown        UNKNOWN         single        &lt;NA&gt;
+## 354                 unknown        UNKNOWN         single        &lt;NA&gt;
+##     classClean
+## 6        other
+## 7        other
+## 15       other
+## 57       other
+## 58       other
+## 59       other
+## 60       other
+## 61       other
+## 65       other
+## 106      other
+## 107      other
+## 139      other
+## 140      other
+## 141      other
+## 249      other
+## 251      other
+## 263      other
+## 264      other
+## 266      other
+## 268      other
+## 273      other
+## 274      other
+## 275      other
+## 326      other
+## 328      other
+## 333      other
+## 334      other
+## 335      other
+## 339      other
+## 340      other
+## 341      other
+## 354      other
+</code></pre>
+
+<pre><code class="r">sort(table(data.reduced$classClean))
 </code></pre>
 
 <pre><code>## 
-##   herbicide         mma       other strobilurin thiophanate    triazole 
-##           6         220          52          90           9         189
+## series chlor fb chlor + triaz series strob + other fb triaz 
+##                             1                             1 
+## series strob fb triaz + strob          triaz + strob + thio 
+##                             1                             1 
+##                 chlor + triaz                 chloronitrile 
+##                             2                             2 
+##                 inorg + triaz                     inorganic 
+##                             2                             2 
+##          series thio fb triaz                  thio + other 
+##                             2                             2 
+##                 inorg + other               organic + strob 
+##                             3                             3 
+##         series chlor fb triaz         series triaz fb strob 
+##                             3                             3 
+##                 strob + other series triaz + strob fb strob 
+##                             3                             4 
+##                     herbicide         series strob fb triaz 
+##                             6                             7 
+##                   thiophanate                  triaz + thio 
+##                            10                            10 
+##                       unknown series triaz + strob fb triaz 
+##                            12                            13 
+##                 triaz + other                         other 
+##                            13                            32 
+##                   strobilurin                 triaz + strob 
+##                            98                           130 
+##                      triazole 
+##                           200
+</code></pre>
+
+<pre><code class="r">sort(table(data.reduced$activeIngClean))
+</code></pre>
+
+<pre><code>## 
+##    FENB    MET     CHLO     COP     ETH   OTHER    PROP    TRIF     ORG 
+##       1       1       2       2       2       2       2       2       3 
+##     SUL    PICO    PROT     GLY    CYPR    FLUS    THIO     MYC     OTH 
+##       3       4       4       6       7       8      10      14      14 
+## UNKNOWN     AZO    TETR    DUAL     PYR    TEBU    FLUT   MIXED 
+##      18      29      37      46      54      55      66     174
+</code></pre>
+
+<pre><code class="r"># Final clean up of specific cases
+data.reduced$activeIngClean[data.reduced$active.ingredient.coded==&quot;sul&quot;] &lt;- &quot;SUL&quot;
+data.reduced$classClean[data.reduced$active.ingredient.coded==&quot;sul&quot;] &lt;- &quot;inorganic&quot;
+data.reduced$classClean[data.reduced$trade.name==&quot;Ballad&quot;] &lt;- &quot;organic&quot;
+data.reduced$activeIngClean[data.reduced$active.ingredient.coded==&quot;eth&quot;] &lt;- &quot;OTH&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;OTH&quot;] &lt;- &quot;other&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;OTHER&quot;] &lt;- &quot;other&quot;
+data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;UNKNOWN&quot;] &lt;- &quot;other&quot;
+data.reduced$classClean[data.reduced$classClean==&quot;unknown&quot;] &lt;- &quot;other&quot;
 </code></pre>
 
 <p>Growth stages of application</p>
@@ -571,11 +1266,6 @@ table(data.reduced$applicationsNumb)
 ## 282 254  23   6   1
 </code></pre>
 
-<p>When sample size is &lt; 5, delete</p>
-
-<pre><code class="r">data.reduced &lt;- data.reduced[data.reduced$applicationsNumb!=8,]
-</code></pre>
-
 <h3>3. Partition data</h3>
 
 <p>Rust data</p>
@@ -601,14 +1291,14 @@ rust.data &lt;- rbind(rust.perc.orig, rust.scale.orig)
 
 <pre><code class="r"># Data that had yield data
     # Column #35 is yield
-yield.data &lt;- data.reduced[!is.na(data.reduced$yield),] 
+yield.data &lt;- rust.data[!is.na(rust.data$yield),] 
 </code></pre>
 
 <p>100sw data</p>
 
 <pre><code class="r"># Data that had 100sw data
     # Column #39 is 100sw
-seedwt.data &lt;- data.reduced[!is.na(data.reduced$seedWt),] 
+seedwt.data &lt;- rust.data[!is.na(rust.data$seedWt),] 
 </code></pre>
 
 <p>Cercospora data</p>
@@ -765,8 +1455,6 @@ rust.data$m2i[rust.data$scale==&quot;Scale 0-10&quot; &amp;
 # For rust severity in percent originally
 rust.data$m1i[rust.data$scale==&quot;Percent&quot;] &lt;- rust.data$rustSeverPerc[rust.data$scale==&quot;Percent&quot;]
 rust.data$m2i[rust.data$scale==&quot;Percent&quot;] &lt;- rust.data$rustSeverPercCont[rust.data$scale==&quot;Percent&quot;]
-# Assume 20% as std deviation
-rust.data$sd1i &lt;- rust.data$sd2i &lt;- 20
 # Sample sizes
 rust.data$n1i &lt;- rust.data$n2i &lt;- rust.data$replications
 </code></pre>
@@ -777,18 +1465,14 @@ rust.data$n1i &lt;- rust.data$n2i &lt;- rust.data$replications
 yield.data$yieldCont.kg.ha &lt;- yield.data$yieldCont*67.25 # convert to kg ha-1
   # conversion info from https://www.extension.iastate.edu/agdm/wholefarm/html/c6-80.html
 yield.data$m1i &lt;- yield.data$yield.kg.ha # Yield for treatment group
-yield.data$sd1i &lt;- yield.data$yield.kg.ha*0.2 # Std is 20% of mean
 yield.data$m2i &lt;- yield.data$yieldCont.kg.ha # Yield for control group
-yield.data$sd2i &lt;- yield.data$yieldCont.kg.ha*0.2 # Std is 20% of the mean
 yield.data$n1i &lt;- yield.data$n2i &lt;- yield.data$replications
 </code></pre>
 
 <p>100 seed weight data</p>
 
 <pre><code class="r">seedwt.data$m1i &lt;- seedwt.data$seedWt # Yield for treatment group
-seedwt.data$sd1i &lt;- seedwt.data$seedWt*0.2 # Std is 20% of mean
 seedwt.data$m2i &lt;- seedwt.data$seedWtCont # Yield for control group
-seedwt.data$sd2i &lt;- seedwt.data$seedWtCont*0.2 # Std is 20% of the mean
 seedwt.data$n1i &lt;- seedwt.data$n2i &lt;- seedwt.data$replications
 </code></pre>
 
@@ -880,8 +1564,6 @@ cerco.data$m2i[cerco.data$scale==&quot;Scale 0-5&quot; &amp;
                  cerco.data$CercoSeverCont &gt; 2 ] &lt;- 25 +
   (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
                            cerco.data$CercoSeverCont &gt; 2]-2)*25
-# SD and replications
-cerco.data$sd1i &lt;- cerco.data$sd2i &lt;- 20
 cerco.data$n1i &lt;- cerco.data$n2i &lt;- cerco.data$replications
 </code></pre>
 
@@ -927,8 +1609,6 @@ target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp;
                  target.spot.data$TSseverityCont &gt; 2 ] &lt;- 25 +
   (target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
                                target.spot.data$TSseverityCont &gt; 2]-2)*25
-# SD and replications
-target.spot.data$sd1i &lt;- target.spot.data$sd2i &lt;- 20
 target.spot.data$n1i &lt;- target.spot.data$n2i &lt;- target.spot.data$replications
 </code></pre>
 
@@ -941,20 +1621,21 @@ sort(table(rust.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##  cypr   myc  thio   azo   gly  flus tetra  dual  pyra  tebu   oth  flut 
-##     2     4     5     6     6     7    10    15    25    31    37    44 
-## mixed 
-##   132
+##  PROP   COP  CYPR   ORG   SUL   MYC  PICO  THIO   AZO   GLY  FLUS  TETR 
+##     1     2     2     3     3     4     4     5     6     6     7    10 
+##  DUAL other   PYR  TEBU  FLUT MIXED 
+##    18    24    25    31    44   129
 </code></pre>
 
-<pre><code class="r">small.ing &lt;- c(&quot;cypr&quot;, &quot;myc&quot;)
-rust.data$activeIngClean[rust.data$activeIngClean %in% small.ing] &lt;- &quot;oth&quot;
-table(rust.data$activeIngClean)
+<pre><code class="r">analyze.ai &lt;- c(&quot;DUAL&quot;, &quot;PYR&quot;,&quot;TEBU&quot;,&quot;FLUT&quot;,&quot;MIXED&quot;)
+rust.data$category_ai[rust.data$activeIngClean %in% analyze.ai] &lt;- 
+  rust.data$activeIngClean[rust.data$activeIngClean %in% analyze.ai]
+table(rust.data$category_ai)
 </code></pre>
 
 <pre><code>## 
-##   azo  dual  flus  flut   gly mixed   oth  pyra  tebu tetra  thio 
-##     6    15     7    44     6   132    43    25    31    10     5
+##  DUAL  FLUT MIXED   PYR  TEBU 
+##    18    44   129    25    31
 </code></pre>
 
 <pre><code class="r"># Class
@@ -962,17 +1643,37 @@ sort(table(rust.data$classClean))
 </code></pre>
 
 <pre><code>## 
-## thiophanate   herbicide strobilurin       other    triazole         mma 
-##           4           6          32          34         102         146
+##                 chlor + triaz                  thio + other 
+##                             1                             1 
+##          triaz + strob + thio                 inorg + triaz 
+##                             1                             2 
+##                 inorg + other                       organic 
+##                             3                             3 
+##               organic + strob         series strob fb triaz 
+##                             3                             3 
+##         series triaz fb strob                     inorganic 
+##                             3                             5 
+##                   thiophanate                     herbicide 
+##                             5                             6 
+##                  triaz + thio series triaz + strob fb triaz 
+##                             6                             7 
+##                 triaz + other                         other 
+##                             9                            26 
+##                   strobilurin                 triaz + strob 
+##                            40                            98 
+##                      triazole 
+##                           102
 </code></pre>
 
-<pre><code class="r">rust.data$classClean[rust.data$classClean==&quot;thiophanate&quot;] &lt;- &quot;other&quot;
-table(rust.data$classClean)
+<pre><code class="r">analyze.class &lt;- c(&quot;strobilurin&quot;,&quot;triaz + strob&quot;,&quot;triazole&quot;)
+rust.data$category_class[rust.data$classClean %in% analyze.class] &lt;- 
+  rust.data$classClean[rust.data$classClean %in% analyze.class]
+table(rust.data$category_class)
 </code></pre>
 
 <pre><code>## 
-##   herbicide         mma       other strobilurin    triazole 
-##           6         146          38          32         102
+##   strobilurin triaz + strob      triazole 
+##            40            98           102
 </code></pre>
 
 <pre><code class="r"># R-stage
@@ -984,6 +1685,17 @@ sort(table(rust.data$growthStateClean))
 ##       8      10      11      16      18      27      51      75     108
 </code></pre>
 
+<pre><code class="r">analyze.rstage &lt;- c(&quot;4&quot;,&quot;5&quot;,&quot;1+&quot;,&quot;2+&quot;,&quot;3&quot;)
+rust.data$category_rstage[rust.data$growthStateClean %in% analyze.rstage] &lt;- 
+  rust.data$growthStateClean[rust.data$growthStateClean %in% analyze.rstage]
+table(rust.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+##  1+  2+   3   4   5 
+##  51  75 108  16  27
+</code></pre>
+
 <pre><code class="r"># Applications 
 sort(table(rust.data$applicationsNumb))
 </code></pre>
@@ -993,6 +1705,16 @@ sort(table(rust.data$applicationsNumb))
 ##   6  15 133 170
 </code></pre>
 
+<pre><code class="r">rust.data$number_applications[rust.data$applicationsNumb!=5] &lt;- 
+  rust.data$applicationsNumb[rust.data$applicationsNumb!=5]
+table(rust.data$number_applications)
+</code></pre>
+
+<pre><code>## 
+##   1   2   3 
+## 133 170  15
+</code></pre>
+
 <p>Yield data</p>
 
 <pre><code class="r"># Applications
@@ -1000,39 +1722,59 @@ sort(table(yield.data$applicationsNumb))
 </code></pre>
 
 <pre><code>## 
-##   5   3   2   1 
-##   3  22 241 254
+##   5   3   1   2 
+##   3  14 115 160
 </code></pre>
 
-<pre><code class="r">yield.data &lt;- yield.data[yield.data$applicationsNumb!=5,]
-# R-stage
+<pre><code class="r">yield.data$number_applications[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2] &lt;- 
+  yield.data$applicationsNumb[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2]
+table(yield.data$number_applications)
+</code></pre>
+
+<pre><code>## 
+##   1   2 
+## 115 160
+</code></pre>
+
+<pre><code class="r"># R-stage
 sort(table(yield.data$growthStateClean))
 </code></pre>
 
 <pre><code>## 
-##       V       4       1       2 unknown      1+       5      2+       3 
-##       4      16      17      22      23      57      63     123     192
+##       V       1       2       5       4 unknown      1+      2+       3 
+##       5       8       8      15      16      18      47      73     102
 </code></pre>
 
-<pre><code class="r">yield.data &lt;- yield.data[yield.data$growthStateClean!=&quot;V&quot;,]
-# Active ingredients
+<pre><code class="r">yield.data$category_rstage[yield.data$growthStateClean %in% analyze.rstage] &lt;- 
+  yield.data$growthStateClean[yield.data$growthStateClean %in% analyze.rstage]
+table(yield.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+##  1+  2+   3   4   5 
+##  47  73 102  16  15
+</code></pre>
+
+<pre><code class="r"># Active ingredients
 sort(table(yield.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##   gly  cypr  flus  thio   myc   azo tetra  dual  pyra  tebu   oth  flut 
-##     2     6     7    10    11    27    35    42    46    48    52    63 
-## mixed 
-##   164
+##  PROP   COP  CYPR   MYC   ORG   SUL   GLY  PICO   AZO  THIO  FLUS  TETR 
+##     1     2     2     3     3     3     4     4     5     5     6     9 
+##  DUAL   PYR other  TEBU  FLUT MIXED 
+##    14    20    21    28    43   119
 </code></pre>
 
-<pre><code class="r">yield.data$activeIngClean[yield.data$activeIngClean==&quot;gly&quot;] &lt;- &quot;oth&quot;
-sort(table(yield.data$activeIngClean))
+<pre><code class="r">analyze.ai &lt;- c(&quot;PYR&quot;,&quot;TEBU&quot;,&quot;FLUT&quot;,&quot;MIXED&quot;)
+yield.data$category_ai[yield.data$activeIngClean %in% analyze.ai] &lt;- 
+  yield.data$activeIngClean[yield.data$activeIngClean %in% analyze.ai]
+sort(table(yield.data$category_ai))
 </code></pre>
 
 <pre><code>## 
-##  cypr  flus  thio   myc   azo tetra  dual  pyra  tebu   oth  flut mixed 
-##     6     7    10    11    27    35    42    46    48    54    63   164
+##   PYR  TEBU  FLUT MIXED 
+##    20    28    43   119
 </code></pre>
 
 <pre><code class="r"># Class
@@ -1040,57 +1782,97 @@ sort(table(yield.data$classClean))
 </code></pre>
 
 <pre><code>## 
-##   herbicide thiophanate       other strobilurin    triazole         mma 
-##           2           9          43          79         175         205
+##                 chlor + triaz         series strob fb triaz 
+##                             1                             1 
+##         series triaz fb strob          triaz + strob + thio 
+##                             1                             1 
+##                 inorg + triaz                 inorg + other 
+##                             2                             3 
+##                       organic               organic + strob 
+##                             3                             3 
+##                     herbicide                     inorganic 
+##                             4                             5 
+##                   thiophanate                  triaz + thio 
+##                             5                             6 
+## series triaz + strob fb triaz                 triaz + other 
+##                             7                             9 
+##                         other                   strobilurin 
+##                            23                            34 
+##                 triaz + strob                      triazole 
+##                            89                            95
 </code></pre>
 
-<pre><code class="r">yield.data$classClean[yield.data$classClean==&quot;herbicide&quot;] &lt;- &quot;other&quot;
-sort(table(yield.data$classClean))
+<pre><code class="r">yield.data$category_class[yield.data$classClean %in% analyze.class] &lt;- 
+  yield.data$classClean[yield.data$classClean %in% analyze.class]
+sort(table(yield.data$category_class))
 </code></pre>
 
 <pre><code>## 
-## thiophanate       other strobilurin    triazole         mma 
-##           9          45          79         175         205
+##   strobilurin triaz + strob      triazole 
+##            34            89            95
 </code></pre>
 
 <p>100-seed weight data</p>
 
-<pre><code class="r"># Applications and growth stage
+<pre><code class="r"># Applications 
 sort(table(seedwt.data$applicationsNumb))
 </code></pre>
 
 <pre><code>## 
-##   3   2   1 
-##   1  91 120
+##  3  2  1 
+##  1 64 83
 </code></pre>
 
-<pre><code class="r">sort(table(seedwt.data$growthStateClean))
+<pre><code class="r">seedwt.data$number_applications[seedwt.data$applicationsNumb!=3] &lt;-
+  seedwt.data$applicationsNumb[seedwt.data$applicationsNumb!=3]
+table(seedwt.data$number_applications)
 </code></pre>
 
 <pre><code>## 
-##       1 unknown       5       4       2      1+      2+       3 
-##       4       9      15      16      21      23      44      80
+##  1  2 
+## 83 64
 </code></pre>
 
-<pre><code class="r">seedwt.data &lt;- seedwt.data[seedwt.data$applicationsNumb!=3 &amp; 
-                             seedwt.data$growthStateClean!=1,]
-# Active ingredients
+<pre><code class="r"># growth stage
+sort(table(seedwt.data$growthStateClean))
+</code></pre>
+
+<pre><code>## 
+##       1       2 unknown       5       4      1+      2+       3 
+##       4       8       9      14      16      23      28      46
+</code></pre>
+
+<pre><code class="r">analyze.rstage &lt;- c(&quot;4&quot;,&quot;1+&quot;,&quot;2+&quot;,&quot;3&quot;)
+seedwt.data$category_rstage[seedwt.data$growthStateClean %in% analyze.rstage] &lt;-
+  seedwt.data$growthStateClean[seedwt.data$growthStateClean %in% analyze.rstage]
+table(seedwt.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+## 1+ 2+  3  4 
+## 23 28 46 16
+</code></pre>
+
+<pre><code class="r"># Active ingredients
 sort(table(seedwt.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
-##   gly  thio  cypr   myc  dual   azo   oth tetra  pyra  tebu  flut mixed 
-##     2     2     3     3     4     9    14    17    19    19    42    73
+##   COP  CYPR   SUL  THIO   AZO   GLY  DUAL   MYC other  TETR   PYR  TEBU 
+##     1     1     1     1     2     2     3     3     5     6    12    18 
+##  FLUT MIXED 
+##    34    59
 </code></pre>
 
-<pre><code class="r">small.ing.100 &lt;- c(&quot;gly&quot;, &quot;thio&quot; ,&quot;cypr&quot;, &quot;myc&quot;, &quot;dual&quot;)
-seedwt.data$activeIngClean[seedwt.data$activeIngClean %in% small.ing.100] &lt;- &quot;oth&quot;
-sort(table(seedwt.data$activeIngClean))
+<pre><code class="r">analyze.ai &lt;- c(&quot;TEBU&quot;,&quot;FLUT&quot;,&quot;MIXED&quot;)
+seedwt.data$category_ai[seedwt.data$activeIngClean %in% analyze.ai] &lt;- 
+  seedwt.data$activeIngClean[seedwt.data$activeIngClean %in% analyze.ai]
+table(seedwt.data$category_ai)
 </code></pre>
 
 <pre><code>## 
-##   azo tetra  pyra  tebu   oth  flut mixed 
-##     9    17    19    19    28    42    73
+##  FLUT MIXED  TEBU 
+##    34    59    18
 </code></pre>
 
 <pre><code class="r"># Class
@@ -1098,18 +1880,32 @@ sort(table(seedwt.data$classClean))
 </code></pre>
 
 <pre><code>## 
-##   herbicide thiophanate       other strobilurin         mma    triazole 
-##           2           2          12          24          78          89
+##                 chlor + triaz         series strob fb triaz 
+##                             1                             1 
+## series triaz + strob fb triaz         series triaz fb strob 
+##                             1                             1 
+##                   thiophanate          triaz + strob + thio 
+##                             1                             1 
+##                     herbicide                 inorg + triaz 
+##                             2                             2 
+##                     inorganic                  triaz + thio 
+##                             2                             2 
+##                         other                 triaz + other 
+##                             5                             7 
+##                   strobilurin                 triaz + strob 
+##                            18                            42 
+##                      triazole 
+##                            62
 </code></pre>
 
-<pre><code class="r">small.class.100 &lt;- c(&quot;herbicide&quot;, &quot;thiophanate&quot;)
-seedwt.data$classClean[seedwt.data$classClean %in% small.class.100] &lt;- &quot;other&quot;
-sort(table(seedwt.data$classClean))
+<pre><code class="r">seedwt.data$category_class[seedwt.data$classClean %in% analyze.class] &lt;- 
+  seedwt.data$classClean[seedwt.data$classClean %in% analyze.class]
+table(seedwt.data$category_class)
 </code></pre>
 
 <pre><code>## 
-##       other strobilurin         mma    triazole 
-##          16          24          78          89
+##   strobilurin triaz + strob      triazole 
+##            18            42            62
 </code></pre>
 
 <h3>6. Calculate effect sizes</h3>
@@ -1135,19 +1931,29 @@ target.spot.data$m2i[target.spot.data$m2i==0] &lt;- 0.0001
 <p>Overall means (raw mean difference)</p>
 
 <pre><code class="r">rust.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i, 
-                    sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                    sd1i = rep(1,nrow(rust.data)), 
+                    sd2i = rep(1,nrow(rust.data)), 
+                    n1i = n1i, n2i = n2i,
                     data = rust.data)
 yield.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i, 
-                     sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                     sd1i = rep(1,nrow(yield.data)), 
+                     sd2i = rep(1,nrow(yield.data)), 
+                     n1i = n1i, n2i = n2i,
                      data = yield.data)
 seedwt.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i, 
-                      sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                      sd1i = rep(1,nrow(seedwt.data)), 
+                      sd2i = rep(1,nrow(seedwt.data)), 
+                      n1i = n1i, n2i = n2i,
                       data = seedwt.data)
 cerco.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i, 
-                              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                              sd1i = rep(1,nrow(cerco.data)), 
+                         sd2i = rep(1,nrow(cerco.data)), 
+                         n1i = n1i, n2i = n2i,
                               data = cerco.data)
 target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i, 
-                              sd1i = sd1i, sd2i = sd2i, n1i = n1i, n2i = n2i,
+                              sd1i = rep(1,nrow(target.spot.data)), 
+                              sd2i = rep(1,nrow(target.spot.data)), 
+                              n1i = n1i, n2i = n2i,
                               data = target.spot.data)
 </code></pre>
 
@@ -1164,28 +1970,45 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 
 <p>Session Info:</p>
 
-<pre><code class="r">sessionInfo()
+<pre><code class="r">devtools::session_info()
 </code></pre>
 
-<pre><code>## R version 3.3.0 (2016-05-03)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.6 (El Capitan)
-## 
-## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-## 
-## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
-## 
-## other attached packages:
-## [1] doBy_4.5-15    metafor_1.9-9  Matrix_1.2-7.1 knitr_1.14    
-## [5] ezknitr_0.6   
-## 
-## loaded via a namespace (and not attached):
-##  [1] MASS_7.3-45       magrittr_1.5      formatR_1.4      
-##  [4] tools_3.3.0       stringi_1.1.2     R.methodsS3_1.7.1
-##  [7] grid_3.3.0        stringr_1.1.0     R.utils_2.4.0    
-## [10] evaluate_0.10     R.oo_1.20.0       lattice_0.20-34
+<pre><code>## Session info --------------------------------------------------------------
+</code></pre>
+
+<pre><code>##  setting  value                       
+##  version  R version 3.3.0 (2016-05-03)
+##  system   x86_64, darwin13.4.0        
+##  ui       RStudio (0.99.902)          
+##  language (EN)                        
+##  collate  en_US.UTF-8                 
+##  tz       America/Chicago             
+##  date     2016-11-29
+</code></pre>
+
+<pre><code>## Packages ------------------------------------------------------------------
+</code></pre>
+
+<pre><code>##  package     * version date       source        
+##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
+##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
+##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
+##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
+##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
+##  formatR       1.4     2016-05-09 CRAN (R 3.3.0)
+##  knitr       * 1.14    2016-08-13 CRAN (R 3.3.0)
+##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.0)
+##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
+##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.0)
+##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.0)
+##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
+##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)
+##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
+##  R.oo          1.20.0  2016-02-17 CRAN (R 3.3.0)
+##  R.utils       2.4.0   2016-09-14 CRAN (R 3.3.0)
+##  stringi       1.1.2   2016-10-01 CRAN (R 3.3.0)
+##  stringr       1.1.0   2016-08-19 CRAN (R 3.3.0)
+##  withr         1.0.2   2016-06-20 CRAN (R 3.3.0)
 </code></pre>
 
 </body>
