@@ -8,6 +8,7 @@ library(ezknitr)
 library(knitr)
 library(metafor)
 library(doBy)
+library(devtools)
 
 #' Clear environment
 #+ clear
@@ -1010,4 +1011,4 @@ save(rust.data.ROM, yield.data.ROM, seedwt.data.ROM,
 #' 
 #' Session Info:
 #+ sessionInfo
-sessionInfo()
+devtools::session_info()
