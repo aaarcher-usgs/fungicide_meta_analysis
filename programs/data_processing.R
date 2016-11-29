@@ -717,8 +717,6 @@ rust.data$m2i[rust.data$scale=="Scale 0-10" &
 # For rust severity in percent originally
 rust.data$m1i[rust.data$scale=="Percent"] <- rust.data$rustSeverPerc[rust.data$scale=="Percent"]
 rust.data$m2i[rust.data$scale=="Percent"] <- rust.data$rustSeverPercCont[rust.data$scale=="Percent"]
-# Assume 20% as std deviation
-rust.data$sd1i <- rust.data$sd2i <- 20
 # Sample sizes
 rust.data$n1i <- rust.data$n2i <- rust.data$replications
 
@@ -728,17 +726,13 @@ yield.data$yield.kg.ha <- yield.data$yield*67.25 # convert to kg ha-1
 yield.data$yieldCont.kg.ha <- yield.data$yieldCont*67.25 # convert to kg ha-1
   # conversion info from https://www.extension.iastate.edu/agdm/wholefarm/html/c6-80.html
 yield.data$m1i <- yield.data$yield.kg.ha # Yield for treatment group
-yield.data$sd1i <- yield.data$yield.kg.ha*0.2 # Std is 20% of mean
 yield.data$m2i <- yield.data$yieldCont.kg.ha # Yield for control group
-yield.data$sd2i <- yield.data$yieldCont.kg.ha*0.2 # Std is 20% of the mean
 yield.data$n1i <- yield.data$n2i <- yield.data$replications
 
 #' 100 seed weight data
 #+ seedDatametafor
 seedwt.data$m1i <- seedwt.data$seedWt # Yield for treatment group
-seedwt.data$sd1i <- seedwt.data$seedWt*0.2 # Std is 20% of mean
 seedwt.data$m2i <- seedwt.data$seedWtCont # Yield for control group
-seedwt.data$sd2i <- seedwt.data$seedWtCont*0.2 # Std is 20% of the mean
 seedwt.data$n1i <- seedwt.data$n2i <- seedwt.data$replications
 
 #' Cercospora data
@@ -826,8 +820,6 @@ cerco.data$m2i[cerco.data$scale=="Scale 0-5" &
                  cerco.data$CercoSeverCont > 2 ] <- 25 +
   (cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-5"& 
                            cerco.data$CercoSeverCont > 2]-2)*25
-# SD and replications
-cerco.data$sd1i <- cerco.data$sd2i <- 20
 cerco.data$n1i <- cerco.data$n2i <- cerco.data$replications
 
 #' Target spot data
@@ -872,8 +864,6 @@ target.spot.data$m2i[target.spot.data$scale=="Scale 0-5" &
                  target.spot.data$TSseverityCont > 2 ] <- 25 +
   (target.spot.data$TSseverityCont[target.spot.data$scale=="Scale 0-5"& 
                                target.spot.data$TSseverityCont > 2]-2)*25
-# SD and replications
-target.spot.data$sd1i <- target.spot.data$sd2i <- 20
 target.spot.data$n1i <- target.spot.data$n2i <- target.spot.data$replications
 
 #' ### 5. Take out categorical moderators with n < 5
