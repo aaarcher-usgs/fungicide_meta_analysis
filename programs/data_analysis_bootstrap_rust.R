@@ -36,7 +36,9 @@ results.rust <- as.data.frame(matrix(NA,ncol=14,nrow=nsims))
 colnames(results.rust) <- c("OVERALL",
                             "DUAL","FLUT","MIXED","PYR","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
-                            "R1+", "R2+", "R3","R4","R5")
+                            "category_rstage1+", "category_rstage2+", 
+                            "category_rstage3","category_rstage4",
+                            "category_rstage5")
 
 #' Running the bootstraps
 for(ii in 1:nsims){
@@ -73,7 +75,11 @@ for(ii in 1:nsims){
                     data = newdata,
                     method = "REML",
                     mods = ~category_rstage-1)
-  results.rust[ii,10:14] <- rstage$b
+  results.rust$`category_rstage1+`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage1+"]
+  results.rust$`category_rstage2+`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage2+"]
+  results.rust$`category_rstage3`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage3"]
+  results.rust$`category_rstage4`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage4"]
+  results.rust$`category_rstage5`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage5"]
   
 }
 
