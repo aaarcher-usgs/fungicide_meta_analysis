@@ -297,14 +297,17 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
                     data = newdata,
                     method = &quot;REML&quot;,
                     mods = ~category_rstage-1)
-  results.yield$`R1+`[ii] &lt;- 
-    rstage$b[rownames(rstage$b)==&quot;category_rstage1+&quot;]
-  results.yield$`R2+`[ii] &lt;- 
-    rstage$b[rownames(rstage$b)==&quot;category_rstage2+&quot;]
-  results.yield$R3[ii] &lt;- 
-    rstage$b[rownames(rstage$b)==&quot;category_rstage3&quot;]
-  results.yield$R5[ii] &lt;- 
-    rstage$b[rownames(rstage$b)==&quot;category_rstage5&quot;]
+  if(length(unique(newdata$category_rstage[! is.na(newdata$category_rstage)]))==4){
+    results.yield$`R1+`[ii] &lt;- 
+      rstage$b[rownames(rstage$b)==&quot;category_rstage1+&quot;]
+    results.yield$`R2+`[ii] &lt;- 
+      rstage$b[rownames(rstage$b)==&quot;category_rstage2+&quot;]
+    results.yield$R3[ii] &lt;- 
+      rstage$b[rownames(rstage$b)==&quot;category_rstage3&quot;]
+    results.yield$R5[ii] &lt;- 
+      rstage$b[rownames(rstage$b)==&quot;category_rstage5&quot;]
+  }
+
 
   # Number of applications
   applications &lt;- rma.uni(yi = yi,
@@ -317,9 +320,6 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
   results.yield$`Application Slope`[ii] &lt;- 
     applications$b[rownames(applications$b)==&quot;number_applications&quot;]
 }
-</code></pre>
-
-<pre><code>## Error in results.yield$R5[ii] &lt;- rstage$b[rownames(rstage$b) == &quot;category_rstage5&quot;]: replacement has length zero
 </code></pre>
 
 <h3>Save final results</h3>
@@ -336,7 +336,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
 <pre><code class="r">devtools::session_info()
 </code></pre>
 
-<pre><code>## Session info --------------------------------------------------------------
+<pre><code>## Session info --------------------------------------------------------------------------------
 </code></pre>
 
 <pre><code>##  setting  value                       
@@ -349,7 +349,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
 ##  date     2016-11-30
 </code></pre>
 
-<pre><code>## Packages ------------------------------------------------------------------
+<pre><code>## Packages ------------------------------------------------------------------------------------
 </code></pre>
 
 <pre><code>##  package     * version date       source        

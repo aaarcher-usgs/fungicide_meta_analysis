@@ -86,14 +86,17 @@ for(ii in 1:nsims){
                     data = newdata,
                     method = "REML",
                     mods = ~category_rstage-1)
-  results.yield$`R1+`[ii] <- 
-    rstage$b[rownames(rstage$b)=="category_rstage1+"]
-  results.yield$`R2+`[ii] <- 
-    rstage$b[rownames(rstage$b)=="category_rstage2+"]
-  results.yield$R3[ii] <- 
-    rstage$b[rownames(rstage$b)=="category_rstage3"]
-  results.yield$R5[ii] <- 
-    rstage$b[rownames(rstage$b)=="category_rstage5"]
+  if(length(unique(newdata$category_rstage[! is.na(newdata$category_rstage)]))==4){
+    results.yield$`R1+`[ii] <- 
+      rstage$b[rownames(rstage$b)=="category_rstage1+"]
+    results.yield$`R2+`[ii] <- 
+      rstage$b[rownames(rstage$b)=="category_rstage2+"]
+    results.yield$R3[ii] <- 
+      rstage$b[rownames(rstage$b)=="category_rstage3"]
+    results.yield$R5[ii] <- 
+      rstage$b[rownames(rstage$b)=="category_rstage5"]
+  }
+
   
   # Number of applications
   applications <- rma.uni(yi = yi,
