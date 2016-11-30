@@ -1615,7 +1615,7 @@ target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp;
 target.spot.data$n1i &lt;- target.spot.data$n2i &lt;- target.spot.data$replications
 </code></pre>
 
-<h3>5. Take out categorical moderators with n &lt; 5</h3>
+<h3>5. Take out categorical moderators with records &lt; 15 from &lt; 5 studies</h3>
 
 <p>Rust data</p>
 
@@ -1641,7 +1641,100 @@ table(rust.data$category_ai)
 ##    18    44   129    25    31
 </code></pre>
 
-<pre><code class="r"># Class
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_ai+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$category_ai),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_ai ReferenceNumb FID.length
+## 1         DUAL            36          1
+## 2         DUAL            43          4
+## 3         DUAL            65          2
+## 4         DUAL            74         11
+## 5         FLUT            16          2
+## 6         FLUT            30          1
+## 7         FLUT            31          1
+## 8         FLUT            33          4
+## 9         FLUT            34          2
+## 10        FLUT            35          6
+## 11        FLUT            37          1
+## 12        FLUT            45         14
+## 13        FLUT            54          1
+## 14        FLUT            65          2
+## 15        FLUT            66         10
+## 16       MIXED             3          2
+## 17       MIXED             4          2
+## 18       MIXED             9          6
+## 19       MIXED            16          5
+## 20       MIXED            18          2
+## 21       MIXED            21          5
+## 22       MIXED            22          3
+## 23       MIXED            23         11
+## 24       MIXED            30          5
+## 25       MIXED            31          5
+## 26       MIXED            32          4
+## 27       MIXED            34          5
+## 28       MIXED            35          6
+## 29       MIXED            36         10
+## 30       MIXED            37          9
+## 31       MIXED            38          6
+## 32       MIXED            39          4
+## 33       MIXED            40          3
+## 34       MIXED            41          4
+## 35       MIXED            42          3
+## 36       MIXED            43          5
+## 37       MIXED            45          2
+## 38       MIXED            46          1
+## 39       MIXED            53          2
+## 40       MIXED            54          3
+## 41       MIXED            55          4
+## 42       MIXED            62          3
+## 43       MIXED            65          3
+## 44       MIXED            66          2
+## 45       MIXED            68          4
+## 46         PYR             1          1
+## 47         PYR             3          1
+## 48         PYR             9          1
+## 49         PYR            16          1
+## 50         PYR            22          1
+## 51         PYR            23          1
+## 52         PYR            30          1
+## 53         PYR            31          1
+## 54         PYR            36          6
+## 55         PYR            37          1
+## 56         PYR            39          1
+## 57         PYR            41          1
+## 58         PYR            43          3
+## 59         PYR            47          2
+## 60         PYR            54          1
+## 61         PYR            55          1
+## 62         PYR            65          1
+## 63        TEBU             3          1
+## 64        TEBU             4          1
+## 65        TEBU             9          2
+## 66        TEBU            16          1
+## 67        TEBU            18          1
+## 68        TEBU            21          1
+## 69        TEBU            30          1
+## 70        TEBU            31          1
+## 71        TEBU            34          2
+## 72        TEBU            36          6
+## 73        TEBU            37          1
+## 74        TEBU            39          2
+## 75        TEBU            41          1
+## 76        TEBU            43          3
+## 77        TEBU            45          1
+## 78        TEBU            46          1
+## 79        TEBU            55          1
+## 80        TEBU            62          1
+## 81        TEBU            65          2
+## 82        TEBU            66          1
+</code></pre>
+
+<pre><code class="r">rust.data$category_ai[rust.data$category_ai==&quot;DUAL&quot;] &lt;- NA
+
+# Class
 sort(table(rust.data$classClean))
 </code></pre>
 
@@ -1679,6 +1772,87 @@ table(rust.data$category_class)
 ##            40            98           102
 </code></pre>
 
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_class+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$category_class),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_class ReferenceNumb FID.length
+## 1     strobilurin             1          1
+## 2     strobilurin             3          1
+## 3     strobilurin             9          1
+## 4     strobilurin            16          2
+## 5     strobilurin            22          4
+## 6     strobilurin            23          1
+## 7     strobilurin            30          2
+## 8     strobilurin            31          2
+## 9     strobilurin            34          3
+## 10    strobilurin            36          6
+## 11    strobilurin            37          3
+## 12    strobilurin            39          1
+## 13    strobilurin            41          1
+## 14    strobilurin            42          1
+## 15    strobilurin            43          3
+## 16    strobilurin            47          2
+## 17    strobilurin            54          2
+## 18    strobilurin            55          2
+## 19    strobilurin            65          1
+## 20    strobilurin            68          1
+## 21  triaz + strob             4          2
+## 22  triaz + strob             9          4
+## 23  triaz + strob            16          5
+## 24  triaz + strob            18          2
+## 25  triaz + strob            21          5
+## 26  triaz + strob            22          2
+## 27  triaz + strob            23         11
+## 28  triaz + strob            30          4
+## 29  triaz + strob            31          4
+## 30  triaz + strob            32          4
+## 31  triaz + strob            34          3
+## 32  triaz + strob            35          6
+## 33  triaz + strob            36         10
+## 34  triaz + strob            37          7
+## 35  triaz + strob            38          6
+## 36  triaz + strob            40          1
+## 37  triaz + strob            43          5
+## 38  triaz + strob            45          1
+## 39  triaz + strob            53          1
+## 40  triaz + strob            54          3
+## 41  triaz + strob            55          3
+## 42  triaz + strob            62          1
+## 43  triaz + strob            65          1
+## 44  triaz + strob            66          1
+## 45  triaz + strob            68          4
+## 46  triaz + strob            74          2
+## 47       triazole             3          1
+## 48       triazole             4          3
+## 49       triazole             9          2
+## 50       triazole            16          6
+## 51       triazole            18          1
+## 52       triazole            21          1
+## 53       triazole            30          3
+## 54       triazole            31          3
+## 55       triazole            33          4
+## 56       triazole            34          6
+## 57       triazole            35          6
+## 58       triazole            36          6
+## 59       triazole            37          4
+## 60       triazole            39          2
+## 61       triazole            40          1
+## 62       triazole            41          1
+## 63       triazole            43          3
+## 64       triazole            45         15
+## 65       triazole            46          1
+## 66       triazole            53          1
+## 67       triazole            54          4
+## 68       triazole            55          4
+## 69       triazole            62          1
+## 70       triazole            65          8
+## 71       triazole            66         11
+## 72       triazole            74          4
+</code></pre>
+
 <pre><code class="r"># R-stage
 sort(table(rust.data$growthStateClean))
 </code></pre>
@@ -1699,7 +1873,60 @@ table(rust.data$category_rstage)
 ##  51  75 108  16  27
 </code></pre>
 
-<pre><code class="r"># Applications 
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_rstage+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$category_rstage),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_rstage ReferenceNumb FID.length
+## 1               1+             4          6
+## 2               1+            35          4
+## 3               1+            36          6
+## 4               1+            38          6
+## 5               1+            39         11
+## 6               1+            43          3
+## 7               1+            46          5
+## 8               1+            55         10
+## 9               2+            18          3
+## 10              2+            23         12
+## 11              2+            37         15
+## 12              2+            40          4
+## 13              2+            41         11
+## 14              2+            42          7
+## 15              2+            45          9
+## 16              2+            47          2
+## 17              2+            74         12
+## 18               3             3          7
+## 19               3             9          9
+## 20               3            16         13
+## 21               3            21          5
+## 22               3            22          9
+## 23               3            32          2
+## 24               3            33          2
+## 25               3            34          9
+## 26               3            35          4
+## 27               3            36          9
+## 28               3            43          6
+## 29               3            53          6
+## 30               3            62          7
+## 31               3            65         15
+## 32               3            68          5
+## 33               4             1          3
+## 34               4            66         13
+## 35               5            21          1
+## 36               5            32          2
+## 37               5            33          2
+## 38               5            34          3
+## 39               5            36          4
+## 40               5            43          3
+## 41               5            54          9
+## 42               5            65          3
+</code></pre>
+
+<pre><code class="r">rust.data$category_rstage[rust.data$category_rstage==&quot;4&quot;] &lt;- NA
+
+# Applications 
 sort(table(rust.data$applicationsNumb))
 </code></pre>
 
@@ -1716,6 +1943,63 @@ table(rust.data$number_applications)
 <pre><code>## 
 ##   1   2   3 
 ## 133 170  15
+</code></pre>
+
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~number_applications+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$number_applications),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    number_applications ReferenceNumb FID.length
+## 1                    1             1          3
+## 2                    1             9          9
+## 3                    1            16          8
+## 4                    1            21          6
+## 5                    1            30          9
+## 6                    1            31          9
+## 7                    1            32          4
+## 8                    1            33          4
+## 9                    1            34         12
+## 10                   1            35          4
+## 11                   1            36         12
+## 12                   1            43          9
+## 13                   1            45          8
+## 14                   1            54          9
+## 15                   1            62          1
+## 16                   1            65         16
+## 17                   1            66          6
+## 18                   1            68          4
+## 19                   2             3          7
+## 20                   2             4          6
+## 21                   2            16          5
+## 22                   2            18          3
+## 23                   2            22          9
+## 24                   2            23         12
+## 25                   2            35          8
+## 26                   2            36         10
+## 27                   2            37         15
+## 28                   2            38          6
+## 29                   2            39         11
+## 30                   2            40          4
+## 31                   2            41         11
+## 32                   2            43          6
+## 33                   2            45          9
+## 34                   2            47          4
+## 35                   2            53          6
+## 36                   2            55         10
+## 37                   2            62          6
+## 38                   2            65          2
+## 39                   2            66          7
+## 40                   2            68          1
+## 41                   2            74         12
+## 42                   3            36          1
+## 43                   3            42          7
+## 44                   3            46          5
+## 45                   3            47          2
+</code></pre>
+
+<pre><code class="r">rust.data$number_applications[rust.data$number_applications==3] &lt;- NA
 </code></pre>
 
 <p>Yield data</p>
@@ -1739,6 +2023,53 @@ table(yield.data$number_applications)
 ## 115 160
 </code></pre>
 
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~number_applications+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$number_applications),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    number_applications ReferenceNumb FID.length
+## 1                    1             1          3
+## 2                    1             9          9
+## 3                    1            16          8
+## 4                    1            21          6
+## 5                    1            30          9
+## 6                    1            31          9
+## 7                    1            32          4
+## 8                    1            33          4
+## 9                    1            34         12
+## 10                   1            35          4
+## 11                   1            36         12
+## 12                   1            45          8
+## 13                   1            62          1
+## 14                   1            65         16
+## 15                   1            66          6
+## 16                   1            68          4
+## 17                   2             3          7
+## 18                   2             4          6
+## 19                   2            16          5
+## 20                   2            18          3
+## 21                   2            22          9
+## 22                   2            23         12
+## 23                   2            35          8
+## 24                   2            36         10
+## 25                   2            37         15
+## 26                   2            38          6
+## 27                   2            39         11
+## 28                   2            40          4
+## 29                   2            41         10
+## 30                   2            45          9
+## 31                   2            47          2
+## 32                   2            53          6
+## 33                   2            55          9
+## 34                   2            62          6
+## 35                   2            65          2
+## 36                   2            66          7
+## 37                   2            68          1
+## 38                   2            74         12
+</code></pre>
+
 <pre><code class="r"># R-stage
 sort(table(yield.data$growthStateClean))
 </code></pre>
@@ -1758,7 +2089,57 @@ table(yield.data$category_rstage)
 ##  47  73 102  16  15
 </code></pre>
 
-<pre><code class="r"># Active ingredients
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_rstage+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$category_rstage),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_rstage ReferenceNumb FID.length
+## 1               1+             4          6
+## 2               1+            35          4
+## 3               1+            36          6
+## 4               1+            38          6
+## 5               1+            39         11
+## 6               1+            46          5
+## 7               1+            55          9
+## 8               2+            18          3
+## 9               2+            23         12
+## 10              2+            37         15
+## 11              2+            40          4
+## 12              2+            41         10
+## 13              2+            42          7
+## 14              2+            45          9
+## 15              2+            47          1
+## 16              2+            74         12
+## 17               3             3          7
+## 18               3             9          9
+## 19               3            16         13
+## 20               3            21          5
+## 21               3            22          9
+## 22               3            32          2
+## 23               3            33          2
+## 24               3            34          9
+## 25               3            35          4
+## 26               3            36          9
+## 27               3            53          6
+## 28               3            62          7
+## 29               3            65         15
+## 30               3            68          5
+## 31               4             1          3
+## 32               4            66         13
+## 33               5            21          1
+## 34               5            32          2
+## 35               5            33          2
+## 36               5            34          3
+## 37               5            36          4
+## 38               5            65          3
+</code></pre>
+
+<pre><code class="r">yield.data$category_rstage[yield.data$category_rstage==&quot;4&quot;] &lt;- NA
+
+
+# Active ingredients
 sort(table(yield.data$activeIngClean))
 </code></pre>
 
@@ -1778,6 +2159,87 @@ sort(table(yield.data$category_ai))
 <pre><code>## 
 ##   PYR  TEBU  FLUT MIXED 
 ##    20    28    43   119
+</code></pre>
+
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_ai+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$category_ai),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_ai ReferenceNumb FID.length
+## 1         FLUT            16          2
+## 2         FLUT            30          1
+## 3         FLUT            31          1
+## 4         FLUT            33          4
+## 5         FLUT            34          2
+## 6         FLUT            35          6
+## 7         FLUT            37          1
+## 8         FLUT            45         14
+## 9         FLUT            65          2
+## 10        FLUT            66         10
+## 11       MIXED             3          2
+## 12       MIXED             4          2
+## 13       MIXED             9          6
+## 14       MIXED            16          5
+## 15       MIXED            18          2
+## 16       MIXED            21          5
+## 17       MIXED            22          3
+## 18       MIXED            23         11
+## 19       MIXED            30          5
+## 20       MIXED            31          5
+## 21       MIXED            32          4
+## 22       MIXED            34          5
+## 23       MIXED            35          6
+## 24       MIXED            36         10
+## 25       MIXED            37          9
+## 26       MIXED            38          6
+## 27       MIXED            39          4
+## 28       MIXED            40          3
+## 29       MIXED            41          3
+## 30       MIXED            42          3
+## 31       MIXED            45          2
+## 32       MIXED            46          1
+## 33       MIXED            53          2
+## 34       MIXED            55          3
+## 35       MIXED            62          3
+## 36       MIXED            65          3
+## 37       MIXED            66          2
+## 38       MIXED            68          4
+## 39         PYR             1          1
+## 40         PYR             3          1
+## 41         PYR             9          1
+## 42         PYR            16          1
+## 43         PYR            22          1
+## 44         PYR            23          1
+## 45         PYR            30          1
+## 46         PYR            31          1
+## 47         PYR            36          6
+## 48         PYR            37          1
+## 49         PYR            39          1
+## 50         PYR            41          1
+## 51         PYR            47          1
+## 52         PYR            55          1
+## 53         PYR            65          1
+## 54        TEBU             3          1
+## 55        TEBU             4          1
+## 56        TEBU             9          2
+## 57        TEBU            16          1
+## 58        TEBU            18          1
+## 59        TEBU            21          1
+## 60        TEBU            30          1
+## 61        TEBU            31          1
+## 62        TEBU            34          2
+## 63        TEBU            36          6
+## 64        TEBU            37          1
+## 65        TEBU            39          2
+## 66        TEBU            41          1
+## 67        TEBU            45          1
+## 68        TEBU            46          1
+## 69        TEBU            55          1
+## 70        TEBU            62          1
+## 71        TEBU            65          2
+## 72        TEBU            66          1
 </code></pre>
 
 <pre><code class="r"># Class
@@ -1815,6 +2277,81 @@ sort(table(yield.data$category_class))
 ##            34            89            95
 </code></pre>
 
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_class+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$category_class),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_class ReferenceNumb FID.length
+## 1     strobilurin             1          1
+## 2     strobilurin             3          1
+## 3     strobilurin             9          1
+## 4     strobilurin            16          2
+## 5     strobilurin            22          4
+## 6     strobilurin            23          1
+## 7     strobilurin            30          2
+## 8     strobilurin            31          2
+## 9     strobilurin            34          3
+## 10    strobilurin            36          6
+## 11    strobilurin            37          3
+## 12    strobilurin            39          1
+## 13    strobilurin            41          1
+## 14    strobilurin            42          1
+## 15    strobilurin            47          1
+## 16    strobilurin            55          2
+## 17    strobilurin            65          1
+## 18    strobilurin            68          1
+## 19  triaz + strob             4          2
+## 20  triaz + strob             9          4
+## 21  triaz + strob            16          5
+## 22  triaz + strob            18          2
+## 23  triaz + strob            21          5
+## 24  triaz + strob            22          2
+## 25  triaz + strob            23         11
+## 26  triaz + strob            30          4
+## 27  triaz + strob            31          4
+## 28  triaz + strob            32          4
+## 29  triaz + strob            34          3
+## 30  triaz + strob            35          6
+## 31  triaz + strob            36         10
+## 32  triaz + strob            37          7
+## 33  triaz + strob            38          6
+## 34  triaz + strob            40          1
+## 35  triaz + strob            45          1
+## 36  triaz + strob            53          1
+## 37  triaz + strob            55          2
+## 38  triaz + strob            62          1
+## 39  triaz + strob            65          1
+## 40  triaz + strob            66          1
+## 41  triaz + strob            68          4
+## 42  triaz + strob            74          2
+## 43       triazole             3          1
+## 44       triazole             4          3
+## 45       triazole             9          2
+## 46       triazole            16          6
+## 47       triazole            18          1
+## 48       triazole            21          1
+## 49       triazole            30          3
+## 50       triazole            31          3
+## 51       triazole            33          4
+## 52       triazole            34          6
+## 53       triazole            35          6
+## 54       triazole            36          6
+## 55       triazole            37          4
+## 56       triazole            39          2
+## 57       triazole            40          1
+## 58       triazole            41          1
+## 59       triazole            45         15
+## 60       triazole            46          1
+## 61       triazole            53          1
+## 62       triazole            55          4
+## 63       triazole            62          1
+## 64       triazole            65          8
+## 65       triazole            66         11
+## 66       triazole            74          4
+</code></pre>
+
 <p>100-seed weight data</p>
 
 <pre><code class="r"># Applications 
@@ -1834,6 +2371,33 @@ table(seedwt.data$number_applications)
 <pre><code>## 
 ##  1  2 
 ## 83 64
+</code></pre>
+
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~number_applications+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$number_applications),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    number_applications ReferenceNumb FID.length
+## 1                    1             1          3
+## 2                    1             9          9
+## 3                    1            30          9
+## 4                    1            32          4
+## 5                    1            33          4
+## 6                    1            34         12
+## 7                    1            36         12
+## 8                    1            45          8
+## 9                    1            65         16
+## 10                   1            66          6
+## 11                   2            36         10
+## 12                   2            37         15
+## 13                   2            38          6
+## 14                   2            39         11
+## 15                   2            40          4
+## 16                   2            45          9
+## 17                   2            65          2
+## 18                   2            66          7
 </code></pre>
 
 <pre><code class="r"># growth stage
@@ -1856,7 +2420,32 @@ table(seedwt.data$category_rstage)
 ## 23 28 46 16
 </code></pre>
 
-<pre><code class="r"># Active ingredients
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_rstage+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$category_rstage),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_rstage ReferenceNumb FID.length
+## 1               1+            36          6
+## 2               1+            38          6
+## 3               1+            39         11
+## 4               2+            37         15
+## 5               2+            40          4
+## 6               2+            45          9
+## 7                3             9          9
+## 8                3            32          2
+## 9                3            33          2
+## 10               3            34          9
+## 11               3            36          9
+## 12               3            65         15
+## 13               4             1          3
+## 14               4            66         13
+</code></pre>
+
+<pre><code class="r">seedwt.data$category_rstage[seedwt.data$category_rstage!=&quot;3&quot;] &lt;- NA
+
+# Active ingredients
 sort(table(seedwt.data$activeIngClean))
 </code></pre>
 
@@ -1876,6 +2465,43 @@ table(seedwt.data$category_ai)
 <pre><code>## 
 ##  FLUT MIXED  TEBU 
 ##    34    59    18
+</code></pre>
+
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_ai+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$category_ai),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_ai ReferenceNumb FID.length
+## 1         FLUT            30          1
+## 2         FLUT            33          4
+## 3         FLUT            34          2
+## 4         FLUT            37          1
+## 5         FLUT            45         14
+## 6         FLUT            65          2
+## 7         FLUT            66         10
+## 8        MIXED             9          6
+## 9        MIXED            30          5
+## 10       MIXED            32          4
+## 11       MIXED            34          5
+## 12       MIXED            36         10
+## 13       MIXED            37          9
+## 14       MIXED            38          6
+## 15       MIXED            39          4
+## 16       MIXED            40          3
+## 17       MIXED            45          2
+## 18       MIXED            65          3
+## 19       MIXED            66          2
+## 20        TEBU             9          2
+## 21        TEBU            30          1
+## 22        TEBU            34          2
+## 23        TEBU            36          6
+## 24        TEBU            37          1
+## 25        TEBU            39          2
+## 26        TEBU            45          1
+## 27        TEBU            65          2
+## 28        TEBU            66          1
 </code></pre>
 
 <pre><code class="r"># Class
@@ -1909,6 +2535,45 @@ table(seedwt.data$category_class)
 <pre><code>## 
 ##   strobilurin triaz + strob      triazole 
 ##            18            42            62
+</code></pre>
+
+<pre><code class="r"># now check for 5+ studies for each category
+summaryBy(FID~category_class+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$category_class),],
+          FUN=length)
+</code></pre>
+
+<pre><code>##    category_class ReferenceNumb FID.length
+## 1     strobilurin             1          1
+## 2     strobilurin             9          1
+## 3     strobilurin            30          2
+## 4     strobilurin            34          3
+## 5     strobilurin            36          6
+## 6     strobilurin            37          3
+## 7     strobilurin            39          1
+## 8     strobilurin            65          1
+## 9   triaz + strob             9          4
+## 10  triaz + strob            30          4
+## 11  triaz + strob            32          4
+## 12  triaz + strob            34          3
+## 13  triaz + strob            36         10
+## 14  triaz + strob            37          7
+## 15  triaz + strob            38          6
+## 16  triaz + strob            40          1
+## 17  triaz + strob            45          1
+## 18  triaz + strob            65          1
+## 19  triaz + strob            66          1
+## 20       triazole             9          2
+## 21       triazole            30          3
+## 22       triazole            33          4
+## 23       triazole            34          6
+## 24       triazole            36          6
+## 25       triazole            37          4
+## 26       triazole            39          2
+## 27       triazole            40          1
+## 28       triazole            45         15
+## 29       triazole            65          8
+## 30       triazole            66         11
 </code></pre>
 
 <h3>6. Calculate effect sizes</h3>
@@ -1986,7 +2651,7 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-11-29
+##  date     2016-11-30
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
