@@ -106,12 +106,9 @@ for(ii in 1:nsims){
     applications$b[rownames(applications$b)=="number_applications"]
 }
 
-class <- rma.uni(yi = yi,
-                 vi = (n1i + n2i)/(n1i*n2i),
-                 data = newdata,
-                 method = "REML",
-                 mods = ~category_rstage-1)
 
+#' ### Save final results
+save(results.rust, file="data/output_data/results_rust.R")
 
 #' ### Footer
 #' 
