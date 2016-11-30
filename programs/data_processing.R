@@ -869,16 +869,20 @@ target.spot.data$m2i[target.spot.data$scale=="Scale 0-5" &
                                target.spot.data$TSseverityCont > 2]-2)*25
 target.spot.data$n1i <- target.spot.data$n2i <- target.spot.data$replications
 
-#' ### 5. Take out categorical moderators with n < 5
+#' ### 5. Take out categorical moderators with records < 15 from < 5 studies
 #' 
 #' Rust data
-#+ removeSmallRst
 # Active ingredients
 sort(table(rust.data$activeIngClean))
 analyze.ai <- c("DUAL", "PYR","TEBU","FLUT","MIXED")
 rust.data$category_ai[rust.data$activeIngClean %in% analyze.ai] <- 
   rust.data$activeIngClean[rust.data$activeIngClean %in% analyze.ai]
 table(rust.data$category_ai)
+# now check for 5+ studies for each category
+summaryBy(FID~category_ai+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$category_ai),],
+          FUN=length)
+rust.data$category_ai[rust.data$category_ai=="DUAL"] <- NA
 
 # Class
 sort(table(rust.data$classClean))
@@ -886,6 +890,10 @@ analyze.class <- c("strobilurin","triaz + strob","triazole")
 rust.data$category_class[rust.data$classClean %in% analyze.class] <- 
   rust.data$classClean[rust.data$classClean %in% analyze.class]
 table(rust.data$category_class)
+# now check for 5+ studies for each category
+summaryBy(FID~category_class+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$category_class),],
+          FUN=length)
 
 # R-stage
 sort(table(rust.data$growthStateClean))
@@ -893,15 +901,24 @@ analyze.rstage <- c("4","5","1+","2+","3")
 rust.data$category_rstage[rust.data$growthStateClean %in% analyze.rstage] <- 
   rust.data$growthStateClean[rust.data$growthStateClean %in% analyze.rstage]
 table(rust.data$category_rstage)
+# now check for 5+ studies for each category
+summaryBy(FID~category_rstage+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$category_rstage),],
+          FUN=length)
+rust.data$category_rstage[rust.data$category_rstage=="4"] <- NA
 
 # Applications 
 sort(table(rust.data$applicationsNumb))
 rust.data$number_applications[rust.data$applicationsNumb!=5] <- 
   rust.data$applicationsNumb[rust.data$applicationsNumb!=5]
 table(rust.data$number_applications)
+# now check for 5+ studies for each category
+summaryBy(FID~number_applications+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$number_applications),],
+          FUN=length)
+rust.data$number_applications[rust.data$number_applications==3] <- NA
 
 #' Yield data
-#+ removeSmallYield
 # Applications
 sort(table(yield.data$applicationsNumb))
 yield.data$number_applications[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2] <- 
