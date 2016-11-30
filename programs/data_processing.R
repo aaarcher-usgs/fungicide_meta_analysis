@@ -924,12 +924,22 @@ sort(table(yield.data$applicationsNumb))
 yield.data$number_applications[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2] <- 
   yield.data$applicationsNumb[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2]
 table(yield.data$number_applications)
+# now check for 5+ studies for each category
+summaryBy(FID~number_applications+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$number_applications),],
+          FUN=length)
 
 # R-stage
 sort(table(yield.data$growthStateClean))
 yield.data$category_rstage[yield.data$growthStateClean %in% analyze.rstage] <- 
   yield.data$growthStateClean[yield.data$growthStateClean %in% analyze.rstage]
 table(yield.data$category_rstage)
+# now check for 5+ studies for each category
+summaryBy(FID~category_rstage+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$category_rstage),],
+          FUN=length)
+yield.data$category_rstage[yield.data$category_rstage=="4"] <- NA
+
 
 # Active ingredients
 sort(table(yield.data$activeIngClean))
@@ -937,20 +947,31 @@ analyze.ai <- c("PYR","TEBU","FLUT","MIXED")
 yield.data$category_ai[yield.data$activeIngClean %in% analyze.ai] <- 
   yield.data$activeIngClean[yield.data$activeIngClean %in% analyze.ai]
 sort(table(yield.data$category_ai))
+# now check for 5+ studies for each category
+summaryBy(FID~category_ai+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$category_ai),],
+          FUN=length)
 
 # Class
 sort(table(yield.data$classClean))
 yield.data$category_class[yield.data$classClean %in% analyze.class] <- 
   yield.data$classClean[yield.data$classClean %in% analyze.class]
 sort(table(yield.data$category_class))
+# now check for 5+ studies for each category
+summaryBy(FID~category_class+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$category_class),],
+          FUN=length)
 
 #' 100-seed weight data
-#+ removeSmall100sw
 # Applications 
 sort(table(seedwt.data$applicationsNumb))
 seedwt.data$number_applications[seedwt.data$applicationsNumb!=3] <-
   seedwt.data$applicationsNumb[seedwt.data$applicationsNumb!=3]
 table(seedwt.data$number_applications)
+# now check for 5+ studies for each category
+summaryBy(FID~number_applications+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$number_applications),],
+          FUN=length)
 
 # growth stage
 sort(table(seedwt.data$growthStateClean))
@@ -958,6 +979,11 @@ analyze.rstage <- c("4","1+","2+","3")
 seedwt.data$category_rstage[seedwt.data$growthStateClean %in% analyze.rstage] <-
   seedwt.data$growthStateClean[seedwt.data$growthStateClean %in% analyze.rstage]
 table(seedwt.data$category_rstage)
+# now check for 5+ studies for each category
+summaryBy(FID~category_rstage+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$category_rstage),],
+          FUN=length)
+seedwt.data$category_rstage[seedwt.data$category_rstage!="3"] <- NA
 
 # Active ingredients
 sort(table(seedwt.data$activeIngClean))
@@ -965,12 +991,20 @@ analyze.ai <- c("TEBU","FLUT","MIXED")
 seedwt.data$category_ai[seedwt.data$activeIngClean %in% analyze.ai] <- 
   seedwt.data$activeIngClean[seedwt.data$activeIngClean %in% analyze.ai]
 table(seedwt.data$category_ai)
+# now check for 5+ studies for each category
+summaryBy(FID~category_ai+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$category_ai),],
+          FUN=length)
 
 # Class
 sort(table(seedwt.data$classClean))
 seedwt.data$category_class[seedwt.data$classClean %in% analyze.class] <- 
   seedwt.data$classClean[seedwt.data$classClean %in% analyze.class]
 table(seedwt.data$category_class)
+# now check for 5+ studies for each category
+summaryBy(FID~category_class+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$category_class),],
+          FUN=length)
 
 #' ### 6. Calculate effect sizes
 #' 
