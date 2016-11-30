@@ -31,7 +31,7 @@ remove(list=c(#"rust.data.ROM",
               ))
 
 #' Number of bootstrap simulations: 
-nsims <- 5
+nsims <- 5000
 
 #' Empty data frame to hold results
 results.rust <- as.data.frame(matrix(NA,ncol=14,nrow=nsims))
@@ -43,6 +43,7 @@ colnames(results.rust) <- c("OVERALL",
                             "Application Intrcpt","Application Slope")
 
 #' Running the bootstraps
+#+ boots, warning=FALSE
 for(ii in 1:nsims){
   studyIDS <- data.frame(ReferenceNumb = sample(rust.data.ROM$ReferenceNumb, 
                                                 length(unique(rust.data.ROM$ReferenceNumb)),
