@@ -9,10 +9,12 @@
 library(ezknitr)
 library(knitr)
 library(metafor)
+library(devtools)
 
-#' Clear environment
+#' Clear environment and set seed
 #+ clear
 remove(list=ls())
+set.seed(18837)
 
 #' Document settings
 #+ settings
@@ -34,11 +36,11 @@ nsims <- 5
 #' Empty data frame to hold results
 results.rust <- as.data.frame(matrix(NA,ncol=14,nrow=nsims))
 colnames(results.rust) <- c("OVERALL",
-                            "DUAL","FLUT","MIXED","PYR","TEBU",
+                            "FLUT","MIXED","PYR","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
-                            "category_rstage1+", "category_rstage2+", 
-                            "category_rstage3","category_rstage4",
-                            "category_rstage5")
+                            "R1+", "R2+", 
+                            "R3","R5",
+                            "Application Intrcpt","Application Slope")
 
 #' Running the bootstraps
 for(ii in 1:nsims){
@@ -59,7 +61,10 @@ for(ii in 1:nsims){
                 data = newdata,
                 method = "REML",
                 mods = ~category_ai-1)
-  results.rust[ii,2:6] <- ai$b
+  results.rust$FLUT[ii] <- ai$b[rownames(ai$b)=="category_aiFLUT"]
+  results.rust$MIXED[ii] <- ai$b[rownames(ai$b)=="category_aiMIXED"]
+  results.rust$PYR[ii] <- ai$b[rownames(ai$b)=="category_aiPYR"]
+  results.rust$TEBU[ii] <- ai$b[rownames(ai$b)=="category_aiTEBU"]
   
   # Classes
   class <- rma.uni(yi = yi,
@@ -67,7 +72,12 @@ for(ii in 1:nsims){
                    data = newdata,
                    method = "REML",
                    mods = ~category_class-1)
-  results.rust[ii,7:9] <- class$b
+  results.rust$Strobilurin[ii] <- 
+    class$b[rownames(class$b)=="category_classstrobilurin"]
+  results.rust$Triaz_Strob[ii] <- 
+    class$b[rownames(class$b)=="category_classtriaz + strob"]
+  results.rust$Triazole[ii] <- 
+    class$b[rownames(class$b)=="category_classtriazole"]
   
   # Growth stage
   rstage <- rma.uni(yi = yi,
@@ -75,12 +85,25 @@ for(ii in 1:nsims){
                     data = newdata,
                     method = "REML",
                     mods = ~category_rstage-1)
-  results.rust$`category_rstage1+`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage1+"]
-  results.rust$`category_rstage2+`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage2+"]
-  results.rust$`category_rstage3`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage3"]
-  results.rust$`category_rstage4`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage4"]
-  results.rust$`category_rstage5`[ii] <- rstage$b[rownames(rstage$b)=="category_rstage5"]
+  results.rust$`R1+`[ii] <- 
+    rstage$b[rownames(rstage$b)=="category_rstage1+"]
+  results.rust$`R2+`[ii] <- 
+    rstage$b[rownames(rstage$b)=="category_rstage2+"]
+  results.rust$R3[ii] <- 
+    rstage$b[rownames(rstage$b)=="category_rstage3"]
+  results.rust$R5[ii] <- 
+    rstage$b[rownames(rstage$b)=="category_rstage5"]
   
+  # Number of applications
+  applications <- rma.uni(yi = yi,
+                          vi = (n1i + n2i)/(n1i*n2i),
+                          data = newdata,
+                          method = "REML",
+                          mods = ~number_applications)
+  results.rust$`Application Intrcpt`[ii] <- 
+    applications$b[rownames(applications$b)=="intrcpt"]
+  results.rust$`Application Slope`[ii] <- 
+    applications$b[rownames(applications$b)=="number_applications"]
 }
 
 class <- rma.uni(yi = yi,
@@ -89,14 +112,11 @@ class <- rma.uni(yi = yi,
                  method = "REML",
                  mods = ~category_rstage-1)
 
-#' Active ingredients
-
-test 
 
 #' ### Footer
 #' 
-#' Spun with ezspin("programs/data_analysis.R", out_dir="output", fig_dir="figures", keep_md=FALSE)
+#' Spun with ezspin("programs/data_analysis_bootstrap_rust.R", out_dir="output", fig_dir="figures", keep_md=FALSE)
 #' 
 #' Session Info:
 #+ sessionInfo
-sessionInfo()
+devtools::session_info()
