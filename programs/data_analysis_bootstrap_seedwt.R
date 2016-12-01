@@ -34,12 +34,15 @@ remove(list=c(#"seedwt.data.ROM",
 nsims <- 5000
 
 #' Empty data frame to hold results
-results.seedwt <- as.data.frame(matrix(NA,ncol=11,nrow=nsims))
+results.seedwt <- as.data.frame(matrix(NA,ncol=17,nrow=nsims))
 colnames(results.seedwt) <- c("OVERALL","tau2",
                             "FLUT","MIXED","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
                             "R3",
-                            "Application Intrcpt","Application Slope")
+                            "Application Intrcpt","Application Slope",
+                            "1 Application","2 Applications",
+                            "high","medium","low",
+                            "2006")
 
 #' Running the bootstraps
 #+ boots, warning=FALSE
@@ -88,7 +91,19 @@ for(ii in 1:nsims){
     results.seedwt$R3[ii] <- rstage$b
   }
 
-
+  # Disease pressure
+  pressure <- rma.uni(yi = yi,
+                      vi = (n1i+n2i)/(n1i*n2i),
+                      data = newdata,
+                      method = "REML",
+                      mods = ~category_pressure-1)
+  results.seedwt$low[ii] <- pressure$b[rownames(pressure$b)=="category_pressurelow"]
+  if(nrow(newdata[newdata$category_pressure=="medium",])>0){
+    results.seedwt$medium[ii] <- 
+      pressure$b[rownames(pressure$b)=="category_pressuremedium"]
+  }
+  results.seedwt$high[ii] <- pressure$b[rownames(pressure$b)=="category_pressurehigh"]
+  
   
   # Number of applications
   applications <- rma.uni(yi = yi,
@@ -100,6 +115,25 @@ for(ii in 1:nsims){
     applications$b[rownames(applications$b)=="intrcpt"]
   results.seedwt$`Application Slope`[ii] <- 
     applications$b[rownames(applications$b)=="number_applications"]
+  
+  # Number of applications as category
+  apps.categ <- rma.uni(yi = yi,
+                        vi = (n1i + n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = "REML",
+                        mods = ~as.character(number_applications)-1)
+  results.seedwt$`1 Application`[ii] <- 
+    apps.categ$b[rownames(apps.categ$b)=="as.character(number_applications)1"]
+  results.seedwt$`2 Applications`[ii] <- 
+    apps.categ$b[rownames(apps.categ$b)=="as.character(number_applications)2"]
+  
+  # Study year
+  # Condition on year1 = 2005
+  year <- rma.uni(yi = yi,
+                  vi = (n1i+n2i)/(n1i*n2i),
+                  data = newdata[newdata$category_year==2006,],
+                  method = "REML")
+  results.seedwt$`2006`[ii] <- year$b
 }
 
 
