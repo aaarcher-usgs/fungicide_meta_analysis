@@ -725,8 +725,10 @@ rust.data$m2i[rust.data$scale=="Scale 0-10" &
   (rust.data$rustSever1.8Cont[rust.data$scale=="Scale 0-10" & 
                             rust.data$rustSever1.8Cont > 8]-8)*32.5
 # For rust severity in percent originally
-rust.data$m1i[rust.data$scale=="Percent"] <- rust.data$rustSeverPerc[rust.data$scale=="Percent"]
-rust.data$m2i[rust.data$scale=="Percent"] <- rust.data$rustSeverPercCont[rust.data$scale=="Percent"]
+rust.data$m1i[rust.data$scale=="Percent"] <- 
+  rust.data$rustSeverPerc[rust.data$scale=="Percent"]
+rust.data$m2i[rust.data$scale=="Percent"] <- 
+  rust.data$rustSeverPercCont[rust.data$scale=="Percent"]
 # Sample sizes
 rust.data$n1i <- rust.data$n2i <- rust.data$replications
 
@@ -881,7 +883,10 @@ target.spot.data$n1i <- target.spot.data$n2i <- target.spot.data$replications
 #' Rust data
 #' 
 # Take out values of control rust severity <5%
-rust.data <- rust.data[rust.data$m2i>=5,] 
+too.low.pressure <- rust.data$ReferenceNumb[rust.data$m2i<5] 
+rust.data <- rust.data[rust.data$ReferenceNumb %in% too.low.pressure]
+yield.data <- yield.data[yield.data$ReferenceNumb %in% too.low.pressure]
+seedwt.data <- seedwt.data[seedwt.data$ReferenceNumb %in% too.low.pressure]
 # Active ingredients
 sort(table(rust.data$activeIngClean))
 analyze.ai <- c("DUAL", "PYR","TEBU","FLUT","MIXED")
