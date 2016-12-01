@@ -97,8 +97,11 @@ for(ii in 1:nsims){
                       data = newdata,
                       method = "REML",
                       mods = ~category_pressure-1)
-  results.seedwt$low[ii] <- pressure$b[rownames(pressure$b)=="category_pressurelow"]
-  if(nrow(newdata[newdata$category_pressure=="medium",])>0){
+  if("low" %in% unique(newdata$category_pressure)){
+    results.seedwt$low[ii] <- 
+      pressure$b[rownames(pressure$b)=="category_pressurelow"]
+  }
+  if("medium" %in% unique(newdata$category_pressure)){
     results.seedwt$medium[ii] <- 
       pressure$b[rownames(pressure$b)=="category_pressuremedium"]
   }
