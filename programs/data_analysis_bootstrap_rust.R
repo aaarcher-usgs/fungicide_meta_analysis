@@ -34,14 +34,16 @@ remove(list=c(#"rust.data.ROM",
 nsims <- 5000
 
 #' Empty data frame to hold results
-results.rust <- as.data.frame(matrix(NA,ncol=16,nrow=nsims))
+results.rust <- as.data.frame(matrix(NA,ncol=21,nrow=nsims))
 colnames(results.rust) <- c("OVERALL","tau2",
                             "FLUT","MIXED","PYR","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
                             "R1+", "R2+", 
                             "R3","R5",
                             "Application Intrcpt","Application Slope",
-                            "AZO + PROP")
+                            "AZO + PROP",
+                            "high","low","medium",
+                            "Year Intrcpt|2004","Year Slope")
 
 #' Running the bootstraps
 #+ boots, warning=FALSE
@@ -50,6 +52,7 @@ for(ii in 1:nsims){
                                                 length(unique(rust.data.ROM$ReferenceNumb)),
                                                 replace=T))
   newdata <- merge(studyIDS, rust.data.ROM)
+  
   # Overall analysis
   meta <- rma.uni(yi = yi,
                   vi = (n1i + n2i)/(n1i*n2i),
@@ -97,6 +100,18 @@ for(ii in 1:nsims){
   results.rust$R5[ii] <- 
     rstage$b[rownames(rstage$b)=="category_rstage5"]
   
+  # Disease pressure
+  pressure <- rma.uni(yi = yi,
+                      vi = (n1i+n2i)/(n1i*n2i),
+                      data = newdata,
+                      method = "REML",
+                      mods = ~category_pressure-1)
+  results.rust$low[ii] <- pressure$b[rownames(pressure$b)=="category_pressurelow"]
+  if(nrow(newdata[newdata$category_pressure=="medium",])>0){
+  results.rust$medium[ii] <- pressure$b[rownames(pressure$b)=="category_pressuremedium"]
+  }
+  results.rust$high[ii] <- pressure$b[rownames(pressure$b)=="category_pressurehigh"]
+  
   # Number of applications
   applications <- rma.uni(yi = yi,
                           vi = (n1i + n2i)/(n1i*n2i),
@@ -108,7 +123,18 @@ for(ii in 1:nsims){
   results.rust$`Application Slope`[ii] <- 
     applications$b[rownames(applications$b)=="number_applications"]
   
-  if(nrow(newdata[newdata$alphaIngred=="AZO + PROP",]>0)){
+  # Study year
+  # Condition on year1 = 2005
+  newdata$category_year <- newdata$category_year - 2004
+  year <- rma.uni(yi = yi,
+                  vi = (n1i+n2i)/(n1i*n2i),
+                  data = newdata,
+                  method = "REML",
+                  mods = ~category_year)
+  results.rust$`Year Intrcpt|2004`[ii] <- year$b[rownames(year$b)=="intrcpt"]
+  results.rust$`Year Slope`[ii] <- year$b[rownames(year$b)=="category_year"]
+  
+  if(nrow(newdata[newdata$alphaIngred=="AZO + PROP",])>0){
     mixed <- rma.uni(yi = yi,
                      vi = (n1i + n2i)/(n1i*n2i),
                      data = newdata[newdata$alphaIngred=="AZO + PROP",],
