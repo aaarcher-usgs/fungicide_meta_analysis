@@ -34,8 +34,8 @@ remove(list=c(#"seedwt.data.ROM",
 nsims <- 5000
 
 #' Empty data frame to hold results
-results.seedwt <- as.data.frame(matrix(NA,ncol=10,nrow=nsims))
-colnames(results.seedwt) <- c("OVERALL",
+results.seedwt <- as.data.frame(matrix(NA,ncol=11,nrow=nsims))
+colnames(results.seedwt) <- c("OVERALL","tau2",
                             "FLUT","MIXED","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
                             "R3",
@@ -54,6 +54,7 @@ for(ii in 1:nsims){
                   data = newdata,
                   method = "REML")
   results.seedwt$OVERALL[ii] <- meta$b
+  results.seedwt$tau2[ii] <- meta$tau2
   
   # Active Ingredients
   ai <- rma.uni(yi = yi,
