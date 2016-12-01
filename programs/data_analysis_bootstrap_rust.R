@@ -123,6 +123,17 @@ for(ii in 1:nsims){
   results.rust$`Application Slope`[ii] <- 
     applications$b[rownames(applications$b)=="number_applications"]
   
+  # Number of applications as category
+  apps.categ <- rma.uni(yi = yi,
+                        vi = (n1i + n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = "REML",
+                        mods = ~as.character(number_applications)-1)
+  results.rust$`1 Application`[ii] <- 
+    apps.categ$b[rownames(apps.categ$b)=="as.character(number_applications)1"]
+  results.rust$`2 Applications`[ii] <- 
+    apps.categ$b[rownames(apps.categ$b)=="as.character(number_applications)2"]
+  
   # Study year
   # Condition on year1 = 2005
   newdata$category_year <- newdata$category_year - 2004
@@ -134,6 +145,20 @@ for(ii in 1:nsims){
   results.rust$`Year Intrcpt|2004`[ii] <- year$b[rownames(year$b)=="intrcpt"]
   results.rust$`Year Slope`[ii] <- year$b[rownames(year$b)=="category_year"]
   
+  # Study year as category
+  year.categ <- rma.uni(yi = yi,
+                        vi = (n1i+n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = "REML",
+                        mods = ~as.character(category_year)-1)
+  results.rust$`2006`[ii] <- 
+    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2006"]
+  results.rust$`2007`[ii] <- 
+    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2007"]
+  results.rust$`2013`[ii] <- 
+    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2013"]
+  
+  # Mixed active ingredients
   if(nrow(newdata[newdata$alphaIngred=="AZO + PROP",])>0){
     mixed <- rma.uni(yi = yi,
                      vi = (n1i + n2i)/(n1i*n2i),

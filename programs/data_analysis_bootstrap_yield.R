@@ -34,15 +34,17 @@ remove(list=c(#"yield.data.ROM",
 nsims <- 5000
 
 #' Empty data frame to hold results
-results.yield <- as.data.frame(matrix(NA,ncol=20,nrow=nsims))
+results.yield <- as.data.frame(matrix(NA,ncol=25,nrow=nsims))
 colnames(results.yield) <- c("OVERALL","tau2",
                             "FLUT","MIXED","PYR","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
                             "R1+", "R2+", 
                             "R3","R5",
                             "Application Intrcpt","Application Slope",
+                            "1 Application", "2 Applications",
                             "high","medium","low",
-                            "Year Intrcpt|2004","Year Slope")
+                            "Year Intrcpt|2004","Year Slope",
+                            "2006","2007","2013")
 
 #' Running the bootstraps
 #+ boots, warning=FALSE
@@ -124,17 +126,40 @@ for(ii in 1:nsims){
   results.yield$`Application Slope`[ii] <- 
     applications$b[rownames(applications$b)=="number_applications"]
   
+  # Number of applications as category
+  apps.categ <- rma.uni(yi = yi,
+                        vi = (n1i + n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = "REML",
+                        mods = ~as.character(number_applications)-1)
+  results.yield$`1 Application`[ii] <- 
+    apps.categ$b[rownames(apps.categ$b)=="as.character(number_applications)1"]
+  results.yield$`2 Applications`[ii] <- 
+    apps.categ$b[rownames(apps.categ$b)=="as.character(number_applications)2"]
+  
   # Study year
   # Condition on year1 = 2005
-  newdata$category_year <- newdata$category_year - 2004
+  newdata$category_yearC <- newdata$category_year - 2004
   year <- rma.uni(yi = yi,
                   vi = (n1i+n2i)/(n1i*n2i),
                   data = newdata,
                   method = "REML",
-                  mods = ~category_year)
+                  mods = ~category_yearC)
   results.yield$`Year Intrcpt|2004`[ii] <- year$b[rownames(year$b)=="intrcpt"]
-  results.yield$`Year Slope`[ii] <- year$b[rownames(year$b)=="category_year"]
+  results.yield$`Year Slope`[ii] <- year$b[rownames(year$b)=="category_yearC"]
   
+  # Study year as category
+  year.categ <- rma.uni(yi = yi,
+                 vi = (n1i+n2i)/(n1i*n2i),
+                 data = newdata,
+                 method = "REML",
+                 mods = ~as.character(category_year)-1)
+  results.yield$`2006`[ii] <- 
+    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2006"]
+  results.yield$`2007`[ii] <- 
+    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2007"]
+  results.yield$`2013`[ii] <- 
+    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2013"]
 }
 
 
