@@ -879,6 +879,9 @@ target.spot.data$n1i <- target.spot.data$n2i <- target.spot.data$replications
 #' ### 5. Take out categorical moderators with records < 15 from < 5 studies
 #' 
 #' Rust data
+#' 
+# Take out values of control rust severity <5%
+rust.data <- rust.data[rust.data$m2i>=5,] 
 # Active ingredients
 sort(table(rust.data$activeIngClean))
 analyze.ai <- c("DUAL", "PYR","TEBU","FLUT","MIXED")
@@ -925,6 +928,31 @@ summaryBy(FID~number_applications+ReferenceNumb,
           FUN=length)
 rust.data$number_applications[rust.data$number_applications==3] <- NA
 
+#' Disease strength of untreated check (i.e., disease pressure)
+#' 
+#' - control severity <40% = low
+#' - control severity >=40 and <70% = medium
+#' - control severity >70 = high
+rust.data$category_pressure[rust.data$m2i<40] <- "low"
+rust.data$category_pressure[rust.data$m2i>=40&
+                              rust.data$m2i<70] <- "medium"
+rust.data$category_pressure[rust.data$m2i>=70] <- "high"
+table(rust.data$category_pressure)
+# Store ReferenceNumbs from each for categorizing yield/100sw data
+index.low <- rust.data$ReferenceNumb[rust.data$category_pressure=="low"]
+index.med <- rust.data$ReferenceNumb[rust.data$category_pressure=="medium"]
+index.high <- rust.data$ReferenceNumb[rust.data$category_pressure=="high"]
+
+#' Year of study
+table(rust.data$studyYear)
+rust.data$category_year[rust.data$studyYear!="2012"] <- 
+  rust.data$studyYear[rust.data$studyYear!="2012"]
+summaryBy(FID~category_year+ReferenceNumb, 
+          data=rust.data[! is.na(rust.data$category_year),],
+          FUN=length)
+rust.data$category_year[rust.data$studyYear=="2008"|
+                          rust.data$studyYear=="2005"] <- NA
+
 #' Yield data
 # Applications
 sort(table(yield.data$applicationsNumb))
@@ -968,6 +996,26 @@ sort(table(yield.data$category_class))
 summaryBy(FID~category_class+ReferenceNumb, 
           data=yield.data[! is.na(yield.data$category_class),],
           FUN=length)
+
+#' Disease strength of untreated check (i.e., disease pressure)
+#' 
+#' - control severity <40% = low
+#' - control severity >=40 and <70% = medium
+#' - control severity >70 = high
+yield.data$category_pressure[yield.data$ReferenceNumb %in% index.low] <- "low"
+yield.data$category_pressure[yield.data$ReferenceNumb %in% index.med] <- "medium"
+yield.data$category_pressure[yield.data$ReferenceNumb %in% index.high] <- "high"
+table(yield.data$category_pressure)
+
+#' Year of study
+table(yield.data$studyYear)
+yield.data$category_year[yield.data$studyYear!="2012"] <- 
+  yield.data$studyYear[yield.data$studyYear!="2012"]
+summaryBy(FID~category_year+ReferenceNumb, 
+          data=yield.data[! is.na(yield.data$category_year),],
+          FUN=length)
+yield.data$category_year[yield.data$studyYear=="2008"|
+                          yield.data$studyYear=="2005"] <- NA
 
 #' 100-seed weight data
 # Applications 
@@ -1013,13 +1061,30 @@ summaryBy(FID~category_class+ReferenceNumb,
           data=seedwt.data[! is.na(seedwt.data$category_class),],
           FUN=length)
 
+#' Disease strength of untreated check (i.e., disease pressure)
+#' 
+#' - control severity <40% = low
+#' - control severity >=40 and <70% = medium
+#' - control severity >70 = high
+seedwt.data$category_pressure[seedwt.data$ReferenceNumb %in% index.low] <- "low"
+seedwt.data$category_pressure[seedwt.data$ReferenceNumb %in% index.med] <- "medium"
+seedwt.data$category_pressure[seedwt.data$ReferenceNumb %in% index.high] <- "high"
+table(seedwt.data$category_pressure)
+
+#' Year of study
+table(seedwt.data$studyYear)
+seedwt.data$category_year[seedwt.data$studyYear!="2007"] <- 
+  seedwt.data$studyYear[seedwt.data$studyYear!="2007"]
+summaryBy(FID~category_year+ReferenceNumb, 
+          data=seedwt.data[! is.na(seedwt.data$category_year),],
+          FUN=length)
+seedwt.data$category_year[seedwt.data$studyYear!="2006"] <- NA
+
 #' ### 6. Calculate effect sizes
 #' 
 #' Using log response ratio, cannot have 0s in data; so changing 0 to 0.0001
 rust.data$m1i[rust.data$m1i==0] <- 0.0001
 rust.data$m2i[rust.data$m2i==0] <- 0.0001
-# Take out values of control rust severity <5%
-rust.data <- rust.data[rust.data$m2i>=5,] 
 
 yield.data$m1i[yield.data$m1i==0] <- 0.0001
 yield.data$m2i[yield.data$m2i==0] <- 0.0001
