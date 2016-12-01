@@ -34,8 +34,8 @@ remove(list=c(#"yield.data.ROM",
 nsims <- 5000
 
 #' Empty data frame to hold results
-results.yield <- as.data.frame(matrix(NA,ncol=14,nrow=nsims))
-colnames(results.yield) <- c("OVERALL",
+results.yield <- as.data.frame(matrix(NA,ncol=15,nrow=nsims))
+colnames(results.yield) <- c("OVERALL","tau2",
                             "FLUT","MIXED","PYR","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
                             "R1+", "R2+", 
@@ -55,6 +55,7 @@ for(ii in 1:nsims){
                   data = newdata,
                   method = "REML")
   results.yield$OVERALL[ii] <- meta$b
+  results.yield$tau2[ii] <- meta$tau2
   
   # Active Ingredients
   ai <- rma.uni(yi = yi,
