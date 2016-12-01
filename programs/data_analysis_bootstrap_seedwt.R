@@ -79,10 +79,10 @@ for(ii in 1:nsims){
     class$b[rownames(class$b)=="category_classtriazole"]
   
   # Growth stage
-  if(unique(newdata$category_rstage[!is.na(newdata$category_rstage)])==3){
+  if(nrow(newdata[!is.na(newdata$category_rstage),])>0){
     rstage <- rma.uni(yi = yi,
                       vi = (n1i + n2i)/(n1i*n2i),
-                      data = newdata[newdata$category_rstage=="3",],
+                      data = newdata[! is.na(newdata$category_rstage),],
                       method = "REML")
     results.seedwt$R3[ii] <- rstage$b
   }
