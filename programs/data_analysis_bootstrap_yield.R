@@ -34,13 +34,15 @@ remove(list=c(#"yield.data.ROM",
 nsims <- 5000
 
 #' Empty data frame to hold results
-results.yield <- as.data.frame(matrix(NA,ncol=15,nrow=nsims))
+results.yield <- as.data.frame(matrix(NA,ncol=20,nrow=nsims))
 colnames(results.yield) <- c("OVERALL","tau2",
                             "FLUT","MIXED","PYR","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
                             "R1+", "R2+", 
                             "R3","R5",
-                            "Application Intrcpt","Application Slope")
+                            "Application Intrcpt","Application Slope",
+                            "high","medium","low",
+                            "Year Intrcpt|2004","Year Slope")
 
 #' Running the bootstraps
 #+ boots, warning=FALSE
@@ -98,7 +100,19 @@ for(ii in 1:nsims){
         rstage$b[rownames(rstage$b)=="category_rstage5"]
     }
 
-  
+    # Disease pressure
+    pressure <- rma.uni(yi = yi,
+                        vi = (n1i+n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = "REML",
+                        mods = ~category_pressure-1)
+    results.yield$low[ii] <- pressure$b[rownames(pressure$b)=="category_pressurelow"]
+    if(nrow(newdata[newdata$category_pressure=="medium",])>0){
+      results.yield$medium[ii] <- pressure$b[rownames(pressure$b)=="category_pressuremedium"]
+    }
+    results.yield$high[ii] <- pressure$b[rownames(pressure$b)=="category_pressurehigh"]
+    
+    
   # Number of applications
   applications <- rma.uni(yi = yi,
                           vi = (n1i + n2i)/(n1i*n2i),
@@ -109,6 +123,18 @@ for(ii in 1:nsims){
     applications$b[rownames(applications$b)=="intrcpt"]
   results.yield$`Application Slope`[ii] <- 
     applications$b[rownames(applications$b)=="number_applications"]
+  
+  # Study year
+  # Condition on year1 = 2005
+  newdata$category_year <- newdata$category_year - 2004
+  year <- rma.uni(yi = yi,
+                  vi = (n1i+n2i)/(n1i*n2i),
+                  data = newdata,
+                  method = "REML",
+                  mods = ~category_year)
+  results.yield$`Year Intrcpt|2004`[ii] <- year$b[rownames(year$b)=="intrcpt"]
+  results.yield$`Year Slope`[ii] <- year$b[rownames(year$b)=="category_year"]
+  
 }
 
 
