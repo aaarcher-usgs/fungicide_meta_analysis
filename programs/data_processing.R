@@ -357,7 +357,7 @@ data.reduced$activeIngClean[data.reduced$activeIngClean=="FEBU"] <- "FENB"
 
 
 
-#' Class of fungicide: clean up labels to be consistent and if <5, relabel as "oth"
+#' Class of fungicide: clean up labels to be consistent 
 #' 
 #+ standardizeClass
 # Table to see how it looks as is
