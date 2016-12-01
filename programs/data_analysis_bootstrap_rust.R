@@ -34,13 +34,14 @@ remove(list=c(#"rust.data.ROM",
 nsims <- 5000
 
 #' Empty data frame to hold results
-results.rust <- as.data.frame(matrix(NA,ncol=14,nrow=nsims))
-colnames(results.rust) <- c("OVERALL",
+results.rust <- as.data.frame(matrix(NA,ncol=16,nrow=nsims))
+colnames(results.rust) <- c("OVERALL","tau2",
                             "FLUT","MIXED","PYR","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
                             "R1+", "R2+", 
                             "R3","R5",
-                            "Application Intrcpt","Application Slope")
+                            "Application Intrcpt","Application Slope",
+                            "AZO + PROP")
 
 #' Running the bootstraps
 #+ boots, warning=FALSE
@@ -53,8 +54,9 @@ for(ii in 1:nsims){
   meta <- rma.uni(yi = yi,
                   vi = (n1i + n2i)/(n1i*n2i),
                   data = newdata,
-                  method = "ML")
+                  method = "REML")
   results.rust$OVERALL[ii] <- meta$b
+  results.rust$tau2[ii] <- meta$tau2
   
   # Active Ingredients
   ai <- rma.uni(yi = yi,
@@ -105,6 +107,14 @@ for(ii in 1:nsims){
     applications$b[rownames(applications$b)=="intrcpt"]
   results.rust$`Application Slope`[ii] <- 
     applications$b[rownames(applications$b)=="number_applications"]
+  
+  if(nrow(newdata[newdata$alphaIngred=="AZO + PROP",]>0)){
+    mixed <- rma.uni(yi = yi,
+                     vi = (n1i + n2i)/(n1i*n2i),
+                     data = newdata[newdata$alphaIngred=="AZO + PROP",],
+                     method = "REML")
+    results.rust$`AZO + PROP`[ii] <- mixed$b
+  }
 }
 
 

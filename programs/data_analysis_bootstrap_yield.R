@@ -53,7 +53,7 @@ for(ii in 1:nsims){
   meta <- rma.uni(yi = yi,
                   vi = (n1i + n2i)/(n1i*n2i),
                   data = newdata,
-                  method = "ML")
+                  method = "REML")
   results.yield$OVERALL[ii] <- meta$b
   
   # Active Ingredients
