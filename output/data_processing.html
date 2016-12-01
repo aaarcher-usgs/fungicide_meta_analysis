@@ -737,7 +737,7 @@ sort(table(data.reduced$activeIngClean))
 data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;FEBU&quot;] &lt;- &quot;FENB&quot;
 </code></pre>
 
-<p>Class of fungicide: clean up labels to be consistent and if &lt;5, relabel as &ldquo;oth&rdquo;</p>
+<p>Class of fungicide: clean up labels to be consistent </p>
 
 <pre><code class="r"># Table to see how it looks as is
 table(data.reduced$class.code)
@@ -1285,6 +1285,13 @@ scale.1to10.refs &lt;- c(3,4,53,55,62,68,16,41)
 rust.scale.orig$scale[rust.scale.orig$ReferenceNumb %in% scale.1to10.refs] &lt;- &quot;Scale 0-10&quot;
 # Rest are on 1-8 scale
 rust.scale.orig$scale[!rust.scale.orig$ReferenceNumb %in% scale.1to10.refs] &lt;- &quot;Scale 0-8&quot;
+
+# Reference number 18 was recorded on 1-9 scale, but really should be 0-8, 
+# so subtract 1
+rust.scale.orig$rustSever1.8[rust.scale.orig$ReferenceNumb==18] &lt;- 
+  rust.scale.orig$rustSever1.8[rust.scale.orig$ReferenceNumb==18] - 1
+rust.scale.orig$rustSever1.8Cont[rust.scale.orig$ReferenceNumb==18] &lt;- 
+  rust.scale.orig$rustSever1.8Cont[rust.scale.orig$ReferenceNumb==18] - 1
 
 # Combine back together
 rust.data &lt;- rbind(rust.perc.orig, rust.scale.orig)
@@ -2582,6 +2589,8 @@ summaryBy(FID~category_class+ReferenceNumb,
 
 <pre><code class="r">rust.data$m1i[rust.data$m1i==0] &lt;- 0.0001
 rust.data$m2i[rust.data$m2i==0] &lt;- 0.0001
+# Take out values of control rust severity &lt;5%
+rust.data &lt;- rust.data[rust.data$m2i&gt;=5,] 
 
 yield.data$m1i[yield.data$m1i==0] &lt;- 0.0001
 yield.data$m2i[yield.data$m2i==0] &lt;- 0.0001
@@ -2651,7 +2660,7 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-11-30
+##  date     2016-12-01
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
@@ -2667,7 +2676,6 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 ##  knitr       * 1.14    2016-08-13 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
-##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
 ##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.0)
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.0)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
@@ -2675,7 +2683,6 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 ##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
 ##  R.oo          1.20.0  2016-02-17 CRAN (R 3.3.0)
 ##  R.utils       2.4.0   2016-09-14 CRAN (R 3.3.0)
-##  rstudioapi    0.6     2016-06-27 CRAN (R 3.3.0)
 ##  stringi       1.1.2   2016-10-01 CRAN (R 3.3.0)
 ##  stringr       1.1.0   2016-08-19 CRAN (R 3.3.0)
 ##  withr         1.0.2   2016-06-20 CRAN (R 3.3.0)

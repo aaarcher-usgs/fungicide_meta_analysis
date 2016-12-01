@@ -558,6 +558,13 @@ rust.scale.orig$scale[rust.scale.orig$ReferenceNumb %in% scale.1to10.refs] <- "S
 # Rest are on 1-8 scale
 rust.scale.orig$scale[!rust.scale.orig$ReferenceNumb %in% scale.1to10.refs] <- "Scale 0-8"
 
+# Reference number 18 was recorded on 1-9 scale, but really should be 0-8, 
+# so subtract 1
+rust.scale.orig$rustSever1.8[rust.scale.orig$ReferenceNumb==18] <- 
+  rust.scale.orig$rustSever1.8[rust.scale.orig$ReferenceNumb==18] - 1
+rust.scale.orig$rustSever1.8Cont[rust.scale.orig$ReferenceNumb==18] <- 
+  rust.scale.orig$rustSever1.8Cont[rust.scale.orig$ReferenceNumb==18] - 1
+
 # Combine back together
 rust.data <- rbind(rust.perc.orig, rust.scale.orig)
 
@@ -1011,6 +1018,8 @@ summaryBy(FID~category_class+ReferenceNumb,
 #' Using log response ratio, cannot have 0s in data; so changing 0 to 0.0001
 rust.data$m1i[rust.data$m1i==0] <- 0.0001
 rust.data$m2i[rust.data$m2i==0] <- 0.0001
+# Take out values of control rust severity <5%
+rust.data <- rust.data[rust.data$m2i>=5,] 
 
 yield.data$m1i[yield.data$m1i==0] <- 0.0001
 yield.data$m2i[yield.data$m2i==0] <- 0.0001
