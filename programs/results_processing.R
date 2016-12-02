@@ -79,7 +79,15 @@ print(c("mean, SD of seedwt response ratio in control plants",
         mean(exp(seedwt.data$yi)), sd(exp(seedwt.data$yi))))
 
 #' #############################################################################
-#' ### Step 1: Calculate numbers for paper: Results
+#' ### Step 2: Information for table with references
+summaryBy(FID~ReferenceNumb+Reference, data=raw.data, FUN=length)
+
+# For Rust analysis
+summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
+
+
+#' #############################################################################
+#' ### Step 3: Calculate numbers for paper: Results
 #' 
 #' 
 #' **Overall mean, 95% CI and Tau^2**
