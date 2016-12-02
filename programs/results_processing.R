@@ -49,9 +49,6 @@ print(c("Studies in seedwt dataset: ",length(unique(seedwt.data$ReferenceNumb)))
 print(c("Entries in rust dataset: ",nrow(rust.data)))
 print(c("Entries in yield dataset: ",nrow(yield.data)))
 print(c("Entries in seedwt dataset: ",nrow(seedwt.data)))
-#' Table of references with number of entries/study (rust)
-referencetable <- sort(table(rust.data$Reference))
-referencetable[referencetable>=1]
 
 #' **Number of entries and studies by year and location**
 summaryBy(FID~studyYear+State+Reference, data=rust.data, FUN=length)
