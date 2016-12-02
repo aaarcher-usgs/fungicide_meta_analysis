@@ -55,7 +55,7 @@ for(ii in 1:nsims){
   newdata <- merge(studyIDS, yield.data.ROM)
   # Overall analysis
   meta <- rma.uni(yi = yi,
-                  vi = (n1i + n2i)/(n1i*n2i),
+                  vi = 1/rust.m2i,
                   data = newdata,
                   method = "REML")
   results.yield$OVERALL[ii] <- meta$b
@@ -63,7 +63,7 @@ for(ii in 1:nsims){
   
   # Active Ingredients
   ai <- rma.uni(yi = yi,
-                vi = (n1i + n2i)/(n1i*n2i),
+                vi = 1/rust.m2i,
                 data = newdata,
                 method = "REML",
                 mods = ~category_ai-1)
@@ -74,7 +74,7 @@ for(ii in 1:nsims){
   
   # Classes
   class <- rma.uni(yi = yi,
-                   vi = (n1i + n2i)/(n1i*n2i),
+                   vi = 1/rust.m2i,
                    data = newdata,
                    method = "REML",
                    mods = ~category_class-1)
@@ -87,7 +87,7 @@ for(ii in 1:nsims){
   
   # Growth stage
   rstage <- rma.uni(yi = yi,
-                    vi = (n1i + n2i)/(n1i*n2i),
+                    vi = 1/rust.m2i,
                     data = newdata,
                     method = "REML",
                     mods = ~category_rstage-1)
@@ -117,7 +117,7 @@ for(ii in 1:nsims){
     
   # Number of applications
   applications <- rma.uni(yi = yi,
-                          vi = (n1i + n2i)/(n1i*n2i),
+                          vi = 1/rust.m2i,
                           data = newdata,
                           method = "REML",
                           mods = ~number_applications)
@@ -128,7 +128,7 @@ for(ii in 1:nsims){
   
   # Number of applications as category
   apps.categ <- rma.uni(yi = yi,
-                        vi = (n1i + n2i)/(n1i*n2i),
+                        vi = 1/rust.m2i,
                         data = newdata,
                         method = "REML",
                         mods = ~as.character(number_applications)-1)
