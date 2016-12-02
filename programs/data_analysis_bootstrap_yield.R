@@ -139,6 +139,7 @@ for(ii in 1:nsims){
   
   # Study year
   # Condition on year1 = 2005
+  if(length(unique(newdata$category_year))>2){
   newdata$category_yearC <- newdata$category_year - 2004
   year <- rma.uni(yi = yi,
                   vi = (n1i+n2i)/(n1i*n2i),
@@ -156,10 +157,23 @@ for(ii in 1:nsims){
                  mods = ~as.character(category_year)-1)
   results.yield$`2006`[ii] <- 
     year.categ$b[rownames(year.categ$b)=="as.character(category_year)2006"]
-  results.yield$`2007`[ii] <- 
-    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2007"]
-  results.yield$`2013`[ii] <- 
-    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2013"]
+  if("2007" %in% unique(newdata$category_year)){
+    results.yield$`2007`[ii] <- 
+      year.categ$b[rownames(year.categ$b)=="as.character(category_year)2007"]
+  }
+  if("2013" %in% unique(newdata$category_year)){
+    results.yield$`2013`[ii] <- 
+      year.categ$b[rownames(year.categ$b)=="as.character(category_year)2013"]
+  }
+  }
+  if(length(unique(newdata$category_year))==2 &
+     unique(newdata$category_year[!is.na(newdata$category_year)]=="2006")){
+    year.categ <- rma.uni(yi = yi,
+                          vi = (n1i+n2i)/(n1i*n2i),
+                          data = newdata[!is.na(newdata$category_year),],
+                          method = "REML")
+    results.yield$`2006`[ii] <- year.categ$b
+  }
 }
 
 

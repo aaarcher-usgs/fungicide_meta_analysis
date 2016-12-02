@@ -350,6 +350,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Study year
   # Condition on year1 = 2005
+  if(length(unique(newdata$category_year))&gt;2){
   newdata$category_yearC &lt;- newdata$category_year - 2004
   year &lt;- rma.uni(yi = yi,
                   vi = (n1i+n2i)/(n1i*n2i),
@@ -367,14 +368,24 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
                  mods = ~as.character(category_year)-1)
   results.yield$`2006`[ii] &lt;- 
     year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2006&quot;]
-  results.yield$`2007`[ii] &lt;- 
-    year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2007&quot;]
-  results.yield$`2013`[ii] &lt;- 
-    year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2013&quot;]
+  if(&quot;2007&quot; %in% unique(newdata$category_year)){
+    results.yield$`2007`[ii] &lt;- 
+      year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2007&quot;]
+  }
+  if(&quot;2013&quot; %in% unique(newdata$category_year)){
+    results.yield$`2013`[ii] &lt;- 
+      year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2013&quot;]
+  }
+  }
+  if(length(unique(newdata$category_year))==2 &amp;
+     unique(newdata$category_year[!is.na(newdata$category_year)]==&quot;2006&quot;)){
+    year.categ &lt;- rma.uni(yi = yi,
+                          vi = (n1i+n2i)/(n1i*n2i),
+                          data = newdata[!is.na(newdata$category_year),],
+                          method = &quot;REML&quot;)
+    results.yield$`2006`[ii] &lt;- year.categ$b
+  }
 }
-</code></pre>
-
-<pre><code>## Error in results.yield$`2007`[ii] &lt;- year.categ$b[rownames(year.categ$b) == : replacement has length zero
 </code></pre>
 
 <h3>Save final results</h3>
@@ -401,7 +412,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-12-01
+##  date     2016-12-02
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
