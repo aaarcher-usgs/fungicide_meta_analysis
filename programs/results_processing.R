@@ -51,7 +51,10 @@ print(c("Entries in yield dataset: ",nrow(yield.data)))
 print(c("Entries in seedwt dataset: ",nrow(seedwt.data)))
 
 #' **Number of entries and studies by year and location**
-summaryBy(FID~studyYear+State+Reference, data=rust.data, FUN=length)
+summaryBy(FID~studyYear+Reference, data=rust.data, FUN=length)
+table(rust.data$studyYear)
+summaryBy(FID~State+Reference, data=rust.data, FUN=length)
+table(rust.data$State)
 
 #' **Mean and std of dependent vars**
 print(c("mean, SD of rust severity in treated plants",
