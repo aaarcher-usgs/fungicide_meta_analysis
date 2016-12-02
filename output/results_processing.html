@@ -299,76 +299,100 @@ load(file=&quot;data/output_data/results_seedwt.R&quot;)
 <pre><code>## [1] &quot;Entries in seedwt dataset: &quot; &quot;144&quot;
 </code></pre>
 
-<p>Table of references with number of entries/study (rust)</p>
+<p><strong>Number of entries and studies by year and location</strong></p>
 
-<pre><code class="r">referencetable &lt;- sort(table(rust.data$Reference))
-referencetable[referencetable&gt;=1]
+<pre><code class="r">summaryBy(FID~studyYear+Reference, data=rust.data, FUN=length)
+</code></pre>
+
+<pre><code>##    studyYear             Reference FID.length
+## 1       2005  lawrence et al ref 4          6
+## 2       2005       Lawrence ref 21          6
+## 3       2005         Sikora ref 42          7
+## 4       2006         Harmon ref 47         12
+## 5       2006       Kemerait ref 46          5
+## 6       2006 Lawrence et al ref 55         10
+## 7       2006       Lawrence ref 18          3
+## 8       2006       Lawrence ref 41         11
+## 9       2006        Mueller ref 36         23
+## 10      2006        Mueller ref 37         15
+## 11      2006        Mueller ref 38          6
+## 12      2006        Mueller ref 39         11
+## 13      2006        Mueller ref 40          4
+## 14      2006        Mueller ref 43         15
+## 15      2006        Mueller ref 45         17
+## 16      2006   Sikora et al ref 74         12
+## 17      2007  Lawrence et al ref 3          7
+## 18      2007 Lawrence et al ref 53          6
+## 19      2007 Lawrence et al ref 62          7
+## 20      2007  Mueller et al  ref 1          3
+## 21      2007   Mueller et al ref 9          9
+## 22      2007  Padgett et al ref 54          9
+## 23      2007         Sikora ref 23         12
+## 24      2008  Douglas et al ref 65         18
+## 25      2008  Douglas et al ref 66         13
+## 26      2008       Lawrence ref 16         13
+## 27      2008       Lawrence ref 22          9
+## 28      2012    Price et al ref 35         12
+## 29      2013        Delaney ref 30          9
+## 30      2013        Delaney ref 31          9
+## 31      2013        Delaney ref 32          4
+## 32      2013        Delaney ref 34         12
+## 33      2013 Lawrence et al ref 68          5
+</code></pre>
+
+<pre><code class="r">table(rust.data$studyYear)
 </code></pre>
 
 <pre><code>## 
-##       Lawrence ref 18  Mueller et al  ref 1        Delaney ref 32 
-##                     3                     3                     4 
-##        Mueller ref 40       Kemerait ref 46 Lawrence et al ref 68 
-##                     4                     5                     5 
-##  lawrence et al ref 4 Lawrence et al ref 53       Lawrence ref 21 
-##                     6                     6                     6 
-##        Mueller ref 38  Lawrence et al ref 3 Lawrence et al ref 62 
-##                     6                     7                     7 
-##         Sikora ref 42        Delaney ref 30        Delaney ref 31 
-##                     7                     9                     9 
-##       Lawrence ref 22   Mueller et al ref 9  Padgett et al ref 54 
-##                     9                     9                     9 
-## Lawrence et al ref 55       Lawrence ref 41        Mueller ref 39 
-##                    10                    11                    11 
-##        Delaney ref 34         Harmon ref 47    Price et al ref 35 
-##                    12                    12                    12 
-##   Sikora et al ref 74         Sikora ref 23  Douglas et al ref 66 
-##                    12                    12                    13 
-##       Lawrence ref 16        Mueller ref 37        Mueller ref 43 
-##                    13                    15                    15 
-##        Mueller ref 45  Douglas et al ref 65        Mueller ref 36 
-##                    17                    18                    23
+## 2005 2006 2007 2008 2012 2013 
+##   19  144   53   53   12   39
 </code></pre>
 
-<p><strong>Number of entries and studies by year and location</strong></p>
-
-<pre><code class="r">summaryBy(FID~studyYear+State+Reference, data=rust.data, FUN=length)
+<pre><code class="r">summaryBy(FID~State+Reference, data=rust.data, FUN=length)
 </code></pre>
 
-<pre><code>##    studyYear State             Reference FID.length
-## 1       2005    AL  lawrence et al ref 4          6
-## 2       2005    AL       Lawrence ref 21          6
-## 3       2005    AL         Sikora ref 42          7
-## 4       2006    AL Lawrence et al ref 55         10
-## 5       2006    AL       Lawrence ref 18          3
-## 6       2006    AL   Sikora et al ref 74         12
-## 7       2006   AL        Lawrence ref 41         11
-## 8       2006    FL         Harmon ref 47         12
-## 9       2006    FL        Mueller ref 36         23
-## 10      2006    FL        Mueller ref 37         15
-## 11      2006    FL        Mueller ref 38          6
-## 12      2006    FL        Mueller ref 39         11
-## 13      2006    FL        Mueller ref 40          4
-## 14      2006    FL        Mueller ref 45         17
-## 15      2006    GA       Kemerait ref 46          5
-## 16      2006    GA        Mueller ref 43         15
-## 17      2007    AL  Lawrence et al ref 3          7
-## 18      2007    AL Lawrence et al ref 53          6
-## 19      2007    AL Lawrence et al ref 62          7
-## 20      2007    AL         Sikora ref 23         12
-## 21      2007    FL  Mueller et al  ref 1          3
-## 22      2007    FL   Mueller et al ref 9          9
-## 23      2007    LA  Padgett et al ref 54          9
-## 24      2008    AL       Lawrence ref 16         13
-## 25      2008    AL       Lawrence ref 22          9
-## 26      2008    FL  Douglas et al ref 65         18
-## 27      2008    FL  Douglas et al ref 66         13
-## 28      2012    LA    Price et al ref 35         12
-## 29      2013    AL        Delaney ref 30          9
-## 30      2013    AL        Delaney ref 31          9
-## 31      2013    AL        Delaney ref 32          4
-## 32      2013    AL        Delaney ref 34         12
-## 33      2013    AL Lawrence et al ref 68          5
+<pre><code>##    State             Reference FID.length
+## 1     AL        Delaney ref 30          9
+## 2     AL        Delaney ref 31          9
+## 3     AL        Delaney ref 32          4
+## 4     AL        Delaney ref 34         12
+## 5     AL  Lawrence et al ref 3          7
+## 6     AL  lawrence et al ref 4          6
+## 7     AL Lawrence et al ref 53          6
+## 8     AL Lawrence et al ref 55         10
+## 9     AL Lawrence et al ref 62          7
+## 10    AL Lawrence et al ref 68          5
+## 11    AL       Lawrence ref 16         13
+## 12    AL       Lawrence ref 18          3
+## 13    AL       Lawrence ref 21          6
+## 14    AL       Lawrence ref 22          9
+## 15    AL   Sikora et al ref 74         12
+## 16    AL         Sikora ref 23         12
+## 17    AL         Sikora ref 42          7
+## 18   AL        Lawrence ref 41         11
+## 19    FL  Douglas et al ref 65         18
+## 20    FL  Douglas et al ref 66         13
+## 21    FL         Harmon ref 47         12
+## 22    FL  Mueller et al  ref 1          3
+## 23    FL   Mueller et al ref 9          9
+## 24    FL        Mueller ref 36         23
+## 25    FL        Mueller ref 37         15
+## 26    FL        Mueller ref 38          6
+## 27    FL        Mueller ref 39         11
+## 28    FL        Mueller ref 40          4
+## 29    FL        Mueller ref 45         17
+## 30    GA       Kemerait ref 46          5
+## 31    GA        Mueller ref 43         15
+## 32    LA  Padgett et al ref 54          9
+## 33    LA    Price et al ref 35         12
+</code></pre>
+
+<pre><code class="r">table(rust.data$State)
+</code></pre>
+
+<pre><code>## 
+##  AL AL   FL  GA  LA  MS 
+## 137  11 131  20  21   0
 </code></pre>
 
 <p><strong>Mean and std of dependent vars</strong></p>
