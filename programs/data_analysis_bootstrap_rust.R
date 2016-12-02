@@ -55,7 +55,7 @@ for(ii in 1:nsims){
   
   # Overall analysis
   meta <- rma.uni(yi = yi,
-                  vi = (n1i + n2i)/(n1i*n2i),
+                  vi = 1/m2i,
                   data = newdata,
                   method = "REML")
   results.rust$OVERALL[ii] <- meta$b
@@ -63,7 +63,7 @@ for(ii in 1:nsims){
   
   # Active Ingredients
   ai <- rma.uni(yi = yi,
-                vi = (n1i + n2i)/(n1i*n2i),
+                vi = 1/rust.m2i,
                 data = newdata,
                 method = "REML",
                 mods = ~category_ai-1)
@@ -74,7 +74,7 @@ for(ii in 1:nsims){
   
   # Classes
   class <- rma.uni(yi = yi,
-                   vi = (n1i + n2i)/(n1i*n2i),
+                   vi = 1/rust.m2i,
                    data = newdata,
                    method = "REML",
                    mods = ~category_class-1)
@@ -87,7 +87,7 @@ for(ii in 1:nsims){
   
   # Growth stage
   rstage <- rma.uni(yi = yi,
-                    vi = (n1i + n2i)/(n1i*n2i),
+                    vi = 1/rust.m2i,
                     data = newdata,
                     method = "REML",
                     mods = ~category_rstage-1)
@@ -114,7 +114,7 @@ for(ii in 1:nsims){
   
   # Number of applications
   applications <- rma.uni(yi = yi,
-                          vi = (n1i + n2i)/(n1i*n2i),
+                          vi = 1/rust.m2i,
                           data = newdata,
                           method = "REML",
                           mods = ~number_applications)
@@ -125,7 +125,7 @@ for(ii in 1:nsims){
   
   # Number of applications as category
   apps.categ <- rma.uni(yi = yi,
-                        vi = (n1i + n2i)/(n1i*n2i),
+                        vi = 1/rust.m2i,
                         data = newdata,
                         method = "REML",
                         mods = ~as.character(number_applications)-1)
@@ -161,7 +161,7 @@ for(ii in 1:nsims){
   # Mixed active ingredients
   if(nrow(newdata[newdata$alphaIngred=="AZO + PROP",])>0){
     mixed <- rma.uni(yi = yi,
-                     vi = (n1i + n2i)/(n1i*n2i),
+                     vi = 1/rust.m2i,
                      data = newdata[newdata$alphaIngred=="AZO + PROP",],
                      method = "REML")
     results.rust$`AZO + PROP`[ii] <- mixed$b
