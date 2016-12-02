@@ -33,7 +33,7 @@ load(file="data/output_data/results_yield.R")
 load(file="data/output_data/results_seedwt.R")
 
 #' #############################################################################
-#' ### Step 1: Calculate numbers for paper
+#' ### Step 1: Calculate numbers for paper: Dataset properties
 #' 
 #' **Number of studies and entries of raw data**
 print(c("Studies in raw data", length(unique(raw.data$Reference))))
@@ -77,6 +77,21 @@ print(c("mean, SD of seedwt in control plants",
         mean(seedwt.data$m2i), sd(seedwt.data$m2i)))
 print(c("mean, SD of seedwt response ratio in control plants",
         mean(exp(seedwt.data$yi)), sd(exp(seedwt.data$yi))))
+
+#' #############################################################################
+#' ### Step 1: Calculate numbers for paper: Results
+#' 
+#' 
+#' **Overall mean, 95% CI and Tau^2**
+print(c("Mean e.s. of rust severity", mean(exp(results.rust$OVERALL))))
+print(c("CI of mean e.s. of rust severity", 
+        quantile(exp(results.rust$OVERALL), probs = c(0.025,0.975))))
+print(c("Mean tau^2 for rust", mean(results.rust$tau2)))
+
+print(c("Mean e.s. of yield severity", mean(exp(results.yield$OVERALL))))
+print(c("CI of mean e.s. of yield severity", 
+        quantile(exp(results.yield$OVERALL), probs = c(0.025,0.975))))
+print(c("Mean tau^2 for yield", mean(results.yield$tau2)))
 
 
 #' ### Footer
