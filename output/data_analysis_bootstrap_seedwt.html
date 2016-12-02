@@ -244,12 +244,15 @@ remove(list=c(#&quot;seedwt.data.ROM&quot;,
 
 <p>Empty data frame to hold results</p>
 
-<pre><code class="r">results.seedwt &lt;- as.data.frame(matrix(NA,ncol=10,nrow=nsims))
-colnames(results.seedwt) &lt;- c(&quot;OVERALL&quot;,
+<pre><code class="r">results.seedwt &lt;- as.data.frame(matrix(NA,ncol=17,nrow=nsims))
+colnames(results.seedwt) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
                             &quot;FLUT&quot;,&quot;MIXED&quot;,&quot;TEBU&quot;,
                             &quot;Strobilurin&quot;,&quot;Triaz_Strob&quot;,&quot;Triazole&quot;,
                             &quot;R3&quot;,
-                            &quot;Application Intrcpt&quot;,&quot;Application Slope&quot;)
+                            &quot;Application Intrcpt&quot;,&quot;Application Slope&quot;,
+                            &quot;1 Application&quot;,&quot;2 Applications&quot;,
+                            &quot;high&quot;,&quot;medium&quot;,&quot;low&quot;,
+                            &quot;2006&quot;)
 </code></pre>
 
 <p>Running the bootstraps</p>
@@ -263,8 +266,9 @@ colnames(results.seedwt) &lt;- c(&quot;OVERALL&quot;,
   meta &lt;- rma.uni(yi = yi,
                   vi = (n1i + n2i)/(n1i*n2i),
                   data = newdata,
-                  method = &quot;ML&quot;)
+                  method = &quot;REML&quot;)
   results.seedwt$OVERALL[ii] &lt;- meta$b
+  results.seedwt$tau2[ii] &lt;- meta$tau2
 
   # Active Ingredients
   ai &lt;- rma.uni(yi = yi,
@@ -290,15 +294,31 @@ colnames(results.seedwt) &lt;- c(&quot;OVERALL&quot;,
     class$b[rownames(class$b)==&quot;category_classtriazole&quot;]
 
   # Growth stage
-  if(unique(newdata$category_rstage[!is.na(newdata$category_rstage)])==3){
+  if(nrow(newdata[!is.na(newdata$category_rstage),])&gt;0){
     rstage &lt;- rma.uni(yi = yi,
                       vi = (n1i + n2i)/(n1i*n2i),
-                      data = newdata[newdata$category_rstage==&quot;3&quot;,],
+                      data = newdata[! is.na(newdata$category_rstage),],
                       method = &quot;REML&quot;)
     results.seedwt$R3[ii] &lt;- rstage$b
   }
 
-
+  # Disease pressure
+  if(length(unique(newdata$category_pressure))&gt;=2){
+    pressure &lt;- rma.uni(yi = yi,
+                        vi = (n1i+n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = &quot;REML&quot;,
+                        mods = ~category_pressure-1)
+    if(&quot;low&quot; %in% unique(newdata$category_pressure)){
+      results.seedwt$low[ii] &lt;- 
+        pressure$b[rownames(pressure$b)==&quot;category_pressurelow&quot;]
+    }
+    if(&quot;medium&quot; %in% unique(newdata$category_pressure)){
+      results.seedwt$medium[ii] &lt;- 
+        pressure$b[rownames(pressure$b)==&quot;category_pressuremedium&quot;]
+    }
+    results.seedwt$high[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressurehigh&quot;]
+  }
 
   # Number of applications
   applications &lt;- rma.uni(yi = yi,
@@ -310,10 +330,26 @@ colnames(results.seedwt) &lt;- c(&quot;OVERALL&quot;,
     applications$b[rownames(applications$b)==&quot;intrcpt&quot;]
   results.seedwt$`Application Slope`[ii] &lt;- 
     applications$b[rownames(applications$b)==&quot;number_applications&quot;]
-}
-</code></pre>
 
-<pre><code>## Error in if (unique(newdata$category_rstage[!is.na(newdata$category_rstage)]) == : argument is of length zero
+  # Number of applications as category
+  apps.categ &lt;- rma.uni(yi = yi,
+                        vi = (n1i + n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = &quot;REML&quot;,
+                        mods = ~as.character(number_applications)-1)
+  results.seedwt$`1 Application`[ii] &lt;- 
+    apps.categ$b[rownames(apps.categ$b)==&quot;as.character(number_applications)1&quot;]
+  results.seedwt$`2 Applications`[ii] &lt;- 
+    apps.categ$b[rownames(apps.categ$b)==&quot;as.character(number_applications)2&quot;]
+
+  # Study year
+  # Condition on year1 = 2005
+  year &lt;- rma.uni(yi = yi,
+                  vi = (n1i+n2i)/(n1i*n2i),
+                  data = newdata[newdata$category_year==2006,],
+                  method = &quot;REML&quot;)
+  results.seedwt$`2006`[ii] &lt;- year$b
+}
 </code></pre>
 
 <h3>Save final results</h3>
@@ -340,7 +376,7 @@ colnames(results.seedwt) &lt;- c(&quot;OVERALL&quot;,
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-11-30
+##  date     2016-12-01
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
@@ -349,13 +385,16 @@ colnames(results.seedwt) &lt;- c(&quot;OVERALL&quot;,
 <pre><code>##  package     * version date       source        
 ##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
 ##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
+##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
 ##  formatR       1.4     2016-05-09 CRAN (R 3.3.0)
+##  highr         0.6     2016-05-09 CRAN (R 3.3.0)
 ##  knitr       * 1.14    2016-08-13 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
 ##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
+##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.0)
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.0)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
 ##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)

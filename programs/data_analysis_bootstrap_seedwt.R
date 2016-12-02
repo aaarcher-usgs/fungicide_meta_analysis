@@ -92,21 +92,22 @@ for(ii in 1:nsims){
   }
 
   # Disease pressure
-  pressure <- rma.uni(yi = yi,
-                      vi = (n1i+n2i)/(n1i*n2i),
-                      data = newdata,
-                      method = "REML",
-                      mods = ~category_pressure-1)
-  if("low" %in% unique(newdata$category_pressure)){
-    results.seedwt$low[ii] <- 
-      pressure$b[rownames(pressure$b)=="category_pressurelow"]
+  if(length(unique(newdata$category_pressure))>=2){
+    pressure <- rma.uni(yi = yi,
+                        vi = (n1i+n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = "REML",
+                        mods = ~category_pressure-1)
+    if("low" %in% unique(newdata$category_pressure)){
+      results.seedwt$low[ii] <- 
+        pressure$b[rownames(pressure$b)=="category_pressurelow"]
+    }
+    if("medium" %in% unique(newdata$category_pressure)){
+      results.seedwt$medium[ii] <- 
+        pressure$b[rownames(pressure$b)=="category_pressuremedium"]
+    }
+    results.seedwt$high[ii] <- pressure$b[rownames(pressure$b)=="category_pressurehigh"]
   }
-  if("medium" %in% unique(newdata$category_pressure)){
-    results.seedwt$medium[ii] <- 
-      pressure$b[rownames(pressure$b)=="category_pressuremedium"]
-  }
-  results.seedwt$high[ii] <- pressure$b[rownames(pressure$b)=="category_pressurehigh"]
-  
   
   # Number of applications
   applications <- rma.uni(yi = yi,

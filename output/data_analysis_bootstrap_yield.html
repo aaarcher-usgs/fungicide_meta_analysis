@@ -244,13 +244,17 @@ remove(list=c(#&quot;yield.data.ROM&quot;,
 
 <p>Empty data frame to hold results</p>
 
-<pre><code class="r">results.yield &lt;- as.data.frame(matrix(NA,ncol=14,nrow=nsims))
-colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
+<pre><code class="r">results.yield &lt;- as.data.frame(matrix(NA,ncol=25,nrow=nsims))
+colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
                             &quot;FLUT&quot;,&quot;MIXED&quot;,&quot;PYR&quot;,&quot;TEBU&quot;,
                             &quot;Strobilurin&quot;,&quot;Triaz_Strob&quot;,&quot;Triazole&quot;,
                             &quot;R1+&quot;, &quot;R2+&quot;, 
                             &quot;R3&quot;,&quot;R5&quot;,
-                            &quot;Application Intrcpt&quot;,&quot;Application Slope&quot;)
+                            &quot;Application Intrcpt&quot;,&quot;Application Slope&quot;,
+                            &quot;1 Application&quot;, &quot;2 Applications&quot;,
+                            &quot;high&quot;,&quot;medium&quot;,&quot;low&quot;,
+                            &quot;Year Intrcpt|2004&quot;,&quot;Year Slope&quot;,
+                            &quot;2006&quot;,&quot;2007&quot;,&quot;2013&quot;)
 </code></pre>
 
 <p>Running the bootstraps</p>
@@ -264,8 +268,9 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
   meta &lt;- rma.uni(yi = yi,
                   vi = (n1i + n2i)/(n1i*n2i),
                   data = newdata,
-                  method = &quot;ML&quot;)
+                  method = &quot;REML&quot;)
   results.yield$OVERALL[ii] &lt;- meta$b
+  results.yield$tau2[ii] &lt;- meta$tau2
 
   # Active Ingredients
   ai &lt;- rma.uni(yi = yi,
@@ -297,16 +302,28 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
                     data = newdata,
                     method = &quot;REML&quot;,
                     mods = ~category_rstage-1)
-  if(length(unique(newdata$category_rstage[! is.na(newdata$category_rstage)]))==4){
     results.yield$`R1+`[ii] &lt;- 
       rstage$b[rownames(rstage$b)==&quot;category_rstage1+&quot;]
     results.yield$`R2+`[ii] &lt;- 
       rstage$b[rownames(rstage$b)==&quot;category_rstage2+&quot;]
     results.yield$R3[ii] &lt;- 
       rstage$b[rownames(rstage$b)==&quot;category_rstage3&quot;]
-    results.yield$R5[ii] &lt;- 
-      rstage$b[rownames(rstage$b)==&quot;category_rstage5&quot;]
-  }
+    if(&quot;5&quot; %in% unique(newdata$category_rstage)){
+      results.yield$R5[ii] &lt;- 
+        rstage$b[rownames(rstage$b)==&quot;category_rstage5&quot;]
+    }
+
+    # Disease pressure
+    pressure &lt;- rma.uni(yi = yi,
+                        vi = (n1i+n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = &quot;REML&quot;,
+                        mods = ~category_pressure-1)
+    results.yield$low[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressurelow&quot;]
+    if(nrow(newdata[newdata$category_pressure==&quot;medium&quot;,])&gt;0){
+      results.yield$medium[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressuremedium&quot;]
+    }
+    results.yield$high[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressurehigh&quot;]
 
 
   # Number of applications
@@ -319,7 +336,45 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
     applications$b[rownames(applications$b)==&quot;intrcpt&quot;]
   results.yield$`Application Slope`[ii] &lt;- 
     applications$b[rownames(applications$b)==&quot;number_applications&quot;]
+
+  # Number of applications as category
+  apps.categ &lt;- rma.uni(yi = yi,
+                        vi = (n1i + n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = &quot;REML&quot;,
+                        mods = ~as.character(number_applications)-1)
+  results.yield$`1 Application`[ii] &lt;- 
+    apps.categ$b[rownames(apps.categ$b)==&quot;as.character(number_applications)1&quot;]
+  results.yield$`2 Applications`[ii] &lt;- 
+    apps.categ$b[rownames(apps.categ$b)==&quot;as.character(number_applications)2&quot;]
+
+  # Study year
+  # Condition on year1 = 2005
+  newdata$category_yearC &lt;- newdata$category_year - 2004
+  year &lt;- rma.uni(yi = yi,
+                  vi = (n1i+n2i)/(n1i*n2i),
+                  data = newdata,
+                  method = &quot;REML&quot;,
+                  mods = ~category_yearC)
+  results.yield$`Year Intrcpt|2004`[ii] &lt;- year$b[rownames(year$b)==&quot;intrcpt&quot;]
+  results.yield$`Year Slope`[ii] &lt;- year$b[rownames(year$b)==&quot;category_yearC&quot;]
+
+  # Study year as category
+  year.categ &lt;- rma.uni(yi = yi,
+                 vi = (n1i+n2i)/(n1i*n2i),
+                 data = newdata,
+                 method = &quot;REML&quot;,
+                 mods = ~as.character(category_year)-1)
+  results.yield$`2006`[ii] &lt;- 
+    year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2006&quot;]
+  results.yield$`2007`[ii] &lt;- 
+    year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2007&quot;]
+  results.yield$`2013`[ii] &lt;- 
+    year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2013&quot;]
 }
+</code></pre>
+
+<pre><code>## Error in results.yield$`2007`[ii] &lt;- year.categ$b[rownames(year.categ$b) == : replacement has length zero
 </code></pre>
 
 <h3>Save final results</h3>
@@ -336,7 +391,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
 <pre><code class="r">devtools::session_info()
 </code></pre>
 
-<pre><code>## Session info --------------------------------------------------------------------------------
+<pre><code>## Session info --------------------------------------------------------------
 </code></pre>
 
 <pre><code>##  setting  value                       
@@ -346,10 +401,10 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-11-30
+##  date     2016-12-01
 </code></pre>
 
-<pre><code>## Packages ------------------------------------------------------------------------------------
+<pre><code>## Packages ------------------------------------------------------------------
 </code></pre>
 
 <pre><code>##  package     * version date       source        
@@ -359,6 +414,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
 ##  formatR       1.4     2016-05-09 CRAN (R 3.3.0)
+##  highr         0.6     2016-05-09 CRAN (R 3.3.0)
 ##  knitr       * 1.14    2016-08-13 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
