@@ -732,6 +732,10 @@ rust.data$m2i[rust.data$scale=="Percent"] <-
 # Sample sizes
 rust.data$n1i <- rust.data$n2i <- rust.data$replications
 
+# Just control plant severity and FID from rust dataset
+rust.data.m2i <- rust.data[,c("FID","m2i")]
+colnames(rust.data.m2i) <- c("FIDrust","rust.m2i")
+
 #' Yield data
 #+ yieldDatametafor
 yield.data$yield.kg.ha <- yield.data$yield*67.25 # convert to kg ha-1
@@ -741,11 +745,25 @@ yield.data$m1i <- yield.data$yield.kg.ha # Yield for treatment group
 yield.data$m2i <- yield.data$yieldCont.kg.ha # Yield for control group
 yield.data$n1i <- yield.data$n2i <- yield.data$replications
 
+# Add control rust severity to yield dataset
+yield.data <- merge(yield.data, 
+                         rust.data.m2i, 
+                         all.x = T, 
+                         by.x = "FID", 
+                         by.y = "FIDrust")
+
 #' 100 seed weight data
 #+ seedDatametafor
 seedwt.data$m1i <- seedwt.data$seedWt # Yield for treatment group
 seedwt.data$m2i <- seedwt.data$seedWtCont # Yield for control group
 seedwt.data$n1i <- seedwt.data$n2i <- seedwt.data$replications
+
+# Add control rust severity to seedwt dataset
+seedwt.data <- merge(seedwt.data, 
+                     rust.data.m2i, 
+                     all.x = T, 
+                     by.x = "FID", 
+                     by.y = "FIDrust")
 
 #' Cercospora data
 #+ cercoMetafor
@@ -884,9 +902,9 @@ target.spot.data$n1i <- target.spot.data$n2i <- target.spot.data$replications
 #' 
 # Take out values of control rust severity <5%
 too.low.pressure <- rust.data$ReferenceNumb[rust.data$m2i<5] 
-rust.data <- rust.data[rust.data$ReferenceNumb %in% too.low.pressure]
-yield.data <- yield.data[yield.data$ReferenceNumb %in% too.low.pressure]
-seedwt.data <- seedwt.data[seedwt.data$ReferenceNumb %in% too.low.pressure]
+rust.data <- rust.data[!rust.data$ReferenceNumb %in% too.low.pressure,]
+yield.data <- yield.data[!yield.data$ReferenceNumb %in% too.low.pressure,]
+seedwt.data <- seedwt.data[!seedwt.data$ReferenceNumb %in% too.low.pressure,]
 # Active ingredients
 sort(table(rust.data$activeIngClean))
 analyze.ai <- c("DUAL", "PYR","TEBU","FLUT","MIXED")
@@ -1102,6 +1120,7 @@ cerco.data$m2i[cerco.data$m2i==0] <- 0.0001
 
 target.spot.data$m1i[target.spot.data$m1i==0] <- 0.0001
 target.spot.data$m2i[target.spot.data$m2i==0] <- 0.0001
+
 #' 
 #' Overall means (raw mean difference)
 #+ effectSizeMD
