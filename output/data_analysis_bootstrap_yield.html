@@ -266,7 +266,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
   newdata &lt;- merge(studyIDS, yield.data.ROM)
   # Overall analysis
   meta &lt;- rma.uni(yi = yi,
-                  vi = (n1i + n2i)/(n1i*n2i),
+                  vi = 1/rust.m2i,
                   data = newdata,
                   method = &quot;REML&quot;)
   results.yield$OVERALL[ii] &lt;- meta$b
@@ -274,7 +274,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Active Ingredients
   ai &lt;- rma.uni(yi = yi,
-                vi = (n1i + n2i)/(n1i*n2i),
+                vi = 1/rust.m2i,
                 data = newdata,
                 method = &quot;REML&quot;,
                 mods = ~category_ai-1)
@@ -285,7 +285,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Classes
   class &lt;- rma.uni(yi = yi,
-                   vi = (n1i + n2i)/(n1i*n2i),
+                   vi = 1/rust.m2i,
                    data = newdata,
                    method = &quot;REML&quot;,
                    mods = ~category_class-1)
@@ -298,7 +298,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Growth stage
   rstage &lt;- rma.uni(yi = yi,
-                    vi = (n1i + n2i)/(n1i*n2i),
+                    vi = 1/rust.m2i,
                     data = newdata,
                     method = &quot;REML&quot;,
                     mods = ~category_rstage-1)
@@ -328,7 +328,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Number of applications
   applications &lt;- rma.uni(yi = yi,
-                          vi = (n1i + n2i)/(n1i*n2i),
+                          vi = 1/rust.m2i,
                           data = newdata,
                           method = &quot;REML&quot;,
                           mods = ~number_applications)
@@ -339,7 +339,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Number of applications as category
   apps.categ &lt;- rma.uni(yi = yi,
-                        vi = (n1i + n2i)/(n1i*n2i),
+                        vi = 1/rust.m2i,
                         data = newdata,
                         method = &quot;REML&quot;,
                         mods = ~as.character(number_applications)-1)
@@ -388,6 +388,9 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 }
 </code></pre>
 
+<pre><code>## Error in results.yield$`R1+`[ii] &lt;- rstage$b[rownames(rstage$b) == &quot;category_rstage1+&quot;]: replacement has length zero
+</code></pre>
+
 <h3>Save final results</h3>
 
 <pre><code class="r">save(results.yield, file=&quot;data/output_data/results_yield.R&quot;)
@@ -412,7 +415,7 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-12-02
+##  date     2016-12-03
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
@@ -421,16 +424,13 @@ colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 <pre><code>##  package     * version date       source        
 ##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
 ##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
-##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
 ##  formatR       1.4     2016-05-09 CRAN (R 3.3.0)
-##  highr         0.6     2016-05-09 CRAN (R 3.3.0)
 ##  knitr       * 1.14    2016-08-13 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
 ##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
-##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.0)
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.0)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
 ##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)
