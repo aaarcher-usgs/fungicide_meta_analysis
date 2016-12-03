@@ -266,7 +266,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Overall analysis
   meta &lt;- rma.uni(yi = yi,
-                  vi = (n1i + n2i)/(n1i*n2i),
+                  vi = 1/m2i,
                   data = newdata,
                   method = &quot;REML&quot;)
   results.rust$OVERALL[ii] &lt;- meta$b
@@ -274,7 +274,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Active Ingredients
   ai &lt;- rma.uni(yi = yi,
-                vi = (n1i + n2i)/(n1i*n2i),
+                vi = 1/m2i,
                 data = newdata,
                 method = &quot;REML&quot;,
                 mods = ~category_ai-1)
@@ -285,7 +285,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Classes
   class &lt;- rma.uni(yi = yi,
-                   vi = (n1i + n2i)/(n1i*n2i),
+                   vi = 1/m2i,
                    data = newdata,
                    method = &quot;REML&quot;,
                    mods = ~category_class-1)
@@ -298,7 +298,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Growth stage
   rstage &lt;- rma.uni(yi = yi,
-                    vi = (n1i + n2i)/(n1i*n2i),
+                    vi = 1/m2i,
                     data = newdata,
                     method = &quot;REML&quot;,
                     mods = ~category_rstage-1)
@@ -325,7 +325,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Number of applications
   applications &lt;- rma.uni(yi = yi,
-                          vi = (n1i + n2i)/(n1i*n2i),
+                          vi = 1/m2i,
                           data = newdata,
                           method = &quot;REML&quot;,
                           mods = ~number_applications)
@@ -336,7 +336,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 
   # Number of applications as category
   apps.categ &lt;- rma.uni(yi = yi,
-                        vi = (n1i + n2i)/(n1i*n2i),
+                        vi = 1/m2i,
                         data = newdata,
                         method = &quot;REML&quot;,
                         mods = ~as.character(number_applications)-1)
@@ -372,7 +372,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
   # Mixed active ingredients
   if(nrow(newdata[newdata$alphaIngred==&quot;AZO + PROP&quot;,])&gt;0){
     mixed &lt;- rma.uni(yi = yi,
-                     vi = (n1i + n2i)/(n1i*n2i),
+                     vi = 1/m2i,
                      data = newdata[newdata$alphaIngred==&quot;AZO + PROP&quot;,],
                      method = &quot;REML&quot;)
     results.rust$`AZO + PROP`[ii] &lt;- mixed$b
@@ -404,7 +404,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-12-01
+##  date     2016-12-02
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
