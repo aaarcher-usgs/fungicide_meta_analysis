@@ -101,6 +101,10 @@ print(c("CI of mean e.s. of yield severity",
         quantile(exp(results.yield$OVERALL), probs = c(0.025,0.975))))
 print(c("Mean tau^2 for yield", mean(results.yield$tau2)))
 
+print(c("Mean e.s. of seedwt severity", mean(exp(results.seedwt$OVERALL))))
+print(c("CI of mean e.s. of seedwt severity", 
+        quantile(exp(results.seedwt$OVERALL), probs = c(0.025,0.975))))
+print(c("Mean tau^2 for seedwt", mean(results.seedwt$tau2)))
 
 #' ### Footer
 #' 
