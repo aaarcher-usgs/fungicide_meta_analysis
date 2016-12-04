@@ -106,6 +106,50 @@ print(c("CI of mean e.s. of seedwt severity",
         quantile(exp(results.seedwt$OVERALL), probs = c(0.025,0.975))))
 print(c("Mean tau^2 for seedwt", mean(results.seedwt$tau2)))
 
+#' ### Store means from each in new dataframe
+summary.means <- as.data.frame(matrix(NA, nrow = 65, ncol = 5))
+colnames(summary.means) <- c("Category", "Moderator" , "Mean", "LL", "UL")
+
+#' Transform model results 
+transform.rust <- exp(results.rust)
+colnames(transform.rust) <- colnames(results.rust)
+transform.rust$tau2 <- results.rust$tau2
+
+transform.yield <- exp(results.yield)
+colnames(transform.yield) <- colnames(results.yield)
+transform.yield$tau2 <- results.yield$tau2
+
+transform.seedwt <- exp(results.seedwt)
+colnames(transform.seedwt) <- colnames(results.seedwt)
+transform.seedwt$tau2 <- results.seedwt$tau2
+
+#' Rust means
+summary.means$Moderator[1:23] <- colnames(results.rust)
+summary.means$Category[1:23] <- "Rust"
+summary.means$Mean[1:23] <- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[1:23] <- apply(X = transform.rust, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
+summary.means$UL[1:23] <- apply(X = transform.rust, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+
+#' Yield means
+summary.means$Moderator[24:48] <- colnames(results.yield)
+summary.means$Category[24:48] <- "Yield"
+summary.means$Mean[24:48] <- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[24:48] <- apply(X = transform.yield, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
+summary.means$UL[24:48] <- apply(X = transform.yield, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+
+#' Seed weight means
+summary.means$Moderator[49:65] <- colnames(results.seedwt)
+summary.means$Category[49:65] <- "Seed Weight"
+summary.means$Mean[49:65] <- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[49:65] <- apply(X = transform.seedwt, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
+summary.means$UL[49:65] <- apply(X = transform.seedwt, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+
 #' ### Footer
 #' 
 #' Spun with ezspin("programs/results_processing.R", out_dir="output", fig_dir="figures", keep_md=FALSE)
