@@ -150,6 +150,9 @@ summary.means$LL[49:65] <- apply(X = transform.seedwt, MARGIN = 2,
 summary.means$UL[49:65] <- apply(X = transform.seedwt, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 
+#' Save summary.means
+save(summary.means, file="data/output_data/summary_results.R")
+
 #' ### Footer
 #' 
 #' Spun with ezspin("programs/results_processing.R", out_dir="output", fig_dir="figures", keep_md=FALSE)
