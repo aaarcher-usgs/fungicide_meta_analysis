@@ -11,6 +11,7 @@ library(ezknitr)
 library(knitr)
 library(metafor)
 library(devtools)
+library(doBy)
 
 #' Clear environment and set seed
 #+ clear
@@ -152,6 +153,27 @@ summary.means$UL[49:65] <- apply(X = transform.seedwt, MARGIN = 2,
 
 #' Save summary.means
 save(summary.means, file="data/output_data/summary_results.R")
+
+#' ### Fungicide table for manuscript
+#' 
+#' Rust
+summaryBy(FID~category_class+alphaIngred+Reference, 
+          data = rust.data[! is.na(rust.data$category_class),], FUN=length)
+summaryBy(FID~category_class+Reference, 
+          data = rust.data[! is.na(rust.data$category_ai),], FUN=length)
+
+#' Yield
+#' 
+summaryBy(FID~category_class+alphaIngred+Reference, 
+          data = yield.data[! is.na(yield.data$category_class),], FUN=length)
+summaryBy(FID~category_ai+Reference, 
+          data = yield.data[! is.na(yield.data$category_ai),], FUN=length)
+
+#' 100-seed-weight
+summaryBy(FID~category_class+alphaIngred+Reference, 
+          data = seedwt.data[! is.na(seedwt.data$category_class),], FUN=length)
+summaryBy(FID~category_ai+Reference, 
+          data = seedwt.data[! is.na(seedwt.data$category_ai),], FUN=length)
 
 #' ### Footer
 #' 
