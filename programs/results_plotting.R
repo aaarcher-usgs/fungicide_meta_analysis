@@ -9,10 +9,7 @@
 #+ libraries, messages=FALSE, warning=FALSE
 library(ezknitr)
 library(knitr)
-library(metafor)
 library(devtools)
-library(doBy)
-library(data.table)
 library(ggplot2)
 library(ggthemes)
 
