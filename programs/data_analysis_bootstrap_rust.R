@@ -34,7 +34,7 @@ remove(list=c(#"rust.data.ROM",
 nsims <- 5000
 
 #' Empty data frame to hold results
-results.rust <- as.data.frame(matrix(NA,ncol=21,nrow=nsims))
+results.rust <- as.data.frame(matrix(NA,ncol=24,nrow=nsims))
 colnames(results.rust) <- c("OVERALL","tau2",
                             "FLUT","MIXED","PYR","TEBU",
                             "Strobilurin","Triaz_Strob","Triazole",
@@ -43,7 +43,8 @@ colnames(results.rust) <- c("OVERALL","tau2",
                             "Application Intrcpt","Application Slope",
                             "AZO + PROP",
                             "high","low","medium",
-                            "Year Intrcpt|2004","Year Slope")
+                            "Year Intrcpt|2004","Year Slope",
+                            "2006","2007","2013")
 
 #' Running the bootstraps
 #+ boots, warning=FALSE
@@ -136,14 +137,14 @@ for(ii in 1:nsims){
   
   # Study year
   # Condition on year1 = 2005
-  newdata$category_year <- newdata$category_year - 2004
+  newdata$category_yearc <- newdata$category_year - 2004
   year <- rma.uni(yi = yi,
                   vi = (n1i+n2i)/(n1i*n2i),
                   data = newdata,
                   method = "REML",
-                  mods = ~category_year)
+                  mods = ~category_yearc)
   results.rust$`Year Intrcpt|2004`[ii] <- year$b[rownames(year$b)=="intrcpt"]
-  results.rust$`Year Slope`[ii] <- year$b[rownames(year$b)=="category_year"]
+  results.rust$`Year Slope`[ii] <- year$b[rownames(year$b)=="category_yearc"]
   
   # Study year as category
   year.categ <- rma.uni(yi = yi,
@@ -151,12 +152,26 @@ for(ii in 1:nsims){
                         data = newdata,
                         method = "REML",
                         mods = ~as.character(category_year)-1)
+  if("2006" %in% unique(newdata$category_year)){
   results.rust$`2006`[ii] <- 
     year.categ$b[rownames(year.categ$b)=="as.character(category_year)2006"]
-  results.rust$`2007`[ii] <- 
-    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2007"]
-  results.rust$`2013`[ii] <- 
-    year.categ$b[rownames(year.categ$b)=="as.character(category_year)2013"]
+  }
+  if("2007" %in% unique(newdata$category_year)){
+    results.rust$`2007`[ii] <- 
+      year.categ$b[rownames(year.categ$b)=="as.character(category_year)2007"]
+  }
+  if("2013" %in% unique(newdata$category_year)){
+    results.rust$`2013`[ii] <- 
+      year.categ$b[rownames(year.categ$b)=="as.character(category_year)2013"]
+  }
+}
+if(length(unique(newdata$category_year))==2 &
+   unique(newdata$category_year[!is.na(newdata$category_year)]=="2006")){
+  year.categ <- rma.uni(yi = yi,
+                        vi = (n1i+n2i)/(n1i*n2i),
+                        data = newdata[!is.na(newdata$category_year),],
+                        method = "REML")
+  results.rust$`2006`[ii] <- year.categ$b
   
   # Mixed active ingredients
   if(nrow(newdata[newdata$alphaIngred=="AZO + PROP",])>0){
