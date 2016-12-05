@@ -171,6 +171,7 @@ summary.means$Analysis[summary.means$Moderator=="R1+"|
 summary.means$Analysis[summary.means$Moderator=="Strobilurin"|
                          summary.means$Moderator=="Triaz_Strob"|
                          summary.means$Moderator=="Triazole"] <- "Fungicide Class"
+summary.means$Analysis[summary.means$Moderator=="OVERALL"] <- "Overall Mean"
 
 #' Save summary.means
 save(summary.means, file="data/output_data/summary_results.R")
