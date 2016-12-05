@@ -12,7 +12,7 @@ library(knitr)
 library(metafor)
 library(devtools)
 library(doBy)
-library(tidyr)
+library(data.table)
 library(ggplot2)
 library(ggthemes)
 
@@ -28,10 +28,12 @@ opts_chunk$set(fig.width = 6, fig.height = 4)
 #' ### Load data
 #+ loadData
 load(file="data/output_data/summary_results.R")
+#' Separate by analysis
+analysis.split <- split(summary.means, by = "Analysis")
+category.split <- split(summary.means, by = "Category")
 
-#' Convert data from long to "wide" for scatter plot(s)
-test <- spread(data = summary.means, key = Category, value = Mean)
-
+test <- merge(category.split$Rust, category.split$Yield, by = "Moderator")
+test <- merge(test, category.split$`Seed Weight`, by = "Moderator")
 
 #' ### Footer
 #' 
