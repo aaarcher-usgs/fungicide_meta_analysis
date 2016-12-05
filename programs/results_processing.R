@@ -157,17 +157,28 @@ save(summary.means, file="data/output_data/summary_results.R")
 #' ### Fungicide table for manuscript
 #' 
 #' Rust
-summaryBy(FID~category_class+alphaIngred+Reference, 
+#' 
+rust.data$temp <- paste0(rust.data$Reference,":",
+                         rust.data$category_class)
+length(unique(rust.data$temp[rust.data$category_class=="strobilurin"]))
+length(unique(rust.data$temp[rust.data$category_class=="triazole"]))
+length(unique(rust.data$temp[rust.data$category_class=="triaz + strob"]))
+summaryBy(FID~category_class, 
           data = rust.data[! is.na(rust.data$category_class),], FUN=length)
-summaryBy(FID~category_class+Reference, 
-          data = rust.data[! is.na(rust.data$category_ai),], FUN=length)
+summaryBy(FID~category_class+alphaIngred+Reference, 
+          data = rust.data[! is.na(rust.data$alphaIngred),], FUN=length)
 
 #' Yield
 #' 
-summaryBy(FID~category_class+alphaIngred+Reference, 
+yield.data$temp <- paste0(yield.data$Reference,":",
+                         yield.data$category_class)
+length(unique(yield.data$temp[yield.data$category_class=="strobilurin"]))
+length(unique(yield.data$temp[yield.data$category_class=="triazole"]))
+length(unique(yield.data$temp[yield.data$category_class=="triaz + strob"]))
+summaryBy(FID~category_class, 
           data = yield.data[! is.na(yield.data$category_class),], FUN=length)
-summaryBy(FID~category_ai+Reference, 
-          data = yield.data[! is.na(yield.data$category_ai),], FUN=length)
+summaryBy(FID~category_class+alphaIngred+Reference, 
+          data = yield.data[! is.na(yield.data$alphaIngred),], FUN=length)
 
 #' 100-seed-weight
 summaryBy(FID~category_class+alphaIngred+Reference, 
