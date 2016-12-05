@@ -142,6 +142,27 @@ summary.means$LL[24:48] <- apply(X = transform.yield, MARGIN = 2,
 summary.means$UL[24:48] <- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 
+summary.means$Analysis[summary.means$Moderator=="1 Application" | 
+                         summary.means$Moderator=="2 Applications"] <- "Applications"
+summary.means$Analysis[summary.means$Moderator=="2006" | 
+                         summary.means$Moderator=="2007"|
+                         summary.means$Moderator=="2013"] <- "Study Year"
+summary.means$Analysis[summary.means$Moderator=="AZO + PROP"|
+                         summary.means$Moderator=="FLUT"|
+                         summary.means$Moderator=="PYR"|
+                         summary.means$Moderator=="MIXED"|
+                         summary.means$Moderator=="TEBU"] <- "Active Ingredient"
+summary.means$Analysis[summary.means$Moderator=="low"|
+                         summary.means$Moderator=="medium"|
+                         summary.means$Moderator=="high"] <- "Disease Pressure"
+summary.means$Analysis[summary.means$Moderator=="R1+"|
+                         summary.means$Moderator=="R2+"|
+                         summary.means$Moderator=="R3"|
+                         summary.means$Moderator=="R5"] <- "Growth Stage"
+summary.means$Analysis[summary.means$Moderator=="Strobilurin"|
+                         summary.means$Moderator=="Triaz_Strob"|
+                         summary.means$Moderator=="Triazole"] <- "Fungicide Class"
+
 #' Seed weight means
 summary.means$Moderator[49:65] <- colnames(results.seedwt)
 summary.means$Category[49:65] <- "Seed Weight"

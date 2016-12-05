@@ -213,7 +213,16 @@ and entries/study)</p>
 <pre><code class="r">library(ezknitr)
 library(knitr)
 library(metafor)
-library(devtools)
+</code></pre>
+
+<pre><code>## Loading required package: Matrix
+</code></pre>
+
+<pre><code>## Loading &#39;metafor&#39; package (version 1.9-9). For an overview 
+## and introduction to the package please type: help(metafor).
+</code></pre>
+
+<pre><code class="r">library(devtools)
 library(doBy)
 </code></pre>
 
@@ -703,6 +712,27 @@ summary.means$LL[24:48] &lt;- apply(X = transform.yield, MARGIN = 2,
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
 summary.means$UL[24:48] &lt;- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+
+summary.means$Analysis[summary.means$Moderator==&quot;1 Application&quot; | 
+                         summary.means$Moderator==&quot;2 Applications&quot;] &lt;- &quot;Applications&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;2006&quot; | 
+                         summary.means$Moderator==&quot;2007&quot;|
+                         summary.means$Moderator==&quot;2013&quot;] &lt;- &quot;Study Year&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;AZO + PROP&quot;|
+                         summary.means$Moderator==&quot;FLUT&quot;|
+                         summary.means$Moderator==&quot;PYR&quot;|
+                         summary.means$Moderator==&quot;MIXED&quot;|
+                         summary.means$Moderator==&quot;TEBU&quot;] &lt;- &quot;Active Ingredient&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;low&quot;|
+                         summary.means$Moderator==&quot;medium&quot;|
+                         summary.means$Moderator==&quot;high&quot;] &lt;- &quot;Disease Pressure&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;R1+&quot;|
+                         summary.means$Moderator==&quot;R2+&quot;|
+                         summary.means$Moderator==&quot;R3&quot;|
+                         summary.means$Moderator==&quot;R5&quot;] &lt;- &quot;Growth Stage&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;Strobilurin&quot;|
+                         summary.means$Moderator==&quot;Triaz_Strob&quot;|
+                         summary.means$Moderator==&quot;Triazole&quot;] &lt;- &quot;Fungicide Class&quot;
 </code></pre>
 
 <p>Seed weight means</p>
@@ -1115,26 +1145,35 @@ length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quo
 </code></pre>
 
 <pre><code>##  package     * version date       source        
+##  assertthat    0.1     2013-12-06 CRAN (R 3.3.0)
+##  colorspace    1.3-1   2016-11-18 CRAN (R 3.3.2)
 ##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
 ##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
 ##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
-##  formatR       1.4     2016-05-09 CRAN (R 3.3.0)
-##  knitr       * 1.14    2016-08-13 CRAN (R 3.3.0)
+##  ggplot2     * 2.2.0   2016-11-11 cran (@2.2.0) 
+##  ggthemes    * 3.3.0   2016-11-24 CRAN (R 3.3.2)
+##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
+##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
+##  labeling      0.3     2014-08-23 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.0)
+##  lazyeval      0.2.0   2016-06-12 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
-##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
 ##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.0)
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.0)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
 ##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)
+##  munsell       0.4.3   2016-02-13 CRAN (R 3.3.0)
+##  plyr          1.8.4   2016-06-08 CRAN (R 3.3.0)
 ##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
-##  R.oo          1.20.0  2016-02-17 CRAN (R 3.3.0)
-##  R.utils       2.4.0   2016-09-14 CRAN (R 3.3.0)
-##  rstudioapi    0.6     2016-06-27 CRAN (R 3.3.0)
+##  R.oo          1.21.0  2016-11-01 CRAN (R 3.3.0)
+##  R.utils       2.5.0   2016-11-07 CRAN (R 3.3.0)
+##  Rcpp          0.12.8  2016-11-17 CRAN (R 3.3.2)
+##  scales        0.4.1   2016-11-09 cran (@0.4.1) 
 ##  stringi       1.1.2   2016-10-01 CRAN (R 3.3.0)
 ##  stringr       1.1.0   2016-08-19 CRAN (R 3.3.0)
+##  tibble        1.2     2016-08-26 CRAN (R 3.3.0)
 ##  withr         1.0.2   2016-06-20 CRAN (R 3.3.0)
 </code></pre>
 
