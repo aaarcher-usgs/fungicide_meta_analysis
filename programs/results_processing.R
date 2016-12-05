@@ -167,6 +167,11 @@ summaryBy(FID~category_class,
           data = rust.data[! is.na(rust.data$category_class),], FUN=length)
 summaryBy(FID~category_class+alphaIngred+Reference, 
           data = rust.data[! is.na(rust.data$alphaIngred),], FUN=length)
+table(rust.data$category_ai)
+unique(rust.data$Reference[rust.data$category_ai=="FLUT"])
+unique(rust.data$Reference[rust.data$category_ai=="MIXED"])
+unique(rust.data$Reference[rust.data$category_ai=="PYR"])
+unique(rust.data$Reference[rust.data$category_ai=="TEBU"])
 
 #' Yield
 #' 
@@ -177,14 +182,26 @@ length(unique(yield.data$temp[yield.data$category_class=="triazole"]))
 length(unique(yield.data$temp[yield.data$category_class=="triaz + strob"]))
 summaryBy(FID~category_class, 
           data = yield.data[! is.na(yield.data$category_class),], FUN=length)
-summaryBy(FID~category_class+alphaIngred+Reference, 
-          data = yield.data[! is.na(yield.data$alphaIngred),], FUN=length)
+
+table(yield.data$category_ai)
+unique(yield.data$Reference[yield.data$category_ai=="FLUT"])
+unique(yield.data$Reference[yield.data$category_ai=="MIXED"])
+unique(yield.data$Reference[yield.data$category_ai=="PYR"])
+unique(yield.data$Reference[yield.data$category_ai=="TEBU"])
 
 #' 100-seed-weight
-summaryBy(FID~category_class+alphaIngred+Reference, 
+seedwt.data$temp <- paste0(seedwt.data$Reference,":",
+                          seedwt.data$category_class)
+length(unique(seedwt.data$temp[seedwt.data$category_class=="strobilurin"]))
+length(unique(seedwt.data$temp[seedwt.data$category_class=="triazole"]))
+length(unique(seedwt.data$temp[seedwt.data$category_class=="triaz + strob"]))
+summaryBy(FID~category_class, 
           data = seedwt.data[! is.na(seedwt.data$category_class),], FUN=length)
-summaryBy(FID~category_ai+Reference, 
-          data = seedwt.data[! is.na(seedwt.data$category_ai),], FUN=length)
+
+table(seedwt.data$category_ai)
+unique(seedwt.data$Reference[seedwt.data$category_ai=="FLUT"])
+unique(seedwt.data$Reference[seedwt.data$category_ai=="MIXED"])
+unique(seedwt.data$Reference[seedwt.data$category_ai=="TEBU"])
 
 #' ### Footer
 #' 

@@ -725,501 +725,368 @@ summary.means$UL[49:65] &lt;- apply(X = transform.seedwt, MARGIN = 2,
 
 <p>Rust</p>
 
-<pre><code class="r">summaryBy(FID~category_class+alphaIngred+Reference, 
+<pre><code class="r">rust.data$temp &lt;- paste0(rust.data$Reference,&quot;:&quot;,
+                         rust.data$category_class)
+length(unique(rust.data$temp[rust.data$category_class==&quot;strobilurin&quot;]))
+</code></pre>
+
+<pre><code>## [1] 21
+</code></pre>
+
+<pre><code class="r">length(unique(rust.data$temp[rust.data$category_class==&quot;triazole&quot;]))
+</code></pre>
+
+<pre><code>## [1] 26
+</code></pre>
+
+<pre><code class="r">length(unique(rust.data$temp[rust.data$category_class==&quot;triaz + strob&quot;]))
+</code></pre>
+
+<pre><code>## [1] 27
+</code></pre>
+
+<pre><code class="r">summaryBy(FID~category_class, 
           data = rust.data[! is.na(rust.data$category_class),], FUN=length)
 </code></pre>
 
-<pre><code>##     category_class        alphaIngred             Reference FID.length
-## 1      strobilurin          AZO + PYR        Mueller ref 37          1
-## 2      strobilurin         FLUX + PYR        Delaney ref 30          1
-## 3      strobilurin         FLUX + PYR        Delaney ref 31          1
-## 4      strobilurin         FLUX + PYR        Delaney ref 34          2
-## 5      strobilurin               &lt;NA&gt;        Delaney ref 30          1
-## 6      strobilurin               &lt;NA&gt;        Delaney ref 31          1
-## 7      strobilurin               &lt;NA&gt;        Delaney ref 34          1
-## 8      strobilurin               &lt;NA&gt;  Douglas et al ref 65          1
-## 9      strobilurin               &lt;NA&gt;         Harmon ref 47          2
-## 10     strobilurin               &lt;NA&gt;  Lawrence et al ref 3          1
-## 11     strobilurin               &lt;NA&gt; Lawrence et al ref 55          2
-## 12     strobilurin               &lt;NA&gt; Lawrence et al ref 68          1
-## 13     strobilurin               &lt;NA&gt;       Lawrence ref 16          2
-## 14     strobilurin               &lt;NA&gt;       Lawrence ref 22          4
-## 15     strobilurin               &lt;NA&gt;       Lawrence ref 41          1
-## 16     strobilurin               &lt;NA&gt;  Mueller et al  ref 1          1
-## 17     strobilurin               &lt;NA&gt;   Mueller et al ref 9          1
-## 18     strobilurin               &lt;NA&gt;        Mueller ref 36          6
-## 19     strobilurin               &lt;NA&gt;        Mueller ref 37          2
-## 20     strobilurin               &lt;NA&gt;        Mueller ref 39          1
-## 21     strobilurin               &lt;NA&gt;        Mueller ref 43          3
-## 22     strobilurin               &lt;NA&gt;  Padgett et al ref 54          2
-## 23     strobilurin               &lt;NA&gt;         Sikora ref 23          1
-## 24     strobilurin               &lt;NA&gt;         Sikora ref 42          1
-## 25   triaz + strob         AZO + CYPR       Lawrence ref 16          1
-## 26   triaz + strob         AZO + CYPR  Padgett et al ref 54          1
-## 27   triaz + strob          AZO + DIF        Delaney ref 30          1
-## 28   triaz + strob          AZO + DIF        Delaney ref 31          1
-## 29   triaz + strob          AZO + DIF        Delaney ref 34          1
-## 30   triaz + strob         AZO + FLUT        Mueller ref 37          1
-## 31   triaz + strob         AZO + FLUT    Price et al ref 35          6
-## 32   triaz + strob  AZO + FLUT + PROP         Sikora ref 23          1
-## 33   triaz + strob          AZO + MYC        Mueller ref 37          1
-## 34   triaz + strob   AZO + MYC + PROP         Sikora ref 23          1
-## 35   triaz + strob         AZO + PROP        Delaney ref 30          1
-## 36   triaz + strob         AZO + PROP        Delaney ref 31          1
-## 37   triaz + strob         AZO + PROP        Delaney ref 34          1
-## 38   triaz + strob         AZO + PROP Lawrence et al ref 68          1
-## 39   triaz + strob         AZO + PROP        Mueller ref 36          5
-## 40   triaz + strob         AZO + PROP        Mueller ref 43          5
-## 41   triaz + strob         AZO + PROP   Sikora et al ref 74          1
-## 42   triaz + strob         AZO + PROP         Sikora ref 23          1
-## 43   triaz + strob  AZO + PROP + TEBU        Mueller ref 37          1
-## 44   triaz + strob  AZO + PROP + TEBU         Sikora ref 23          1
-## 45   triaz + strob         AZO + TEBU        Mueller ref 37          1
-## 46   triaz + strob         AZO + TETR        Mueller ref 40          1
-## 47   triaz + strob        CYPR + PICO Lawrence et al ref 68          3
-## 48   triaz + strob        FAMO + FLUS Lawrence et al ref 55          1
-## 49   triaz + strob        FAMO + FLUZ  lawrence et al ref 4          2
-## 50   triaz + strob          FEN + PYR        Mueller ref 38          2
-## 51   triaz + strob        FLUS + PICO       Lawrence ref 16          1
-## 52   triaz + strob         FLUS + PYR Lawrence et al ref 53          1
-## 53   triaz + strob         FLUS + PYR Lawrence et al ref 55          2
-## 54   triaz + strob         FLUS + PYR       Lawrence ref 22          2
-## 55   triaz + strob        FLUT + FLUX        Delaney ref 32          4
-## 56   triaz + strob FLUT + PROP + TRIF         Sikora ref 23          1
-## 57   triaz + strob         FLUT + PYR        Delaney ref 30          1
-## 58   triaz + strob         FLUT + PYR        Delaney ref 31          1
-## 59   triaz + strob         FLUT + PYR  Douglas et al ref 66          1
-## 60   triaz + strob         FLUT + PYR        Mueller ref 45          1
-## 61   triaz + strob         FLUT + PYR         Sikora ref 23          1
-## 62   triaz + strob          MET + PYR  Padgett et al ref 54          1
-## 63   triaz + strob  MYC + PROP + TRIF         Sikora ref 23          1
-## 64   triaz + strob          MYC + PYR        Mueller ref 38          4
-## 65   triaz + strob          MYC + PYR         Sikora ref 23          1
-## 66   triaz + strob PROP + PROT + TRIF       Lawrence ref 16          1
-## 67   triaz + strob PROP + TEBU + TRIF       Lawrence ref 21          3
-## 68   triaz + strob PROP + TEBU + TRIF        Mueller ref 37          1
-## 69   triaz + strob PROP + TEBU + TRIF         Sikora ref 23          1
-## 70   triaz + strob        PROP + TRIF  Douglas et al ref 65          1
-## 71   triaz + strob        PROP + TRIF       Lawrence ref 16          1
-## 72   triaz + strob        PROP + TRIF       Lawrence ref 18          1
-## 73   triaz + strob        PROP + TRIF   Mueller et al ref 9          1
-## 74   triaz + strob        PROP + TRIF        Mueller ref 37          1
-## 75   triaz + strob        PROP + TRIF         Sikora ref 23          1
-## 76   triaz + strob        PROT + TRIF        Delaney ref 30          1
-## 77   triaz + strob        PROT + TRIF        Delaney ref 31          1
-## 78   triaz + strob        PROT + TRIF        Delaney ref 34          1
-## 79   triaz + strob         PYR + TEBU Lawrence et al ref 62          1
-## 80   triaz + strob         PYR + TEBU       Lawrence ref 16          1
-## 81   triaz + strob         PYR + TEBU        Mueller ref 36          5
-## 82   triaz + strob         PYR + TEBU        Mueller ref 37          1
-## 83   triaz + strob         PYR + TEBU   Sikora et al ref 74          1
-## 84   triaz + strob         PYR + TEBU         Sikora ref 23          1
-## 85   triaz + strob        TEBU + TRIF       Lawrence ref 18          1
-## 86   triaz + strob        TEBU + TRIF       Lawrence ref 21          2
-## 87   triaz + strob        TEBU + TRIF   Mueller et al ref 9          2
-## 88   triaz + strob        TEBU + TRIF  Padgett et al ref 54          1
-## 89   triaz + strob  TEBU + TRIF + OTH   Mueller et al ref 9          1
-## 90        triazole       PROP fb FLUT   Sikora et al ref 74          1
-## 91        triazole        PROP fb MYC   Sikora et al ref 74          1
-## 92        triazole       PROP fb TEBU   Sikora et al ref 74          1
-## 93        triazole               &lt;NA&gt;        Delaney ref 30          3
-## 94        triazole               &lt;NA&gt;        Delaney ref 31          3
-## 95        triazole               &lt;NA&gt;        Delaney ref 34          6
-## 96        triazole               &lt;NA&gt;  Douglas et al ref 65          8
-## 97        triazole               &lt;NA&gt;  Douglas et al ref 66         11
-## 98        triazole               &lt;NA&gt;       Kemerait ref 46          1
-## 99        triazole               &lt;NA&gt;  Lawrence et al ref 3          1
-## 100       triazole               &lt;NA&gt;  lawrence et al ref 4          3
-## 101       triazole               &lt;NA&gt; Lawrence et al ref 53          1
-## 102       triazole               &lt;NA&gt; Lawrence et al ref 55          4
-## 103       triazole               &lt;NA&gt; Lawrence et al ref 62          1
-## 104       triazole               &lt;NA&gt;       Lawrence ref 16          6
-## 105       triazole               &lt;NA&gt;       Lawrence ref 18          1
-## 106       triazole               &lt;NA&gt;       Lawrence ref 21          1
-## 107       triazole               &lt;NA&gt;       Lawrence ref 41          1
-## 108       triazole               &lt;NA&gt;   Mueller et al ref 9          2
-## 109       triazole               &lt;NA&gt;        Mueller ref 36          6
-## 110       triazole               &lt;NA&gt;        Mueller ref 37          4
-## 111       triazole               &lt;NA&gt;        Mueller ref 39          2
-## 112       triazole               &lt;NA&gt;        Mueller ref 40          1
-## 113       triazole               &lt;NA&gt;        Mueller ref 43          3
-## 114       triazole               &lt;NA&gt;        Mueller ref 45         15
-## 115       triazole               &lt;NA&gt;  Padgett et al ref 54          4
-## 116       triazole               &lt;NA&gt;    Price et al ref 35          6
-## 117       triazole               &lt;NA&gt;   Sikora et al ref 74          1
+<pre><code>##   category_class FID.length
+## 1    strobilurin         40
+## 2  triaz + strob         98
+## 3       triazole         98
 </code></pre>
 
-<pre><code class="r">summaryBy(FID~category_class+Reference, 
-          data = rust.data[! is.na(rust.data$category_ai),], FUN=length)
+<pre><code class="r">summaryBy(FID~category_class+alphaIngred+Reference, 
+          data = rust.data[! is.na(rust.data$alphaIngred),], FUN=length)
 </code></pre>
 
-<pre><code>##    category_class             Reference FID.length
-## 1     strobilurin        Delaney ref 30          2
-## 2     strobilurin        Delaney ref 31          2
-## 3     strobilurin        Delaney ref 34          2
-## 4     strobilurin  Douglas et al ref 65          1
-## 5     strobilurin         Harmon ref 47          2
-## 6     strobilurin  Lawrence et al ref 3          1
-## 7     strobilurin Lawrence et al ref 55          1
-## 8     strobilurin       Lawrence ref 16          1
-## 9     strobilurin       Lawrence ref 22          1
-## 10    strobilurin       Lawrence ref 41          1
-## 11    strobilurin  Mueller et al  ref 1          1
-## 12    strobilurin   Mueller et al ref 9          1
-## 13    strobilurin        Mueller ref 36          6
-## 14    strobilurin        Mueller ref 37          2
-## 15    strobilurin        Mueller ref 39          1
-## 16    strobilurin        Mueller ref 43          3
-## 17    strobilurin  Padgett et al ref 54          1
-## 18    strobilurin         Sikora ref 23          1
-## 19  triaz + strob        Delaney ref 30          4
-## 20  triaz + strob        Delaney ref 31          4
-## 21  triaz + strob        Delaney ref 32          4
-## 22  triaz + strob        Delaney ref 34          3
-## 23  triaz + strob  Douglas et al ref 65          1
-## 24  triaz + strob  Douglas et al ref 66          1
-## 25  triaz + strob  lawrence et al ref 4          2
-## 26  triaz + strob Lawrence et al ref 53          1
-## 27  triaz + strob Lawrence et al ref 55          3
-## 28  triaz + strob Lawrence et al ref 62          1
-## 29  triaz + strob Lawrence et al ref 68          4
-## 30  triaz + strob       Lawrence ref 16          5
-## 31  triaz + strob       Lawrence ref 18          2
-## 32  triaz + strob       Lawrence ref 21          5
-## 33  triaz + strob       Lawrence ref 22          2
-## 34  triaz + strob   Mueller et al ref 9          4
-## 35  triaz + strob        Mueller ref 36         10
-## 36  triaz + strob        Mueller ref 37          7
-## 37  triaz + strob        Mueller ref 38          6
-## 38  triaz + strob        Mueller ref 40          1
-## 39  triaz + strob        Mueller ref 43          5
-## 40  triaz + strob        Mueller ref 45          1
-## 41  triaz + strob  Padgett et al ref 54          3
-## 42  triaz + strob    Price et al ref 35          6
-## 43  triaz + strob         Sikora ref 23         11
-## 44       triazole        Delaney ref 30          2
-## 45       triazole        Delaney ref 31          2
-## 46       triazole        Delaney ref 34          4
-## 47       triazole  Douglas et al ref 65          4
-## 48       triazole  Douglas et al ref 66         11
-## 49       triazole       Kemerait ref 46          1
-## 50       triazole  Lawrence et al ref 3          1
-## 51       triazole  lawrence et al ref 4          1
-## 52       triazole Lawrence et al ref 55          1
-## 53       triazole Lawrence et al ref 62          1
-## 54       triazole       Lawrence ref 16          3
-## 55       triazole       Lawrence ref 18          1
-## 56       triazole       Lawrence ref 21          1
-## 57       triazole       Lawrence ref 41          1
-## 58       triazole   Mueller et al ref 9          2
-## 59       triazole        Mueller ref 36          6
-## 60       triazole        Mueller ref 37          2
-## 61       triazole        Mueller ref 39          2
-## 62       triazole        Mueller ref 43          3
-## 63       triazole        Mueller ref 45         15
-## 64       triazole  Padgett et al ref 54          1
-## 65       triazole    Price et al ref 35          6
-## 66           &lt;NA&gt;  Douglas et al ref 65          2
-## 67           &lt;NA&gt;  Douglas et al ref 66          1
-## 68           &lt;NA&gt;       Kemerait ref 46          1
-## 69           &lt;NA&gt;  Lawrence et al ref 3          2
-## 70           &lt;NA&gt; Lawrence et al ref 53          1
-## 71           &lt;NA&gt; Lawrence et al ref 55          1
-## 72           &lt;NA&gt; Lawrence et al ref 62          2
-## 73           &lt;NA&gt;       Lawrence ref 22          1
-## 74           &lt;NA&gt;       Lawrence ref 41          4
-## 75           &lt;NA&gt;   Mueller et al ref 9          2
-## 76           &lt;NA&gt;        Mueller ref 37          1
-## 77           &lt;NA&gt;        Mueller ref 39          4
-## 78           &lt;NA&gt;        Mueller ref 40          2
-## 79           &lt;NA&gt;        Mueller ref 45          1
-## 80           &lt;NA&gt;         Sikora ref 42          3
+<pre><code>##     category_class         alphaIngred             Reference FID.length
+## 1      strobilurin           AZO + PYR        Mueller ref 37          1
+## 2      strobilurin          FLUX + PYR        Delaney ref 30          1
+## 3      strobilurin          FLUX + PYR        Delaney ref 31          1
+## 4      strobilurin          FLUX + PYR        Delaney ref 34          2
+## 5    triaz + strob          AZO + CYPR       Lawrence ref 16          1
+## 6    triaz + strob          AZO + CYPR  Padgett et al ref 54          1
+## 7    triaz + strob           AZO + DIF        Delaney ref 30          1
+## 8    triaz + strob           AZO + DIF        Delaney ref 31          1
+## 9    triaz + strob           AZO + DIF        Delaney ref 34          1
+## 10   triaz + strob          AZO + FLUT        Mueller ref 37          1
+## 11   triaz + strob          AZO + FLUT    Price et al ref 35          6
+## 12   triaz + strob   AZO + FLUT + PROP         Sikora ref 23          1
+## 13   triaz + strob           AZO + MYC        Mueller ref 37          1
+## 14   triaz + strob    AZO + MYC + PROP         Sikora ref 23          1
+## 15   triaz + strob          AZO + PROP        Delaney ref 30          1
+## 16   triaz + strob          AZO + PROP        Delaney ref 31          1
+## 17   triaz + strob          AZO + PROP        Delaney ref 34          1
+## 18   triaz + strob          AZO + PROP Lawrence et al ref 68          1
+## 19   triaz + strob          AZO + PROP        Mueller ref 36          5
+## 20   triaz + strob          AZO + PROP        Mueller ref 43          5
+## 21   triaz + strob          AZO + PROP   Sikora et al ref 74          1
+## 22   triaz + strob          AZO + PROP         Sikora ref 23          1
+## 23   triaz + strob   AZO + PROP + TEBU        Mueller ref 37          1
+## 24   triaz + strob   AZO + PROP + TEBU         Sikora ref 23          1
+## 25   triaz + strob          AZO + TEBU        Mueller ref 37          1
+## 26   triaz + strob          AZO + TETR        Mueller ref 40          1
+## 27   triaz + strob         CYPR + PICO Lawrence et al ref 68          3
+## 28   triaz + strob         FAMO + FLUS Lawrence et al ref 55          1
+## 29   triaz + strob         FAMO + FLUZ  lawrence et al ref 4          2
+## 30   triaz + strob           FEN + PYR        Mueller ref 38          2
+## 31   triaz + strob         FLUS + PICO       Lawrence ref 16          1
+## 32   triaz + strob          FLUS + PYR Lawrence et al ref 53          1
+## 33   triaz + strob          FLUS + PYR Lawrence et al ref 55          2
+## 34   triaz + strob          FLUS + PYR       Lawrence ref 22          2
+## 35   triaz + strob         FLUT + FLUX        Delaney ref 32          4
+## 36   triaz + strob  FLUT + PROP + TRIF         Sikora ref 23          1
+## 37   triaz + strob          FLUT + PYR        Delaney ref 30          1
+## 38   triaz + strob          FLUT + PYR        Delaney ref 31          1
+## 39   triaz + strob          FLUT + PYR  Douglas et al ref 66          1
+## 40   triaz + strob          FLUT + PYR        Mueller ref 45          1
+## 41   triaz + strob          FLUT + PYR         Sikora ref 23          1
+## 42   triaz + strob           MET + PYR  Padgett et al ref 54          1
+## 43   triaz + strob   MYC + PROP + TRIF         Sikora ref 23          1
+## 44   triaz + strob           MYC + PYR        Mueller ref 38          4
+## 45   triaz + strob           MYC + PYR         Sikora ref 23          1
+## 46   triaz + strob  PROP + PROT + TRIF       Lawrence ref 16          1
+## 47   triaz + strob  PROP + TEBU + TRIF       Lawrence ref 21          3
+## 48   triaz + strob  PROP + TEBU + TRIF        Mueller ref 37          1
+## 49   triaz + strob  PROP + TEBU + TRIF         Sikora ref 23          1
+## 50   triaz + strob         PROP + TRIF  Douglas et al ref 65          1
+## 51   triaz + strob         PROP + TRIF       Lawrence ref 16          1
+## 52   triaz + strob         PROP + TRIF       Lawrence ref 18          1
+## 53   triaz + strob         PROP + TRIF   Mueller et al ref 9          1
+## 54   triaz + strob         PROP + TRIF        Mueller ref 37          1
+## 55   triaz + strob         PROP + TRIF         Sikora ref 23          1
+## 56   triaz + strob         PROT + TRIF        Delaney ref 30          1
+## 57   triaz + strob         PROT + TRIF        Delaney ref 31          1
+## 58   triaz + strob         PROT + TRIF        Delaney ref 34          1
+## 59   triaz + strob          PYR + TEBU Lawrence et al ref 62          1
+## 60   triaz + strob          PYR + TEBU       Lawrence ref 16          1
+## 61   triaz + strob          PYR + TEBU        Mueller ref 36          5
+## 62   triaz + strob          PYR + TEBU        Mueller ref 37          1
+## 63   triaz + strob          PYR + TEBU   Sikora et al ref 74          1
+## 64   triaz + strob          PYR + TEBU         Sikora ref 23          1
+## 65   triaz + strob         TEBU + TRIF       Lawrence ref 18          1
+## 66   triaz + strob         TEBU + TRIF       Lawrence ref 21          2
+## 67   triaz + strob         TEBU + TRIF   Mueller et al ref 9          2
+## 68   triaz + strob         TEBU + TRIF  Padgett et al ref 54          1
+## 69   triaz + strob   TEBU + TRIF + OTH   Mueller et al ref 9          1
+## 70        triazole        PROP fb FLUT   Sikora et al ref 74          1
+## 71        triazole         PROP fb MYC   Sikora et al ref 74          1
+## 72        triazole        PROP fb TEBU   Sikora et al ref 74          1
+## 73            &lt;NA&gt;  AZO + CYPR fb CYPR  Douglas et al ref 65          1
+## 74            &lt;NA&gt;          AZO + FLUS Lawrence et al ref 55          1
+## 75            &lt;NA&gt;           AZO + ORG         Sikora ref 42          3
+## 76            &lt;NA&gt;  CARB + FLUS + PICO  Douglas et al ref 65          1
+## 77            &lt;NA&gt;          CHL + TEBU        Mueller ref 37          1
+## 78            &lt;NA&gt;        COPPER + OTH       Lawrence ref 41          1
+## 79            &lt;NA&gt;       COPPER + TEBU        Mueller ref 39          1
+## 80            &lt;NA&gt;         CROP + TETR        Mueller ref 40          1
+## 81            &lt;NA&gt;          ETH + FLUT        Mueller ref 45          1
+## 82            &lt;NA&gt;           ETH + OTH       Lawrence ref 41          1
+## 83            &lt;NA&gt;          ETH + TEBU        Mueller ref 39          1
+## 84            &lt;NA&gt;          FLUS + OTH Lawrence et al ref 53          1
+## 85            &lt;NA&gt;          FLUS + OTH       Lawrence ref 22          1
+## 86            &lt;NA&gt;         FLUT + THIO  Douglas et al ref 66          1
+## 87            &lt;NA&gt;           MYC + OTH  Douglas et al ref 65          1
+## 88            &lt;NA&gt;         ORTH + TETR        Mueller ref 40          1
+## 89            &lt;NA&gt;          OTH + THIO       Lawrence ref 41          1
+## 90            &lt;NA&gt; PROP + TRIF fb FLUT   Sikora et al ref 74          1
+## 91            &lt;NA&gt;  PROP + TRIF fb MYC   Sikora et al ref 74          1
+## 92            &lt;NA&gt; PROP + TRIF fb TEBU   Sikora et al ref 74          1
+## 93            &lt;NA&gt;  PYR + TEBU fb FLUT   Sikora et al ref 74          1
+## 94            &lt;NA&gt;   PYR + TEBU fb MYC   Sikora et al ref 74          1
+## 95            &lt;NA&gt;  PYR + TEBU fb TEBU   Sikora et al ref 74          1
+## 96            &lt;NA&gt;         PYR fb TEBU  Douglas et al ref 65          1
+## 97            &lt;NA&gt;         PYR fb TEBU        Mueller ref 43          2
+## 98            &lt;NA&gt;           SUL + OTH       Kemerait ref 46          1
+## 99            &lt;NA&gt;           SUL + OTH       Lawrence ref 41          1
+## 100           &lt;NA&gt;          SUL + TEBU        Mueller ref 39          1
+## 101           &lt;NA&gt;         SURF + TEBU   Mueller et al ref 9          2
+## 102           &lt;NA&gt;         TEBU + THIO  Lawrence et al ref 3          2
+## 103           &lt;NA&gt;         TEBU + THIO Lawrence et al ref 62          2
+## 104           &lt;NA&gt;         TEBU + THIO        Mueller ref 39          1
+## 105           &lt;NA&gt;         TEBU fb PYR        Mueller ref 36          1
+## 106           &lt;NA&gt;         TEBU fb PYR        Mueller ref 43          2
+</code></pre>
+
+<pre><code class="r">table(rust.data$category_ai)
+</code></pre>
+
+<pre><code>## 
+##  FLUT MIXED   PYR  TEBU 
+##    40   129    25    31
+</code></pre>
+
+<pre><code class="r">unique(rust.data$Reference[rust.data$category_ai==&quot;FLUT&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                 Price et al ref 35   Mueller ref 37      
+##  [4] Mueller ref 45       Padgett et al ref 54 Douglas et al ref 65
+##  [7] Douglas et al ref 66 Lawrence ref 16      Delaney ref 30      
+## [10] Delaney ref 31       Delaney ref 34      
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+</code></pre>
+
+<pre><code class="r">unique(rust.data$Reference[rust.data$category_ai==&quot;MIXED&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                  Mueller et al ref 9   Lawrence ref 21      
+##  [4] Lawrence ref 22       Sikora ref 23         Price et al ref 35   
+##  [7] Mueller ref 36        Mueller ref 37        Mueller ref 38       
+## [10] Mueller ref 39        Mueller ref 40        Sikora ref 42        
+## [13] Mueller ref 45        Padgett et al ref 54  Douglas et al ref 65 
+## [16] Douglas et al ref 66  Lawrence et al ref 3  lawrence et al ref 4 
+## [19] Lawrence ref 16       Lawrence ref 18       Delaney ref 30       
+## [22] Delaney ref 31        Delaney ref 32        Delaney ref 34       
+## [25] Lawrence ref 41       Mueller ref 43        Kemerait ref 46      
+## [28] Lawrence et al ref 53 Lawrence et al ref 55 Lawrence et al ref 62
+## [31] Lawrence et al ref 68
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+</code></pre>
+
+<pre><code class="r">unique(rust.data$Reference[rust.data$category_ai==&quot;PYR&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                  Mueller et al  ref 1  Mueller et al ref 9  
+##  [4] Lawrence ref 22       Sikora ref 23         Mueller ref 36       
+##  [7] Mueller ref 37        Mueller ref 39        Harmon ref 47        
+## [10] Padgett et al ref 54  Douglas et al ref 65  Lawrence et al ref 3 
+## [13] Lawrence ref 16       Delaney ref 30        Delaney ref 31       
+## [16] Lawrence ref 41       Mueller ref 43        Lawrence et al ref 55
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+</code></pre>
+
+<pre><code class="r">unique(rust.data$Reference[rust.data$category_ai==&quot;TEBU&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                  Mueller et al ref 9   Lawrence ref 21      
+##  [4] Mueller ref 36        Mueller ref 37        Mueller ref 39       
+##  [7] Mueller ref 45        Douglas et al ref 65  Douglas et al ref 66 
+## [10] Lawrence et al ref 3  lawrence et al ref 4  Lawrence ref 16      
+## [13] Lawrence ref 18       Delaney ref 30        Delaney ref 31       
+## [16] Delaney ref 34        Lawrence ref 41       Mueller ref 43       
+## [19] Kemerait ref 46       Lawrence et al ref 55 Lawrence et al ref 62
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
 </code></pre>
 
 <p>Yield</p>
 
-<pre><code class="r">summaryBy(FID~category_class+alphaIngred+Reference, 
+<pre><code class="r">yield.data$temp &lt;- paste0(yield.data$Reference,&quot;:&quot;,
+                         yield.data$category_class)
+length(unique(yield.data$temp[yield.data$category_class==&quot;strobilurin&quot;]))
+</code></pre>
+
+<pre><code>## [1] 19
+</code></pre>
+
+<pre><code class="r">length(unique(yield.data$temp[yield.data$category_class==&quot;triazole&quot;]))
+</code></pre>
+
+<pre><code>## [1] 24
+</code></pre>
+
+<pre><code class="r">length(unique(yield.data$temp[yield.data$category_class==&quot;triaz + strob&quot;]))
+</code></pre>
+
+<pre><code>## [1] 25
+</code></pre>
+
+<pre><code class="r">summaryBy(FID~category_class, 
           data = yield.data[! is.na(yield.data$category_class),], FUN=length)
 </code></pre>
 
-<pre><code>##     category_class        alphaIngred             Reference FID.length
-## 1      strobilurin          AZO + PYR        Mueller ref 37          1
-## 2      strobilurin         FLUX + PYR        Delaney ref 30          1
-## 3      strobilurin         FLUX + PYR        Delaney ref 31          1
-## 4      strobilurin         FLUX + PYR        Delaney ref 34          2
-## 5      strobilurin               &lt;NA&gt;        Delaney ref 30          1
-## 6      strobilurin               &lt;NA&gt;        Delaney ref 31          1
-## 7      strobilurin               &lt;NA&gt;        Delaney ref 34          1
-## 8      strobilurin               &lt;NA&gt;  Douglas et al ref 65          1
-## 9      strobilurin               &lt;NA&gt;         Harmon ref 47          1
-## 10     strobilurin               &lt;NA&gt;  Lawrence et al ref 3          1
-## 11     strobilurin               &lt;NA&gt; Lawrence et al ref 55          2
-## 12     strobilurin               &lt;NA&gt; Lawrence et al ref 68          1
-## 13     strobilurin               &lt;NA&gt;       Lawrence ref 16          2
-## 14     strobilurin               &lt;NA&gt;       Lawrence ref 22          4
-## 15     strobilurin               &lt;NA&gt;       Lawrence ref 41          1
-## 16     strobilurin               &lt;NA&gt;  Mueller et al  ref 1          1
-## 17     strobilurin               &lt;NA&gt;   Mueller et al ref 9          1
-## 18     strobilurin               &lt;NA&gt;        Mueller ref 36          6
-## 19     strobilurin               &lt;NA&gt;        Mueller ref 37          2
-## 20     strobilurin               &lt;NA&gt;        Mueller ref 39          1
-## 21     strobilurin               &lt;NA&gt;         Sikora ref 23          1
-## 22     strobilurin               &lt;NA&gt;         Sikora ref 42          1
-## 23   triaz + strob         AZO + CYPR       Lawrence ref 16          1
-## 24   triaz + strob          AZO + DIF        Delaney ref 30          1
-## 25   triaz + strob          AZO + DIF        Delaney ref 31          1
-## 26   triaz + strob          AZO + DIF        Delaney ref 34          1
-## 27   triaz + strob         AZO + FLUT        Mueller ref 37          1
-## 28   triaz + strob         AZO + FLUT    Price et al ref 35          6
-## 29   triaz + strob  AZO + FLUT + PROP         Sikora ref 23          1
-## 30   triaz + strob          AZO + MYC        Mueller ref 37          1
-## 31   triaz + strob   AZO + MYC + PROP         Sikora ref 23          1
-## 32   triaz + strob         AZO + PROP        Delaney ref 30          1
-## 33   triaz + strob         AZO + PROP        Delaney ref 31          1
-## 34   triaz + strob         AZO + PROP        Delaney ref 34          1
-## 35   triaz + strob         AZO + PROP Lawrence et al ref 68          1
-## 36   triaz + strob         AZO + PROP        Mueller ref 36          5
-## 37   triaz + strob         AZO + PROP   Sikora et al ref 74          1
-## 38   triaz + strob         AZO + PROP         Sikora ref 23          1
-## 39   triaz + strob  AZO + PROP + TEBU        Mueller ref 37          1
-## 40   triaz + strob  AZO + PROP + TEBU         Sikora ref 23          1
-## 41   triaz + strob         AZO + TEBU        Mueller ref 37          1
-## 42   triaz + strob         AZO + TETR        Mueller ref 40          1
-## 43   triaz + strob        CYPR + PICO Lawrence et al ref 68          3
-## 44   triaz + strob        FAMO + FLUS Lawrence et al ref 55          1
-## 45   triaz + strob        FAMO + FLUZ  lawrence et al ref 4          2
-## 46   triaz + strob          FEN + PYR        Mueller ref 38          2
-## 47   triaz + strob        FLUS + PICO       Lawrence ref 16          1
-## 48   triaz + strob         FLUS + PYR Lawrence et al ref 53          1
-## 49   triaz + strob         FLUS + PYR Lawrence et al ref 55          1
-## 50   triaz + strob         FLUS + PYR       Lawrence ref 22          2
-## 51   triaz + strob        FLUT + FLUX        Delaney ref 32          4
-## 52   triaz + strob FLUT + PROP + TRIF         Sikora ref 23          1
-## 53   triaz + strob         FLUT + PYR        Delaney ref 30          1
-## 54   triaz + strob         FLUT + PYR        Delaney ref 31          1
-## 55   triaz + strob         FLUT + PYR  Douglas et al ref 66          1
-## 56   triaz + strob         FLUT + PYR        Mueller ref 45          1
-## 57   triaz + strob         FLUT + PYR         Sikora ref 23          1
-## 58   triaz + strob  MYC + PROP + TRIF         Sikora ref 23          1
-## 59   triaz + strob          MYC + PYR        Mueller ref 38          4
-## 60   triaz + strob          MYC + PYR         Sikora ref 23          1
-## 61   triaz + strob PROP + PROT + TRIF       Lawrence ref 16          1
-## 62   triaz + strob PROP + TEBU + TRIF       Lawrence ref 21          3
-## 63   triaz + strob PROP + TEBU + TRIF        Mueller ref 37          1
-## 64   triaz + strob PROP + TEBU + TRIF         Sikora ref 23          1
-## 65   triaz + strob        PROP + TRIF  Douglas et al ref 65          1
-## 66   triaz + strob        PROP + TRIF       Lawrence ref 16          1
-## 67   triaz + strob        PROP + TRIF       Lawrence ref 18          1
-## 68   triaz + strob        PROP + TRIF   Mueller et al ref 9          1
-## 69   triaz + strob        PROP + TRIF        Mueller ref 37          1
-## 70   triaz + strob        PROP + TRIF         Sikora ref 23          1
-## 71   triaz + strob        PROT + TRIF        Delaney ref 30          1
-## 72   triaz + strob        PROT + TRIF        Delaney ref 31          1
-## 73   triaz + strob        PROT + TRIF        Delaney ref 34          1
-## 74   triaz + strob         PYR + TEBU Lawrence et al ref 62          1
-## 75   triaz + strob         PYR + TEBU       Lawrence ref 16          1
-## 76   triaz + strob         PYR + TEBU        Mueller ref 36          5
-## 77   triaz + strob         PYR + TEBU        Mueller ref 37          1
-## 78   triaz + strob         PYR + TEBU   Sikora et al ref 74          1
-## 79   triaz + strob         PYR + TEBU         Sikora ref 23          1
-## 80   triaz + strob        TEBU + TRIF       Lawrence ref 18          1
-## 81   triaz + strob        TEBU + TRIF       Lawrence ref 21          2
-## 82   triaz + strob        TEBU + TRIF   Mueller et al ref 9          2
-## 83   triaz + strob  TEBU + TRIF + OTH   Mueller et al ref 9          1
-## 84        triazole       PROP fb FLUT   Sikora et al ref 74          1
-## 85        triazole        PROP fb MYC   Sikora et al ref 74          1
-## 86        triazole       PROP fb TEBU   Sikora et al ref 74          1
-## 87        triazole               &lt;NA&gt;        Delaney ref 30          3
-## 88        triazole               &lt;NA&gt;        Delaney ref 31          3
-## 89        triazole               &lt;NA&gt;        Delaney ref 34          6
-## 90        triazole               &lt;NA&gt;  Douglas et al ref 65          8
-## 91        triazole               &lt;NA&gt;  Douglas et al ref 66         11
-## 92        triazole               &lt;NA&gt;       Kemerait ref 46          1
-## 93        triazole               &lt;NA&gt;  Lawrence et al ref 3          1
-## 94        triazole               &lt;NA&gt;  lawrence et al ref 4          3
-## 95        triazole               &lt;NA&gt; Lawrence et al ref 53          1
-## 96        triazole               &lt;NA&gt; Lawrence et al ref 55          4
-## 97        triazole               &lt;NA&gt; Lawrence et al ref 62          1
-## 98        triazole               &lt;NA&gt;       Lawrence ref 16          6
-## 99        triazole               &lt;NA&gt;       Lawrence ref 18          1
-## 100       triazole               &lt;NA&gt;       Lawrence ref 21          1
-## 101       triazole               &lt;NA&gt;       Lawrence ref 41          1
-## 102       triazole               &lt;NA&gt;   Mueller et al ref 9          2
-## 103       triazole               &lt;NA&gt;        Mueller ref 36          6
-## 104       triazole               &lt;NA&gt;        Mueller ref 37          4
-## 105       triazole               &lt;NA&gt;        Mueller ref 39          2
-## 106       triazole               &lt;NA&gt;        Mueller ref 40          1
-## 107       triazole               &lt;NA&gt;        Mueller ref 45         15
-## 108       triazole               &lt;NA&gt;    Price et al ref 35          6
-## 109       triazole               &lt;NA&gt;   Sikora et al ref 74          1
+<pre><code>##   category_class FID.length
+## 1    strobilurin         34
+## 2  triaz + strob         89
+## 3       triazole         91
 </code></pre>
 
-<pre><code class="r">summaryBy(FID~category_ai+Reference, 
-          data = yield.data[! is.na(yield.data$category_ai),], FUN=length)
+<pre><code class="r">table(yield.data$category_ai)
 </code></pre>
 
-<pre><code>##    category_ai             Reference FID.length
-## 1         FLUT        Delaney ref 30          1
-## 2         FLUT        Delaney ref 31          1
-## 3         FLUT        Delaney ref 34          2
-## 4         FLUT  Douglas et al ref 65          2
-## 5         FLUT  Douglas et al ref 66         10
-## 6         FLUT       Lawrence ref 16          2
-## 7         FLUT        Mueller ref 37          1
-## 8         FLUT        Mueller ref 45         14
-## 9         FLUT    Price et al ref 35          6
-## 10       MIXED        Delaney ref 30          5
-## 11       MIXED        Delaney ref 31          5
-## 12       MIXED        Delaney ref 32          4
-## 13       MIXED        Delaney ref 34          5
-## 14       MIXED  Douglas et al ref 65          3
-## 15       MIXED  Douglas et al ref 66          2
-## 16       MIXED       Kemerait ref 46          1
-## 17       MIXED  Lawrence et al ref 3          2
-## 18       MIXED  lawrence et al ref 4          2
-## 19       MIXED Lawrence et al ref 53          2
-## 20       MIXED Lawrence et al ref 55          3
-## 21       MIXED Lawrence et al ref 62          3
-## 22       MIXED Lawrence et al ref 68          4
-## 23       MIXED       Lawrence ref 16          5
-## 24       MIXED       Lawrence ref 18          2
-## 25       MIXED       Lawrence ref 21          5
-## 26       MIXED       Lawrence ref 22          3
-## 27       MIXED       Lawrence ref 41          3
-## 28       MIXED   Mueller et al ref 9          6
-## 29       MIXED        Mueller ref 36         10
-## 30       MIXED        Mueller ref 37          9
-## 31       MIXED        Mueller ref 38          6
-## 32       MIXED        Mueller ref 39          4
-## 33       MIXED        Mueller ref 40          3
-## 34       MIXED        Mueller ref 45          2
-## 35       MIXED    Price et al ref 35          6
-## 36       MIXED         Sikora ref 23         11
-## 37       MIXED         Sikora ref 42          3
-## 38         PYR        Delaney ref 30          1
-## 39         PYR        Delaney ref 31          1
-## 40         PYR  Douglas et al ref 65          1
-## 41         PYR         Harmon ref 47          1
-## 42         PYR  Lawrence et al ref 3          1
-## 43         PYR Lawrence et al ref 55          1
-## 44         PYR       Lawrence ref 16          1
-## 45         PYR       Lawrence ref 22          1
-## 46         PYR       Lawrence ref 41          1
-## 47         PYR  Mueller et al  ref 1          1
-## 48         PYR   Mueller et al ref 9          1
-## 49         PYR        Mueller ref 36          6
-## 50         PYR        Mueller ref 37          1
-## 51         PYR        Mueller ref 39          1
-## 52         PYR         Sikora ref 23          1
-## 53        TEBU        Delaney ref 30          1
-## 54        TEBU        Delaney ref 31          1
-## 55        TEBU        Delaney ref 34          2
-## 56        TEBU  Douglas et al ref 65          2
-## 57        TEBU  Douglas et al ref 66          1
-## 58        TEBU       Kemerait ref 46          1
-## 59        TEBU  Lawrence et al ref 3          1
-## 60        TEBU  lawrence et al ref 4          1
-## 61        TEBU Lawrence et al ref 55          1
-## 62        TEBU Lawrence et al ref 62          1
-## 63        TEBU       Lawrence ref 16          1
-## 64        TEBU       Lawrence ref 18          1
-## 65        TEBU       Lawrence ref 21          1
-## 66        TEBU       Lawrence ref 41          1
-## 67        TEBU   Mueller et al ref 9          2
-## 68        TEBU        Mueller ref 36          6
-## 69        TEBU        Mueller ref 37          1
-## 70        TEBU        Mueller ref 39          2
-## 71        TEBU        Mueller ref 45          1
+<pre><code>## 
+##  FLUT MIXED   PYR  TEBU 
+##    39   119    20    28
+</code></pre>
+
+<pre><code class="r">unique(yield.data$Reference[yield.data$category_ai==&quot;FLUT&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                 Lawrence ref 16      Delaney ref 30      
+##  [4] Delaney ref 31       Delaney ref 34       Price et al ref 35  
+##  [7] Mueller ref 37       Mueller ref 45       Douglas et al ref 65
+## [10] Douglas et al ref 66
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+</code></pre>
+
+<pre><code class="r">unique(yield.data$Reference[yield.data$category_ai==&quot;MIXED&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                  Lawrence et al ref 3  lawrence et al ref 4 
+##  [4] Mueller et al ref 9   Lawrence ref 16       Lawrence ref 18      
+##  [7] Lawrence ref 21       Lawrence ref 22       Sikora ref 23        
+## [10] Delaney ref 30        Delaney ref 31        Delaney ref 32       
+## [13] Delaney ref 34        Price et al ref 35    Mueller ref 36       
+## [16] Mueller ref 37        Mueller ref 38        Mueller ref 39       
+## [19] Mueller ref 40        Lawrence ref 41       Sikora ref 42        
+## [22] Mueller ref 45        Kemerait ref 46       Lawrence et al ref 53
+## [25] Lawrence et al ref 55 Lawrence et al ref 62 Douglas et al ref 65 
+## [28] Douglas et al ref 66  Lawrence et al ref 68
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+</code></pre>
+
+<pre><code class="r">unique(yield.data$Reference[yield.data$category_ai==&quot;PYR&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                  Mueller et al  ref 1  Lawrence et al ref 3 
+##  [4] Mueller et al ref 9   Lawrence ref 16       Lawrence ref 22      
+##  [7] Sikora ref 23         Delaney ref 30        Delaney ref 31       
+## [10] Mueller ref 36        Mueller ref 37        Mueller ref 39       
+## [13] Lawrence ref 41       Harmon ref 47         Lawrence et al ref 55
+## [16] Douglas et al ref 65 
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+</code></pre>
+
+<pre><code class="r">unique(yield.data$Reference[yield.data$category_ai==&quot;TEBU&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                  Lawrence et al ref 3  lawrence et al ref 4 
+##  [4] Mueller et al ref 9   Lawrence ref 16       Lawrence ref 18      
+##  [7] Lawrence ref 21       Delaney ref 30        Delaney ref 31       
+## [10] Delaney ref 34        Mueller ref 36        Mueller ref 37       
+## [13] Mueller ref 39        Mueller ref 45        Kemerait ref 46      
+## [16] Lawrence et al ref 55 Lawrence et al ref 62 Douglas et al ref 65 
+## [19] Douglas et al ref 66  Lawrence ref 41      
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
 </code></pre>
 
 <p>100-seed-weight</p>
 
-<pre><code class="r">summaryBy(FID~category_class+alphaIngred+Reference, 
+<pre><code class="r">seedwt.data$temp &lt;- paste0(seedwt.data$Reference,&quot;:&quot;,
+                          seedwt.data$category_class)
+length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quot;]))
+</code></pre>
+
+<pre><code>## [1] 9
+</code></pre>
+
+<pre><code class="r">length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;triazole&quot;]))
+</code></pre>
+
+<pre><code>## [1] 11
+</code></pre>
+
+<pre><code class="r">length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;triaz + strob&quot;]))
+</code></pre>
+
+<pre><code>## [1] 12
+</code></pre>
+
+<pre><code class="r">summaryBy(FID~category_class, 
           data = seedwt.data[! is.na(seedwt.data$category_class),], FUN=length)
 </code></pre>
 
-<pre><code>##    category_class        alphaIngred            Reference FID.length
-## 1     strobilurin          AZO + PYR       Mueller ref 37          1
-## 2     strobilurin         FLUX + PYR       Delaney ref 30          1
-## 3     strobilurin         FLUX + PYR       Delaney ref 34          2
-## 4     strobilurin               &lt;NA&gt;       Delaney ref 30          1
-## 5     strobilurin               &lt;NA&gt;       Delaney ref 34          1
-## 6     strobilurin               &lt;NA&gt; Douglas et al ref 65          1
-## 7     strobilurin               &lt;NA&gt; Mueller et al  ref 1          1
-## 8     strobilurin               &lt;NA&gt;  Mueller et al ref 9          1
-## 9     strobilurin               &lt;NA&gt;       Mueller ref 36          6
-## 10    strobilurin               &lt;NA&gt;       Mueller ref 37          2
-## 11    strobilurin               &lt;NA&gt;       Mueller ref 39          1
-## 12  triaz + strob          AZO + DIF       Delaney ref 30          1
-## 13  triaz + strob          AZO + DIF       Delaney ref 34          1
-## 14  triaz + strob         AZO + FLUT       Mueller ref 37          1
-## 15  triaz + strob          AZO + MYC       Mueller ref 37          1
-## 16  triaz + strob         AZO + PROP       Delaney ref 30          1
-## 17  triaz + strob         AZO + PROP       Delaney ref 34          1
-## 18  triaz + strob         AZO + PROP       Mueller ref 36          5
-## 19  triaz + strob  AZO + PROP + TEBU       Mueller ref 37          1
-## 20  triaz + strob         AZO + TEBU       Mueller ref 37          1
-## 21  triaz + strob         AZO + TETR       Mueller ref 40          1
-## 22  triaz + strob          FEN + PYR       Mueller ref 38          2
-## 23  triaz + strob        FLUT + FLUX       Delaney ref 32          4
-## 24  triaz + strob         FLUT + PYR       Delaney ref 30          1
-## 25  triaz + strob         FLUT + PYR Douglas et al ref 66          1
-## 26  triaz + strob         FLUT + PYR       Mueller ref 45          1
-## 27  triaz + strob          MYC + PYR       Mueller ref 38          4
-## 28  triaz + strob PROP + TEBU + TRIF       Mueller ref 37          1
-## 29  triaz + strob        PROP + TRIF Douglas et al ref 65          1
-## 30  triaz + strob        PROP + TRIF  Mueller et al ref 9          1
-## 31  triaz + strob        PROP + TRIF       Mueller ref 37          1
-## 32  triaz + strob        PROT + TRIF       Delaney ref 30          1
-## 33  triaz + strob        PROT + TRIF       Delaney ref 34          1
-## 34  triaz + strob         PYR + TEBU       Mueller ref 36          5
-## 35  triaz + strob         PYR + TEBU       Mueller ref 37          1
-## 36  triaz + strob        TEBU + TRIF  Mueller et al ref 9          2
-## 37  triaz + strob  TEBU + TRIF + OTH  Mueller et al ref 9          1
-## 38       triazole               &lt;NA&gt;       Delaney ref 30          3
-## 39       triazole               &lt;NA&gt;       Delaney ref 34          6
-## 40       triazole               &lt;NA&gt; Douglas et al ref 65          8
-## 41       triazole               &lt;NA&gt; Douglas et al ref 66         11
-## 42       triazole               &lt;NA&gt;  Mueller et al ref 9          2
-## 43       triazole               &lt;NA&gt;       Mueller ref 36          6
-## 44       triazole               &lt;NA&gt;       Mueller ref 37          4
-## 45       triazole               &lt;NA&gt;       Mueller ref 39          2
-## 46       triazole               &lt;NA&gt;       Mueller ref 40          1
-## 47       triazole               &lt;NA&gt;       Mueller ref 45         15
+<pre><code>##   category_class FID.length
+## 1    strobilurin         18
+## 2  triaz + strob         42
+## 3       triazole         58
 </code></pre>
 
-<pre><code class="r">summaryBy(FID~category_ai+Reference, 
-          data = seedwt.data[! is.na(seedwt.data$category_ai),], FUN=length)
+<pre><code class="r">table(seedwt.data$category_ai)
 </code></pre>
 
-<pre><code>##    category_ai            Reference FID.length
-## 1         FLUT       Delaney ref 30          1
-## 2         FLUT       Delaney ref 34          2
-## 3         FLUT Douglas et al ref 65          2
-## 4         FLUT Douglas et al ref 66         10
-## 5         FLUT       Mueller ref 37          1
-## 6         FLUT       Mueller ref 45         14
-## 7        MIXED       Delaney ref 30          5
-## 8        MIXED       Delaney ref 32          4
-## 9        MIXED       Delaney ref 34          5
-## 10       MIXED Douglas et al ref 65          3
-## 11       MIXED Douglas et al ref 66          2
-## 12       MIXED  Mueller et al ref 9          6
-## 13       MIXED       Mueller ref 36         10
-## 14       MIXED       Mueller ref 37          9
-## 15       MIXED       Mueller ref 38          6
-## 16       MIXED       Mueller ref 39          4
-## 17       MIXED       Mueller ref 40          3
-## 18       MIXED       Mueller ref 45          2
-## 19        TEBU       Delaney ref 30          1
-## 20        TEBU       Delaney ref 34          2
-## 21        TEBU Douglas et al ref 65          2
-## 22        TEBU Douglas et al ref 66          1
-## 23        TEBU  Mueller et al ref 9          2
-## 24        TEBU       Mueller ref 36          6
-## 25        TEBU       Mueller ref 37          1
-## 26        TEBU       Mueller ref 39          2
-## 27        TEBU       Mueller ref 45          1
+<pre><code>## 
+##  FLUT MIXED  TEBU 
+##    30    59    18
+</code></pre>
+
+<pre><code class="r">unique(seedwt.data$Reference[seedwt.data$category_ai==&quot;FLUT&quot;])
+</code></pre>
+
+<pre><code>## [1] &lt;NA&gt;                 Delaney ref 30       Delaney ref 34      
+## [4] Mueller ref 37       Mueller ref 45       Douglas et al ref 65
+## [7] Douglas et al ref 66
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+</code></pre>
+
+<pre><code class="r">unique(seedwt.data$Reference[seedwt.data$category_ai==&quot;MIXED&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                 Mueller et al ref 9  Delaney ref 30      
+##  [4] Delaney ref 32       Delaney ref 34       Mueller ref 36      
+##  [7] Mueller ref 37       Mueller ref 38       Mueller ref 39      
+## [10] Mueller ref 40       Mueller ref 45       Douglas et al ref 65
+## [13] Douglas et al ref 66
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+</code></pre>
+
+<pre><code class="r">unique(seedwt.data$Reference[seedwt.data$category_ai==&quot;TEBU&quot;])
+</code></pre>
+
+<pre><code>##  [1] &lt;NA&gt;                 Mueller et al ref 9  Delaney ref 30      
+##  [4] Delaney ref 34       Mueller ref 36       Mueller ref 37      
+##  [7] Mueller ref 39       Mueller ref 45       Douglas et al ref 65
+## [10] Douglas et al ref 66
+## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
 </code></pre>
 
 <h3>Footer</h3>
