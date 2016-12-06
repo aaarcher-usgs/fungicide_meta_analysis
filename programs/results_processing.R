@@ -225,6 +225,33 @@ unique(seedwt.data$Reference[seedwt.data$category_ai=="FLUT"])
 unique(seedwt.data$Reference[seedwt.data$category_ai=="MIXED"])
 unique(seedwt.data$Reference[seedwt.data$category_ai=="TEBU"])
 
+#' ### Expanding regression results for plotting
+#' 
+#' Year analysis
+year.regression <- summary.means[summary.means$Moderator=="Year Slope",]
+year.regression.rust <- results.rust[,c("Year Intrcpt|2004", "Year Slope")]
+year.regression.rust$Category <- "Rust"
+year.regression.yield <- results.yield[,c("Year Intrcpt|2004", "Year Slope")]
+year.regression.yield$Category <- "Yield"
+year.regression.sims <- rbind(year.regression.rust, year.regression.yield)
+# combine
+year.regression <- merge(year.regression, year.regression.sims, by = "Category")
+
+
+#' Applications analysis
+applic.regression <- summary.means[summary.means$Moderator=="Application Slope",]
+applic.regression.rust <- results.rust[,c("Application Intrcpt", "Application Slope")]
+applic.regression.rust$Category <- "Rust"
+applic.regression.yield <- results.yield[,c("Application Intrcpt", "Application Slope")]
+applic.regression.yield$Category <- "Yield"
+applic.regression.seedwt <- results.yield[,c("Application Intrcpt", "Application Slope")]
+applic.regression.seedwt$Category <- "Seed Weight"
+applic.regression.sims <- rbind(applic.regression.rust, 
+                                applic.regression.yield, 
+                                applic.regression.seedwt)
+# combine
+applic.regression <- merge(applic.regression, applic.regression.sims, by = "Category")
+
 #' ### Footer
 #' 
 #' Spun with ezspin("programs/results_processing.R", out_dir="output", fig_dir="figures", keep_md=FALSE)
