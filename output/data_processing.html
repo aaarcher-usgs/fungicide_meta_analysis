@@ -246,7 +246,7 @@ raw.data$FID[raw.data$FID==279&amp;raw.data$trade.name==&quot;Folicur&quot;] &lt
 
 <h3>1. New dataset with only selected fields</h3>
 
-<pre><code class="r">data.reduced &lt;- raw.data[,c(1:7,10:16,19:48)]
+<pre><code class="r">data.reduced &lt;- raw.data[,c(1:7,10:17,19:48)]
 # take out three data points with information on control treatments only
 data.reduced &lt;- data.reduced[data.reduced$FID!=105 &amp;
                                data.reduced$FID!=154 &amp;
@@ -377,13 +377,13 @@ head(data.reduced[is.na(data.reduced$combo_complete),c(10:12,45:46)])
 ## 14           Charisma         fluzilazole + famoxidone
 ## 21           Stratego propriconizole + trifloxystrobin
 ## 22           Stratego propriconizole + trifloxystrobin
-##    active.ingredient.coded activeIngClean combo_complete
-## 5                 tebu+thi          mixed           &lt;NA&gt;
-## 9                 tebu+thi          mixed           &lt;NA&gt;
-## 13               fluz+famo          mixed           &lt;NA&gt;
-## 14               fluz+famo          mixed           &lt;NA&gt;
-## 21             prop + trif          mixed           &lt;NA&gt;
-## 22             prop + trif          mixed           &lt;NA&gt;
+##    active.ingredient.coded seedWtContLSD activeIngClean
+## 5                 tebu+thi            NA          mixed
+## 9                 tebu+thi            NA          mixed
+## 13               fluz+famo            NA          mixed
+## 14               fluz+famo            NA          mixed
+## 21             prop + trif           0.5          mixed
+## 22             prop + trif           0.5          mixed
 </code></pre>
 
 <pre><code class="r">data.reduced$alphaIngred[data.reduced$active.ingredient.coded==&quot;tebu+thi&quot;] &lt;- 
@@ -892,20 +892,20 @@ head(data.reduced[data.reduced$classClean==&quot;mma&quot;,c(10:12,45:48)])
 ## 14           Charisma         fluzilazole + famoxidone
 ## 21           Stratego propriconizole + trifloxystrobin
 ## 22           Stratego propriconizole + trifloxystrobin
-##    active.ingredient.coded activeIngClean combo_complete alphaIngred
-## 5                 tebu+thi          MIXED       complete TEBU + THIO
-## 9                 tebu+thi          MIXED       complete TEBU + THIO
-## 13               fluz+famo          MIXED       complete FAMO + FLUZ
-## 14               fluz+famo          MIXED       complete FAMO + FLUZ
-## 21             prop + trif          MIXED       complete PROP + TRIF
-## 22             prop + trif          MIXED       complete PROP + TRIF
-##    classClean
-## 5         mma
-## 9         mma
-## 13        mma
-## 14        mma
-## 21        mma
-## 22        mma
+##    active.ingredient.coded seedWtContLSD activeIngClean combo_complete
+## 5                 tebu+thi            NA          MIXED       complete
+## 9                 tebu+thi            NA          MIXED       complete
+## 13               fluz+famo            NA          MIXED       complete
+## 14               fluz+famo            NA          MIXED       complete
+## 21             prop + trif           0.5          MIXED       complete
+## 22             prop + trif           0.5          MIXED       complete
+##    alphaIngred
+## 5  TEBU + THIO
+## 9  TEBU + THIO
+## 13 FAMO + FLUZ
+## 14 FAMO + FLUZ
+## 21 PROP + TRIF
+## 22 PROP + TRIF
 </code></pre>
 
 <pre><code class="r">data.reduced$classClean[data.reduced$alphaIngred==&quot;TEBU + THIO&quot;] &lt;- &quot;triaz + thio&quot;
@@ -1029,72 +1029,72 @@ head(data.reduced[data.reduced$classClean==&quot;other&quot;,c(10:12,45:48)],32)
 ## 340                  Physpe G                            unknown
 ## 341                  Physpe G                            unknown
 ## 354                biological                            unknown
-##     active.ingredient.coded activeIngClean combo_complete alphaIngred
-## 6                     other          OTHER         single        &lt;NA&gt;
-## 7                       oth            OTH         single        &lt;NA&gt;
-## 15                      oth            OTH         single        &lt;NA&gt;
-## 57                      oth            OTH         single        &lt;NA&gt;
-## 58                      oth            OTH         single        &lt;NA&gt;
-## 59                      oth            OTH         single        &lt;NA&gt;
-## 60                      oth            OTH         single        &lt;NA&gt;
-## 61                      oth            OTH         single        &lt;NA&gt;
-## 65                      oth            OTH         single        &lt;NA&gt;
-## 106                     oth            OTH         single        &lt;NA&gt;
-## 107                     oth            OTH         single        &lt;NA&gt;
-## 139                     oth            OTH         single        &lt;NA&gt;
-## 140                     oth            OTH         single        &lt;NA&gt;
-## 141                     oth            OTH         single        &lt;NA&gt;
-## 249                     sul            SUL         single        &lt;NA&gt;
-## 251                     eth            ETH         single        &lt;NA&gt;
-## 263                     eth            ETH         single        &lt;NA&gt;
-## 264                     sul            SUL         single        &lt;NA&gt;
-## 266                     oth            OTH         single        &lt;NA&gt;
-## 268                 eth+oth          MIXED       complete   ETH + OTH
-## 273                     org            ORG         single        &lt;NA&gt;
-## 274                     org            ORG         single        &lt;NA&gt;
-## 275                     org            ORG         single        &lt;NA&gt;
-## 326                 unknown        UNKNOWN         single        &lt;NA&gt;
-## 328                     sul            SUL         single        &lt;NA&gt;
-## 333                 unknown        UNKNOWN         single        &lt;NA&gt;
-## 334                 unknown        UNKNOWN         single        &lt;NA&gt;
-## 335                 unknown        UNKNOWN         single        &lt;NA&gt;
-## 339                 unknown        UNKNOWN         single        &lt;NA&gt;
-## 340                 unknown        UNKNOWN         single        &lt;NA&gt;
-## 341                 unknown        UNKNOWN         single        &lt;NA&gt;
-## 354                 unknown        UNKNOWN         single        &lt;NA&gt;
-##     classClean
-## 6        other
-## 7        other
-## 15       other
-## 57       other
-## 58       other
-## 59       other
-## 60       other
-## 61       other
-## 65       other
-## 106      other
-## 107      other
-## 139      other
-## 140      other
-## 141      other
-## 249      other
-## 251      other
-## 263      other
-## 264      other
-## 266      other
-## 268      other
-## 273      other
-## 274      other
-## 275      other
-## 326      other
-## 328      other
-## 333      other
-## 334      other
-## 335      other
-## 339      other
-## 340      other
-## 341      other
-## 354      other
+##     active.ingredient.coded seedWtContLSD activeIngClean combo_complete
+## 6                     other            NA          OTHER         single
+## 7                       oth            NA            OTH         single
+## 15                      oth            NA            OTH         single
+## 57                      oth            NA            OTH         single
+## 58                      oth            NA            OTH         single
+## 59                      oth            NA            OTH         single
+## 60                      oth            NA            OTH         single
+## 61                      oth            NA            OTH         single
+## 65                      oth            NA            OTH         single
+## 106                     oth            NA            OTH         single
+## 107                     oth            NA            OTH         single
+## 139                     oth      1.700000            OTH         single
+## 140                     oth      1.700000            OTH         single
+## 141                     oth      1.700000            OTH         single
+## 249                     sul      0.850485            SUL         single
+## 251                     eth      0.850485            ETH         single
+## 263                     eth            NA            ETH         single
+## 264                     sul            NA            SUL         single
+## 266                     oth            NA            OTH         single
+## 268                 eth+oth            NA          MIXED       complete
+## 273                     org            NA            ORG         single
+## 274                     org            NA            ORG         single
+## 275                     org            NA            ORG         single
+## 326                 unknown            NA        UNKNOWN         single
+## 328                     sul            NA            SUL         single
+## 333                 unknown            NA        UNKNOWN         single
+## 334                 unknown            NA        UNKNOWN         single
+## 335                 unknown            NA        UNKNOWN         single
+## 339                 unknown            NA        UNKNOWN         single
+## 340                 unknown            NA        UNKNOWN         single
+## 341                 unknown            NA        UNKNOWN         single
+## 354                 unknown            NA        UNKNOWN         single
+##     alphaIngred
+## 6          &lt;NA&gt;
+## 7          &lt;NA&gt;
+## 15         &lt;NA&gt;
+## 57         &lt;NA&gt;
+## 58         &lt;NA&gt;
+## 59         &lt;NA&gt;
+## 60         &lt;NA&gt;
+## 61         &lt;NA&gt;
+## 65         &lt;NA&gt;
+## 106        &lt;NA&gt;
+## 107        &lt;NA&gt;
+## 139        &lt;NA&gt;
+## 140        &lt;NA&gt;
+## 141        &lt;NA&gt;
+## 249        &lt;NA&gt;
+## 251        &lt;NA&gt;
+## 263        &lt;NA&gt;
+## 264        &lt;NA&gt;
+## 266        &lt;NA&gt;
+## 268   ETH + OTH
+## 273        &lt;NA&gt;
+## 274        &lt;NA&gt;
+## 275        &lt;NA&gt;
+## 326        &lt;NA&gt;
+## 328        &lt;NA&gt;
+## 333        &lt;NA&gt;
+## 334        &lt;NA&gt;
+## 335        &lt;NA&gt;
+## 339        &lt;NA&gt;
+## 340        &lt;NA&gt;
+## 341        &lt;NA&gt;
+## 354        &lt;NA&gt;
 </code></pre>
 
 <pre><code class="r">sort(table(data.reduced$classClean))
@@ -2871,39 +2871,52 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 </code></pre>
 
 <pre><code>##  setting  value                       
-##  version  R version 3.3.0 (2016-05-03)
+##  version  R version 3.3.2 (2016-10-31)
 ##  system   x86_64, darwin13.4.0        
 ##  ui       RStudio (0.99.902)          
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-12-05
+##  date     2016-12-06
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
 </code></pre>
 
 <pre><code>##  package     * version date       source        
+##  assertthat    0.1     2013-12-06 CRAN (R 3.3.0)
+##  colorspace    1.3-1   2016-11-18 CRAN (R 3.3.2)
 ##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
 ##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
 ##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
-##  formatR       1.4     2016-05-09 CRAN (R 3.3.0)
-##  knitr       * 1.14    2016-08-13 CRAN (R 3.3.0)
-##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.0)
+##  ggplot2     * 2.2.0   2016-11-11 cran (@2.2.0) 
+##  ggthemes    * 3.3.0   2016-11-24 CRAN (R 3.3.2)
+##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
+##  highr         0.6     2016-05-09 CRAN (R 3.3.0)
+##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
+##  labeling      0.3     2014-08-23 CRAN (R 3.3.0)
+##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.2)
+##  lazyeval      0.2.0   2016-06-12 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
 ##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
-##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.0)
-##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.0)
+##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.2)
+##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.2)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
 ##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)
+##  mime          0.5     2016-07-07 CRAN (R 3.3.0)
+##  munsell       0.4.3   2016-02-13 CRAN (R 3.3.0)
+##  plyr          1.8.4   2016-06-08 CRAN (R 3.3.0)
 ##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
-##  R.oo          1.20.0  2016-02-17 CRAN (R 3.3.0)
-##  R.utils       2.4.0   2016-09-14 CRAN (R 3.3.0)
+##  R.oo          1.21.0  2016-11-01 CRAN (R 3.3.0)
+##  R.utils       2.5.0   2016-11-07 CRAN (R 3.3.0)
+##  Rcpp          0.12.8  2016-11-17 CRAN (R 3.3.2)
 ##  rstudioapi    0.6     2016-06-27 CRAN (R 3.3.0)
+##  scales        0.4.1   2016-11-09 cran (@0.4.1) 
 ##  stringi       1.1.2   2016-10-01 CRAN (R 3.3.0)
 ##  stringr       1.1.0   2016-08-19 CRAN (R 3.3.0)
+##  tibble        1.2     2016-08-26 CRAN (R 3.3.0)
 ##  withr         1.0.2   2016-06-20 CRAN (R 3.3.0)
 </code></pre>
 
