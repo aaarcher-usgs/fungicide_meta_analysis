@@ -141,17 +141,6 @@ ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
   theme_tufte()+
   theme(legend.position = "none")
 
-ggplot(data = summary.means[summary.means$Analysis=="Study Year",], 
-       aes(x = as.numeric(Moderator)-2004, y = Mean, colour=Category, shape=Category))+
-  geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
-  geom_hline(aes(yintercept=1), colour="grey")+
-  geom_vline(aes(xintercept=1.5), colour="grey")+
-  ylab("Mean Effect Size (95% C.I.)")+
-  xlab("Study Year")+
-  theme_tufte()+
-  theme(legend.position = "none")+
-  geom_abline(intercept = 1.37, slope=0.97)
-
 #' ### Footer
 #' 
 #' Spun with ezspin("programs/results_plotting.R", out_dir="output", fig_dir="figures", keep_md=FALSE)
