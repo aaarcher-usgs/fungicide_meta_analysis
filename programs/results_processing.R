@@ -195,6 +195,11 @@ unique(rust.data$Reference[rust.data$category_ai=="MIXED"])
 unique(rust.data$Reference[rust.data$category_ai=="PYR"])
 unique(rust.data$Reference[rust.data$category_ai=="TEBU"])
 
+table(rust.data$activeIngClean[rust.data$category_class=="strobilurin"])
+table(rust.data$alphaIngred[rust.data$category_class=="strobilurin"])
+table(rust.data$activeIngClean[rust.data$category_class=="triazole"])
+table(rust.data$alphaIngred[rust.data$category_class=="triazole"])
+
 #' Yield
 #' 
 yield.data$temp <- paste0(yield.data$Reference,":",
@@ -224,6 +229,46 @@ table(seedwt.data$category_ai)
 unique(seedwt.data$Reference[seedwt.data$category_ai=="FLUT"])
 unique(seedwt.data$Reference[seedwt.data$category_ai=="MIXED"])
 unique(seedwt.data$Reference[seedwt.data$category_ai=="TEBU"])
+
+#' ### Table of other moderator variables
+#' Number of applications
+table(rust.data$number_applications)
+tapply(rust.data$Reference, rust.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+
+table(yield.data$number_applications)
+tapply(yield.data$Reference, yield.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+
+table(seedwt.data$number_applications)
+tapply(seedwt.data$Reference, seedwt.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+
+#' Growth stage
+table(rust.data$category_rstage)
+tapply(rust.data$Reference, rust.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+
+table(yield.data$category_rstage)
+tapply(yield.data$Reference, yield.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+
+table(seedwt.data$category_rstage)
+tapply(seedwt.data$Reference, seedwt.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+
+#' Disease Pressure
+table(rust.data$category_pressure)
+tapply(rust.data$Reference, rust.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+
+table(yield.data$category_pressure)
+tapply(yield.data$Reference, yield.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+
+table(seedwt.data$category_pressure)
+tapply(seedwt.data$Reference, seedwt.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
 
 #' ### Expanding regression results for plotting
 #' 

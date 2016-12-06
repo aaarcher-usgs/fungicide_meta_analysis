@@ -664,31 +664,17 @@ summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
 
 <h3>Store means from each in new dataframe</h3>
 
-<pre><code class="r">summary.means &lt;- as.data.frame(matrix(NA, nrow = 65, ncol = 5))
+<pre><code class="r">summary.means &lt;- as.data.frame(matrix(NA, nrow = 68, ncol = 5))
 colnames(summary.means) &lt;- c(&quot;Category&quot;, &quot;Moderator&quot; , &quot;Mean&quot;, &quot;LL&quot;, &quot;UL&quot;)
 </code></pre>
 
 <p>Transform model results </p>
 
 <pre><code class="r">transform.rust &lt;- exp(results.rust)
-</code></pre>
+colnames(transform.rust) &lt;- colnames(results.rust)
+transform.rust$tau2 &lt;- results.rust$tau2
 
-<pre><code>## Error in Math.data.frame(results.rust): non-numeric variable in data frame: AZO + PROP
-</code></pre>
-
-<pre><code class="r">colnames(transform.rust) &lt;- colnames(results.rust)
-</code></pre>
-
-<pre><code>## Error in colnames(transform.rust) &lt;- colnames(results.rust): object &#39;transform.rust&#39; not found
-</code></pre>
-
-<pre><code class="r">transform.rust$tau2 &lt;- results.rust$tau2
-</code></pre>
-
-<pre><code>## Error in transform.rust$tau2 &lt;- results.rust$tau2: object &#39;transform.rust&#39; not found
-</code></pre>
-
-<pre><code class="r">transform.yield &lt;- exp(results.yield)
+transform.yield &lt;- exp(results.yield)
 colnames(transform.yield) &lt;- colnames(results.yield)
 transform.yield$tau2 &lt;- results.yield$tau2
 
@@ -699,53 +685,34 @@ transform.seedwt$tau2 &lt;- results.seedwt$tau2
 
 <p>Rust means</p>
 
-<pre><code class="r">summary.means$Moderator[1:23] &lt;- colnames(results.rust)
-</code></pre>
-
-<pre><code>## Warning in summary.means$Moderator[1:23] &lt;- colnames(results.rust): number
-## of items to replace is not a multiple of replacement length
-</code></pre>
-
-<pre><code class="r">summary.means$Category[1:23] &lt;- &quot;Rust&quot;
-summary.means$Mean[1:23] &lt;- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
-</code></pre>
-
-<pre><code>## Error in apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm = T): object &#39;transform.rust&#39; not found
-</code></pre>
-
-<pre><code class="r">summary.means$LL[1:23] &lt;- apply(X = transform.rust, MARGIN = 2, 
+<pre><code class="r">summary.means$Moderator[1:26] &lt;- colnames(results.rust)
+summary.means$Category[1:26] &lt;- &quot;Rust&quot;
+summary.means$Mean[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-</code></pre>
-
-<pre><code>## Error in apply(X = transform.rust, MARGIN = 2, FUN = function(x) {: object &#39;transform.rust&#39; not found
-</code></pre>
-
-<pre><code class="r">summary.means$UL[1:23] &lt;- apply(X = transform.rust, MARGIN = 2, 
+summary.means$UL[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
-</code></pre>
-
-<pre><code>## Error in apply(X = transform.rust, MARGIN = 2, FUN = function(x) {: object &#39;transform.rust&#39; not found
 </code></pre>
 
 <p>Yield means</p>
 
-<pre><code class="r">summary.means$Moderator[24:48] &lt;- colnames(results.yield)
-summary.means$Category[24:48] &lt;- &quot;Yield&quot;
-summary.means$Mean[24:48] &lt;- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[24:48] &lt;- apply(X = transform.yield, MARGIN = 2, 
+<pre><code class="r">summary.means$Moderator[27:51] &lt;- colnames(results.yield)
+summary.means$Category[27:51] &lt;- &quot;Yield&quot;
+summary.means$Mean[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[24:48] &lt;- apply(X = transform.yield, MARGIN = 2, 
+summary.means$UL[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 </code></pre>
 
 <p>Seed weight means</p>
 
-<pre><code class="r">summary.means$Moderator[49:65] &lt;- colnames(results.seedwt)
-summary.means$Category[49:65] &lt;- &quot;Seed Weight&quot;
-summary.means$Mean[49:65] &lt;- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[49:65] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
+<pre><code class="r">summary.means$Moderator[52:68] &lt;- colnames(results.seedwt)
+summary.means$Category[52:68] &lt;- &quot;Seed Weight&quot;
+summary.means$Mean[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
                                  FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[49:65] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
+summary.means$UL[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
                                  FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 
 summary.means$Analysis[summary.means$Moderator==&quot;1 Application&quot; | 
@@ -1144,6 +1111,36 @@ length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quo
 ## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
 </code></pre>
 
+<h3>Expanding regression results for plotting</h3>
+
+<p>Year analysis</p>
+
+<pre><code class="r">year.regression &lt;- summary.means[summary.means$Moderator==&quot;Year Slope&quot;,]
+year.regression.rust &lt;- results.rust[,c(&quot;Year Intrcpt|2004&quot;, &quot;Year Slope&quot;)]
+year.regression.rust$Category &lt;- &quot;Rust&quot;
+year.regression.yield &lt;- results.yield[,c(&quot;Year Intrcpt|2004&quot;, &quot;Year Slope&quot;)]
+year.regression.yield$Category &lt;- &quot;Yield&quot;
+year.regression.sims &lt;- rbind(year.regression.rust, year.regression.yield)
+# combine
+year.regression &lt;- merge(year.regression, year.regression.sims, by = &quot;Category&quot;)
+</code></pre>
+
+<p>Applications analysis</p>
+
+<pre><code class="r">applic.regression &lt;- summary.means[summary.means$Moderator==&quot;Application Slope&quot;,]
+applic.regression.rust &lt;- results.rust[,c(&quot;Application Intrcpt&quot;, &quot;Application Slope&quot;)]
+applic.regression.rust$Category &lt;- &quot;Rust&quot;
+applic.regression.yield &lt;- results.yield[,c(&quot;Application Intrcpt&quot;, &quot;Application Slope&quot;)]
+applic.regression.yield$Category &lt;- &quot;Yield&quot;
+applic.regression.seedwt &lt;- results.yield[,c(&quot;Application Intrcpt&quot;, &quot;Application Slope&quot;)]
+applic.regression.seedwt$Category &lt;- &quot;Seed Weight&quot;
+applic.regression.sims &lt;- rbind(applic.regression.rust, 
+                                applic.regression.yield, 
+                                applic.regression.seedwt)
+# combine
+applic.regression &lt;- merge(applic.regression, applic.regression.sims, by = &quot;Category&quot;)
+</code></pre>
+
 <h3>Footer</h3>
 
 <p>Spun with ezspin(&ldquo;programs/results_processing.R&rdquo;, out_dir=&ldquo;output&rdquo;, fig_dir=&ldquo;figures&rdquo;, keep_md=FALSE)</p>
@@ -1163,7 +1160,7 @@ length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quo
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-12-05
+##  date     2016-12-06
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
@@ -1177,9 +1174,12 @@ length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quo
 ##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
-##  ggplot2       2.2.0   2016-11-11 cran (@2.2.0) 
+##  ggplot2     * 2.2.0   2016-11-11 cran (@2.2.0) 
+##  ggthemes    * 3.3.0   2016-11-24 CRAN (R 3.3.2)
 ##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
+##  highr         0.6     2016-05-09 CRAN (R 3.3.0)
 ##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
+##  labeling      0.3     2014-08-23 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.2)
 ##  lazyeval      0.2.0   2016-06-12 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
@@ -1188,6 +1188,7 @@ length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quo
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.2)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
 ##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)
+##  mime          0.5     2016-07-07 CRAN (R 3.3.0)
 ##  munsell       0.4.3   2016-02-13 CRAN (R 3.3.0)
 ##  plyr          1.8.4   2016-06-08 CRAN (R 3.3.0)
 ##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
