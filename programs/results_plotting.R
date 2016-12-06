@@ -135,11 +135,13 @@ ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
   geom_hline(aes(yintercept=1), colour="grey")+
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","2006","2007","2008","2009","2010","2011","2012","2013"), 
-                   labels=c("OVERALL","2006","2007","2008","2009","2010","2011","2012","2013"))+
+                   labels=c("Overall","2006","2007","2008","2009","2010","2011","2012","2013"))+
   ylab("Mean Effect Size (95% C.I.)")+
   xlab("Study Year")+
   theme_tufte()+
   theme(legend.position = "none")
+
+
 
 #' ### Footer
 #' 
