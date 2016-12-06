@@ -87,8 +87,11 @@ ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
   theme(legend.position = "none")
 
 #' Disease Pressure
-summary.means$Analysis[summary.means$Category=="Seed Weight"&
+summary.means$Analysis[summary.means$Category=="Seed Weight" &
                          summary.means$Moderator=="medium"] <- NA
+summary.means$Analysis[summary.means$Moderator=="medium"] <- NA
+summary.means$Analysis[summary.means$Category=="Seed Weight" &
+                         summary.means$Moderator=="low"] <- NA
 ggplot(data = summary.means[summary.means$Analysis=="Disease Pressure"|
                               summary.means$Moderator=="OVERALL",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
@@ -143,6 +146,8 @@ ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
   xlab("Study Year")+
   theme_tufte()+
   theme(legend.position = "none")
+
+
 
 #' ### Footer
 #' 
