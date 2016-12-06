@@ -58,7 +58,13 @@ ggplot(data = wide[!is.na(wide$Analysis.x),], aes(x = Mean, y = Mean.y))+
 #' ### Scatter plot main results
 new.wide.rust <- category.split$Rust
 new.wide.y100 <- rbind(category.split$Yield, category.split$`Seed Weight`)
+new.wide.yV100 <- merge(category.split$Yield, category.split$`Seed Weight`, all=T, by="Moderator")
+new.wide.yV100$Comparison <- "Yield vs 100-sw"
 new.wide <- merge(new.wide.rust, new.wide.y100, by = "Moderator",all = T)
+new.wide$Comparison[new.wide$Category.y=="Seed Weight"] <- "Rust vs. 100-sw"
+new.wide$Comparison[new.wide$Category.y=="Yield"] <- "Rust vs. Yield"
+new.wide.3way <- rbind(new.wide, new.wide.yV100)
+
 
 #' All analyses types
 ggplot(data = new.wide[!is.na(new.wide$Analysis.x),], 
@@ -91,6 +97,22 @@ ggplot(data = new.wide[new.wide$Analysis.x=="Study Year"&
   geom_errorbarh(aes(xmin=LL.x,xmax=UL.x))+
   theme_tufte()
 
+#' ### Panel of scatter plots
+ggplot(data = new.wide.3way[!is.na(new.wide.3way$Analysis.x),], 
+       aes(x = Mean.x, y = Mean.y))+
+  geom_point()+
+  geom_errorbar(aes(ymin=LL.y, ymax=UL.y))+
+  geom_errorbarh(aes(xmin=LL.x, xmax=UL.x))+
+  geom_errorbar(data = new.wide.3way[new.wide.3way$Analysis.x=="Overall Mean",],
+                aes(ymin=LL.y,ymax=UL.y),colour="red",width=0)+
+  geom_errorbarh(data = new.wide.3way[new.wide.3way$Analysis.x=="Overall Mean",],
+                 aes(xmin=LL.x,xmax=UL.x),colour="red",height=0)+
+  geom_point(data = new.wide.3way[new.wide.3way$Analysis.x=="Overall Mean",],
+             colour="red",size=2)+
+  theme_tufte()+
+  ylab("Response Ratio (95% C.I.)")+
+  xlab("Response Ratio (95% C.I.)")+
+  facet_grid(~Comparison, scales = "free_x")
 
 #' ### Main results
 #' 
