@@ -251,7 +251,7 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
                             &quot;R1+&quot;, &quot;R2+&quot;, 
                             &quot;R3&quot;,&quot;R5&quot;,
                             &quot;Application Intrcpt&quot;,&quot;Application Slope&quot;,
-                            &quot;AZO + PROP&quot;,
+                            &quot;AZO_PROP&quot;,
                             &quot;high&quot;,&quot;low&quot;,&quot;medium&quot;,
                             &quot;Year Intrcpt|2004&quot;,&quot;Year Slope&quot;,
                             &quot;2006&quot;,&quot;2007&quot;,&quot;2013&quot;)
@@ -375,7 +375,6 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
     results.rust$`2013`[ii] &lt;- 
       year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2013&quot;]
   }
-}
 if(length(unique(newdata$category_year))==2 &amp;
    unique(newdata$category_year[!is.na(newdata$category_year)]==&quot;2006&quot;)){
   year.categ &lt;- rma.uni(yi = yi,
@@ -383,14 +382,14 @@ if(length(unique(newdata$category_year))==2 &amp;
                         data = newdata[!is.na(newdata$category_year),],
                         method = &quot;REML&quot;)
   results.rust$`2006`[ii] &lt;- year.categ$b
-
+}
   # Mixed active ingredients
-  if(nrow(newdata[newdata$alphaIngred==&quot;AZO + PROP&quot;,])&gt;0){
+  if(&quot;AZO + PROP&quot; %in% newdata$alphaIngred){
     mixed &lt;- rma.uni(yi = yi,
                      vi = 1/m2i,
                      data = newdata[newdata$alphaIngred==&quot;AZO + PROP&quot;,],
                      method = &quot;REML&quot;)
-    results.rust$`AZO + PROP`[ii] &lt;- mixed$b
+    results.rust$`AZO_PROP`[ii] &lt;- mixed$b
   }
 }
 </code></pre>
@@ -433,9 +432,11 @@ if(length(unique(newdata$category_year))==2 &amp;
 ##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
-##  ggplot2       2.2.0   2016-11-11 cran (@2.2.0) 
+##  ggplot2     * 2.2.0   2016-11-11 cran (@2.2.0) 
+##  ggthemes    * 3.3.0   2016-11-24 CRAN (R 3.3.2)
 ##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
 ##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
+##  labeling      0.3     2014-08-23 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.2)
 ##  lazyeval      0.2.0   2016-06-12 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
