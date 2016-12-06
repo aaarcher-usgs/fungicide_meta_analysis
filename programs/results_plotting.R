@@ -1,4 +1,4 @@
-#' # Results processing for plots
+#' # Results plotting
 #' 
 #' Also, analysis for the numbers reported in the paper (e.g., number of studies
 #' and entries/study)
@@ -29,8 +29,8 @@ load(file="data/output_data/summary_results.R")
 analysis.split <- split(summary.means, summary.means$Analysis)
 category.split <- split(summary.means, summary.means$Category)
 
-wide <- merge(category.split$Rust, category.split$Yield, by = "Moderator")
-wide <- merge(wide, category.split$`Seed Weight`, by = "Moderator")
+wide <- merge(category.split$Rust, category.split$Yield, by = "Moderator",all=T)
+wide <- merge(wide, category.split$`Seed Weight`, by = "Moderator",all = T)
 
 #' ### Scatter plots of Relationships between dependent variables 
 #' 
@@ -87,11 +87,6 @@ ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
   theme(legend.position = "none")
 
 #' Disease Pressure
-summary.means$Analysis[summary.means$Category=="Seed Weight" &
-                         summary.means$Moderator=="medium"] <- NA
-summary.means$Analysis[summary.means$Moderator=="medium"] <- NA
-summary.means$Analysis[summary.means$Category=="Seed Weight" &
-                         summary.means$Moderator=="low"] <- NA
 ggplot(data = summary.means[summary.means$Analysis=="Disease Pressure"|
                               summary.means$Moderator=="OVERALL",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
