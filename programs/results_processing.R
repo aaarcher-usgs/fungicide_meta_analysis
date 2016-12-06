@@ -180,55 +180,39 @@ save(summary.means, file="data/output_data/summary_results.R")
 #' 
 #' Rust
 #' 
-rust.data$temp <- paste0(rust.data$Reference,":",
-                         rust.data$category_class)
-length(unique(rust.data$temp[rust.data$category_class=="strobilurin"]))
-length(unique(rust.data$temp[rust.data$category_class=="triazole"]))
-length(unique(rust.data$temp[rust.data$category_class=="triaz + strob"]))
-summaryBy(FID~category_class, 
-          data = rust.data[! is.na(rust.data$category_class),], FUN=length)
-summaryBy(FID~category_class+alphaIngred+Reference, 
-          data = rust.data[! is.na(rust.data$alphaIngred),], FUN=length)
 table(rust.data$category_ai)
-unique(rust.data$Reference[rust.data$category_ai=="FLUT"])
-unique(rust.data$Reference[rust.data$category_ai=="MIXED"])
-unique(rust.data$Reference[rust.data$category_ai=="PYR"])
-unique(rust.data$Reference[rust.data$category_ai=="TEBU"])
+tapply(rust.data$Reference, rust.data$category_ai, 
+       FUN=function(x){length(unique(x))})
 
-table(rust.data$activeIngClean[rust.data$category_class=="strobilurin"])
-table(rust.data$alphaIngred[rust.data$category_class=="strobilurin"])
-table(rust.data$activeIngClean[rust.data$category_class=="triazole"])
-table(rust.data$alphaIngred[rust.data$category_class=="triazole"])
+table(rust.data$category_class)
+tapply(rust.data$Reference, rust.data$category_class, 
+       FUN=function(x){length(unique(x))})
+
+table(rust.data$alphaIngred[rust.data$alphaIngred=="AZO + PROP"])
+tapply(rust.data$Reference[rust.data$alphaIngred=="AZO + PROP"], 
+       rust.data$category_class[rust.data$alphaIngred=="AZO + PROP"], 
+       FUN=function(x){length(unique(x))})
 
 #' Yield
 #' 
-yield.data$temp <- paste0(yield.data$Reference,":",
-                         yield.data$category_class)
-length(unique(yield.data$temp[yield.data$category_class=="strobilurin"]))
-length(unique(yield.data$temp[yield.data$category_class=="triazole"]))
-length(unique(yield.data$temp[yield.data$category_class=="triaz + strob"]))
-summaryBy(FID~category_class, 
-          data = yield.data[! is.na(yield.data$category_class),], FUN=length)
-
 table(yield.data$category_ai)
-unique(yield.data$Reference[yield.data$category_ai=="FLUT"])
-unique(yield.data$Reference[yield.data$category_ai=="MIXED"])
-unique(yield.data$Reference[yield.data$category_ai=="PYR"])
-unique(yield.data$Reference[yield.data$category_ai=="TEBU"])
+tapply(yield.data$Reference, yield.data$category_ai, 
+       FUN=function(x){length(unique(x))})
 
-#' 100-seed-weight
-seedwt.data$temp <- paste0(seedwt.data$Reference,":",
-                          seedwt.data$category_class)
-length(unique(seedwt.data$temp[seedwt.data$category_class=="strobilurin"]))
-length(unique(seedwt.data$temp[seedwt.data$category_class=="triazole"]))
-length(unique(seedwt.data$temp[seedwt.data$category_class=="triaz + strob"]))
-summaryBy(FID~category_class, 
-          data = seedwt.data[! is.na(seedwt.data$category_class),], FUN=length)
+table(yield.data$category_class)
+tapply(yield.data$Reference, yield.data$category_class, 
+       FUN=function(x){length(unique(x))})
 
+#' Seedwt
+#' 
 table(seedwt.data$category_ai)
-unique(seedwt.data$Reference[seedwt.data$category_ai=="FLUT"])
-unique(seedwt.data$Reference[seedwt.data$category_ai=="MIXED"])
-unique(seedwt.data$Reference[seedwt.data$category_ai=="TEBU"])
+tapply(seedwt.data$Reference, seedwt.data$category_ai, 
+       FUN=function(x){length(unique(x))})
+
+table(seedwt.data$category_class)
+tapply(seedwt.data$Reference, seedwt.data$category_class, 
+       FUN=function(x){length(unique(x))})
+
 
 #' ### Table of other moderator variables
 #' Number of applications
@@ -268,6 +252,19 @@ tapply(yield.data$Reference, yield.data$category_pressure,
 
 table(seedwt.data$category_pressure)
 tapply(seedwt.data$Reference, seedwt.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+
+#' Study Year
+table(rust.data$category_year)
+tapply(rust.data$Reference, rust.data$category_year, 
+       FUN=function(x){length(unique(x))})
+
+table(yield.data$category_year)
+tapply(yield.data$Reference, yield.data$category_year, 
+       FUN=function(x){length(unique(x))})
+
+table(seedwt.data$category_year)
+tapply(seedwt.data$Reference, seedwt.data$category_year, 
        FUN=function(x){length(unique(x))})
 
 #' ### Expanding regression results for plotting
