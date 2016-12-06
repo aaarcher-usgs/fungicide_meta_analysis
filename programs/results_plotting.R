@@ -35,18 +35,10 @@ wide <- merge(wide, category.split$`Seed Weight`, by = "Moderator")
 #' ### Scatter plots of Relationships between dependent variables 
 #' 
 #' Rust vs Yield
-ggplot(data = wide[!is.na(wide$Analysis.x)
-                   & wide$Analysis.x!="Overall Mean",], 
-       aes(x = Mean.x, y = Mean.y, shape=Analysis))+
-  geom_point(colour="grey")+
-  geom_errorbar(aes(ymin=LL.y,ymax=UL.y),colour="grey")+
-  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x),colour="grey")+
-  geom_point(data = wide[wide$Analysis.x=="Overall Mean",], colour="red")+
-  geom_errorbar(data = wide[wide$Analysis.x=="Overall Mean",], 
-                aes(ymin=LL.y,ymax=UL.y), colour="red")+
-  geom_errorbarh(data = wide[wide$Analysis.x=="Overall Mean",], 
-                 aes(xmin=LL.x,xmax=UL.x), colour="red")+
-  theme_tufte()
+ggplot(data = wide[!is.na(wide$Analysis.x),], aes(x = Mean.x, y = Mean.y))+
+  geom_point()+
+  geom_errorbar(aes(ymin=LL.y,ymax=UL.y))+
+  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x))
 
 #' Rust vs Seed Weight
 ggplot(data = wide[!is.na(wide$Analysis.x),], aes(x = Mean.x, y = Mean))+
