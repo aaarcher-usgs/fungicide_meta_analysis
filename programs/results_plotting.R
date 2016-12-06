@@ -143,7 +143,7 @@ ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
 
 #' ### Footer
 #' 
-#' Spun with ezspin("programs/results_processing.R", out_dir="output", fig_dir="figures", keep_md=FALSE)
+#' Spun with ezspin("programs/results_plotting.R", out_dir="output", fig_dir="figures", keep_md=FALSE)
 #' 
 #' Session Info:
 #+ sessionInfo
