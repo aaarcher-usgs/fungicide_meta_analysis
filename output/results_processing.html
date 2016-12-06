@@ -747,149 +747,6 @@ summary.means$Analysis[summary.means$Moderator==&quot;OVERALL&quot;] &lt;- &quot
 
 <p>Rust</p>
 
-<pre><code class="r">rust.data$temp &lt;- paste0(rust.data$Reference,&quot;:&quot;,
-                         rust.data$category_class)
-length(unique(rust.data$temp[rust.data$category_class==&quot;strobilurin&quot;]))
-</code></pre>
-
-<pre><code>## [1] 21
-</code></pre>
-
-<pre><code class="r">length(unique(rust.data$temp[rust.data$category_class==&quot;triazole&quot;]))
-</code></pre>
-
-<pre><code>## [1] 26
-</code></pre>
-
-<pre><code class="r">length(unique(rust.data$temp[rust.data$category_class==&quot;triaz + strob&quot;]))
-</code></pre>
-
-<pre><code>## [1] 27
-</code></pre>
-
-<pre><code class="r">summaryBy(FID~category_class, 
-          data = rust.data[! is.na(rust.data$category_class),], FUN=length)
-</code></pre>
-
-<pre><code>##   category_class FID.length
-## 1    strobilurin         40
-## 2  triaz + strob         98
-## 3       triazole         98
-</code></pre>
-
-<pre><code class="r">summaryBy(FID~category_class+alphaIngred+Reference, 
-          data = rust.data[! is.na(rust.data$alphaIngred),], FUN=length)
-</code></pre>
-
-<pre><code>##     category_class         alphaIngred             Reference FID.length
-## 1      strobilurin           AZO + PYR        Mueller ref 37          1
-## 2      strobilurin          FLUX + PYR        Delaney ref 30          1
-## 3      strobilurin          FLUX + PYR        Delaney ref 31          1
-## 4      strobilurin          FLUX + PYR        Delaney ref 34          2
-## 5    triaz + strob          AZO + CYPR       Lawrence ref 16          1
-## 6    triaz + strob          AZO + CYPR  Padgett et al ref 54          1
-## 7    triaz + strob           AZO + DIF        Delaney ref 30          1
-## 8    triaz + strob           AZO + DIF        Delaney ref 31          1
-## 9    triaz + strob           AZO + DIF        Delaney ref 34          1
-## 10   triaz + strob          AZO + FLUT        Mueller ref 37          1
-## 11   triaz + strob          AZO + FLUT    Price et al ref 35          6
-## 12   triaz + strob   AZO + FLUT + PROP         Sikora ref 23          1
-## 13   triaz + strob           AZO + MYC        Mueller ref 37          1
-## 14   triaz + strob    AZO + MYC + PROP         Sikora ref 23          1
-## 15   triaz + strob          AZO + PROP        Delaney ref 30          1
-## 16   triaz + strob          AZO + PROP        Delaney ref 31          1
-## 17   triaz + strob          AZO + PROP        Delaney ref 34          1
-## 18   triaz + strob          AZO + PROP Lawrence et al ref 68          1
-## 19   triaz + strob          AZO + PROP        Mueller ref 36          5
-## 20   triaz + strob          AZO + PROP        Mueller ref 43          5
-## 21   triaz + strob          AZO + PROP   Sikora et al ref 74          1
-## 22   triaz + strob          AZO + PROP         Sikora ref 23          1
-## 23   triaz + strob   AZO + PROP + TEBU        Mueller ref 37          1
-## 24   triaz + strob   AZO + PROP + TEBU         Sikora ref 23          1
-## 25   triaz + strob          AZO + TEBU        Mueller ref 37          1
-## 26   triaz + strob          AZO + TETR        Mueller ref 40          1
-## 27   triaz + strob         CYPR + PICO Lawrence et al ref 68          3
-## 28   triaz + strob         FAMO + FLUS Lawrence et al ref 55          1
-## 29   triaz + strob         FAMO + FLUZ  lawrence et al ref 4          2
-## 30   triaz + strob           FEN + PYR        Mueller ref 38          2
-## 31   triaz + strob         FLUS + PICO       Lawrence ref 16          1
-## 32   triaz + strob          FLUS + PYR Lawrence et al ref 53          1
-## 33   triaz + strob          FLUS + PYR Lawrence et al ref 55          2
-## 34   triaz + strob          FLUS + PYR       Lawrence ref 22          2
-## 35   triaz + strob         FLUT + FLUX        Delaney ref 32          4
-## 36   triaz + strob  FLUT + PROP + TRIF         Sikora ref 23          1
-## 37   triaz + strob          FLUT + PYR        Delaney ref 30          1
-## 38   triaz + strob          FLUT + PYR        Delaney ref 31          1
-## 39   triaz + strob          FLUT + PYR  Douglas et al ref 66          1
-## 40   triaz + strob          FLUT + PYR        Mueller ref 45          1
-## 41   triaz + strob          FLUT + PYR         Sikora ref 23          1
-## 42   triaz + strob           MET + PYR  Padgett et al ref 54          1
-## 43   triaz + strob   MYC + PROP + TRIF         Sikora ref 23          1
-## 44   triaz + strob           MYC + PYR        Mueller ref 38          4
-## 45   triaz + strob           MYC + PYR         Sikora ref 23          1
-## 46   triaz + strob  PROP + PROT + TRIF       Lawrence ref 16          1
-## 47   triaz + strob  PROP + TEBU + TRIF       Lawrence ref 21          3
-## 48   triaz + strob  PROP + TEBU + TRIF        Mueller ref 37          1
-## 49   triaz + strob  PROP + TEBU + TRIF         Sikora ref 23          1
-## 50   triaz + strob         PROP + TRIF  Douglas et al ref 65          1
-## 51   triaz + strob         PROP + TRIF       Lawrence ref 16          1
-## 52   triaz + strob         PROP + TRIF       Lawrence ref 18          1
-## 53   triaz + strob         PROP + TRIF   Mueller et al ref 9          1
-## 54   triaz + strob         PROP + TRIF        Mueller ref 37          1
-## 55   triaz + strob         PROP + TRIF         Sikora ref 23          1
-## 56   triaz + strob         PROT + TRIF        Delaney ref 30          1
-## 57   triaz + strob         PROT + TRIF        Delaney ref 31          1
-## 58   triaz + strob         PROT + TRIF        Delaney ref 34          1
-## 59   triaz + strob          PYR + TEBU Lawrence et al ref 62          1
-## 60   triaz + strob          PYR + TEBU       Lawrence ref 16          1
-## 61   triaz + strob          PYR + TEBU        Mueller ref 36          5
-## 62   triaz + strob          PYR + TEBU        Mueller ref 37          1
-## 63   triaz + strob          PYR + TEBU   Sikora et al ref 74          1
-## 64   triaz + strob          PYR + TEBU         Sikora ref 23          1
-## 65   triaz + strob         TEBU + TRIF       Lawrence ref 18          1
-## 66   triaz + strob         TEBU + TRIF       Lawrence ref 21          2
-## 67   triaz + strob         TEBU + TRIF   Mueller et al ref 9          2
-## 68   triaz + strob         TEBU + TRIF  Padgett et al ref 54          1
-## 69   triaz + strob   TEBU + TRIF + OTH   Mueller et al ref 9          1
-## 70        triazole        PROP fb FLUT   Sikora et al ref 74          1
-## 71        triazole         PROP fb MYC   Sikora et al ref 74          1
-## 72        triazole        PROP fb TEBU   Sikora et al ref 74          1
-## 73            &lt;NA&gt;  AZO + CYPR fb CYPR  Douglas et al ref 65          1
-## 74            &lt;NA&gt;          AZO + FLUS Lawrence et al ref 55          1
-## 75            &lt;NA&gt;           AZO + ORG         Sikora ref 42          3
-## 76            &lt;NA&gt;  CARB + FLUS + PICO  Douglas et al ref 65          1
-## 77            &lt;NA&gt;          CHL + TEBU        Mueller ref 37          1
-## 78            &lt;NA&gt;        COPPER + OTH       Lawrence ref 41          1
-## 79            &lt;NA&gt;       COPPER + TEBU        Mueller ref 39          1
-## 80            &lt;NA&gt;         CROP + TETR        Mueller ref 40          1
-## 81            &lt;NA&gt;          ETH + FLUT        Mueller ref 45          1
-## 82            &lt;NA&gt;           ETH + OTH       Lawrence ref 41          1
-## 83            &lt;NA&gt;          ETH + TEBU        Mueller ref 39          1
-## 84            &lt;NA&gt;          FLUS + OTH Lawrence et al ref 53          1
-## 85            &lt;NA&gt;          FLUS + OTH       Lawrence ref 22          1
-## 86            &lt;NA&gt;         FLUT + THIO  Douglas et al ref 66          1
-## 87            &lt;NA&gt;           MYC + OTH  Douglas et al ref 65          1
-## 88            &lt;NA&gt;         ORTH + TETR        Mueller ref 40          1
-## 89            &lt;NA&gt;          OTH + THIO       Lawrence ref 41          1
-## 90            &lt;NA&gt; PROP + TRIF fb FLUT   Sikora et al ref 74          1
-## 91            &lt;NA&gt;  PROP + TRIF fb MYC   Sikora et al ref 74          1
-## 92            &lt;NA&gt; PROP + TRIF fb TEBU   Sikora et al ref 74          1
-## 93            &lt;NA&gt;  PYR + TEBU fb FLUT   Sikora et al ref 74          1
-## 94            &lt;NA&gt;   PYR + TEBU fb MYC   Sikora et al ref 74          1
-## 95            &lt;NA&gt;  PYR + TEBU fb TEBU   Sikora et al ref 74          1
-## 96            &lt;NA&gt;         PYR fb TEBU  Douglas et al ref 65          1
-## 97            &lt;NA&gt;         PYR fb TEBU        Mueller ref 43          2
-## 98            &lt;NA&gt;           SUL + OTH       Kemerait ref 46          1
-## 99            &lt;NA&gt;           SUL + OTH       Lawrence ref 41          1
-## 100           &lt;NA&gt;          SUL + TEBU        Mueller ref 39          1
-## 101           &lt;NA&gt;         SURF + TEBU   Mueller et al ref 9          2
-## 102           &lt;NA&gt;         TEBU + THIO  Lawrence et al ref 3          2
-## 103           &lt;NA&gt;         TEBU + THIO Lawrence et al ref 62          2
-## 104           &lt;NA&gt;         TEBU + THIO        Mueller ref 39          1
-## 105           &lt;NA&gt;         TEBU fb PYR        Mueller ref 36          1
-## 106           &lt;NA&gt;         TEBU fb PYR        Mueller ref 43          2
-</code></pre>
-
 <pre><code class="r">table(rust.data$category_ai)
 </code></pre>
 
@@ -898,89 +755,48 @@ length(unique(rust.data$temp[rust.data$category_class==&quot;strobilurin&quot;])
 ##    40   129    25    31
 </code></pre>
 
-<pre><code class="r">unique(rust.data$Reference[rust.data$category_ai==&quot;FLUT&quot;])
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_ai, 
+       FUN=function(x){length(unique(x))})
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                 Price et al ref 35   Mueller ref 37      
-##  [4] Mueller ref 45       Padgett et al ref 54 Douglas et al ref 65
-##  [7] Douglas et al ref 66 Lawrence ref 16      Delaney ref 30      
-## [10] Delaney ref 31       Delaney ref 34      
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>##  FLUT MIXED   PYR  TEBU 
+##    10    30    17    20
 </code></pre>
 
-<pre><code class="r">unique(rust.data$Reference[rust.data$category_ai==&quot;MIXED&quot;])
+<pre><code class="r">table(rust.data$category_class)
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                  Mueller et al ref 9   Lawrence ref 21      
-##  [4] Lawrence ref 22       Sikora ref 23         Price et al ref 35   
-##  [7] Mueller ref 36        Mueller ref 37        Mueller ref 38       
-## [10] Mueller ref 39        Mueller ref 40        Sikora ref 42        
-## [13] Mueller ref 45        Padgett et al ref 54  Douglas et al ref 65 
-## [16] Douglas et al ref 66  Lawrence et al ref 3  lawrence et al ref 4 
-## [19] Lawrence ref 16       Lawrence ref 18       Delaney ref 30       
-## [22] Delaney ref 31        Delaney ref 32        Delaney ref 34       
-## [25] Lawrence ref 41       Mueller ref 43        Kemerait ref 46      
-## [28] Lawrence et al ref 53 Lawrence et al ref 55 Lawrence et al ref 62
-## [31] Lawrence et al ref 68
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>## 
+##   strobilurin triaz + strob      triazole 
+##            40            98            98
 </code></pre>
 
-<pre><code class="r">unique(rust.data$Reference[rust.data$category_ai==&quot;PYR&quot;])
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_class, 
+       FUN=function(x){length(unique(x))})
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                  Mueller et al  ref 1  Mueller et al ref 9  
-##  [4] Lawrence ref 22       Sikora ref 23         Mueller ref 36       
-##  [7] Mueller ref 37        Mueller ref 39        Harmon ref 47        
-## [10] Padgett et al ref 54  Douglas et al ref 65  Lawrence et al ref 3 
-## [13] Lawrence ref 16       Delaney ref 30        Delaney ref 31       
-## [16] Lawrence ref 41       Mueller ref 43        Lawrence et al ref 55
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>##   strobilurin triaz + strob      triazole 
+##            20            26            25
 </code></pre>
 
-<pre><code class="r">unique(rust.data$Reference[rust.data$category_ai==&quot;TEBU&quot;])
+<pre><code class="r">table(rust.data$alphaIngred[rust.data$alphaIngred==&quot;AZO + PROP&quot;])
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                  Mueller et al ref 9   Lawrence ref 21      
-##  [4] Mueller ref 36        Mueller ref 37        Mueller ref 39       
-##  [7] Mueller ref 45        Douglas et al ref 65  Douglas et al ref 66 
-## [10] Lawrence et al ref 3  lawrence et al ref 4  Lawrence ref 16      
-## [13] Lawrence ref 18       Delaney ref 30        Delaney ref 31       
-## [16] Delaney ref 34        Lawrence ref 41       Mueller ref 43       
-## [19] Kemerait ref 46       Lawrence et al ref 55 Lawrence et al ref 62
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>## 
+## AZO + PROP 
+##         16
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference[rust.data$alphaIngred==&quot;AZO + PROP&quot;], 
+       rust.data$category_class[rust.data$alphaIngred==&quot;AZO + PROP&quot;], 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## triaz + strob 
+##             8
 </code></pre>
 
 <p>Yield</p>
-
-<pre><code class="r">yield.data$temp &lt;- paste0(yield.data$Reference,&quot;:&quot;,
-                         yield.data$category_class)
-length(unique(yield.data$temp[yield.data$category_class==&quot;strobilurin&quot;]))
-</code></pre>
-
-<pre><code>## [1] 19
-</code></pre>
-
-<pre><code class="r">length(unique(yield.data$temp[yield.data$category_class==&quot;triazole&quot;]))
-</code></pre>
-
-<pre><code>## [1] 24
-</code></pre>
-
-<pre><code class="r">length(unique(yield.data$temp[yield.data$category_class==&quot;triaz + strob&quot;]))
-</code></pre>
-
-<pre><code>## [1] 25
-</code></pre>
-
-<pre><code class="r">summaryBy(FID~category_class, 
-          data = yield.data[! is.na(yield.data$category_class),], FUN=length)
-</code></pre>
-
-<pre><code>##   category_class FID.length
-## 1    strobilurin         34
-## 2  triaz + strob         89
-## 3       triazole         91
-</code></pre>
 
 <pre><code class="r">table(yield.data$category_ai)
 </code></pre>
@@ -990,88 +806,31 @@ length(unique(yield.data$temp[yield.data$category_class==&quot;strobilurin&quot;
 ##    39   119    20    28
 </code></pre>
 
-<pre><code class="r">unique(yield.data$Reference[yield.data$category_ai==&quot;FLUT&quot;])
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_ai, 
+       FUN=function(x){length(unique(x))})
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                 Lawrence ref 16      Delaney ref 30      
-##  [4] Delaney ref 31       Delaney ref 34       Price et al ref 35  
-##  [7] Mueller ref 37       Mueller ref 45       Douglas et al ref 65
-## [10] Douglas et al ref 66
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>##  FLUT MIXED   PYR  TEBU 
+##     9    28    15    19
 </code></pre>
 
-<pre><code class="r">unique(yield.data$Reference[yield.data$category_ai==&quot;MIXED&quot;])
+<pre><code class="r">table(yield.data$category_class)
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                  Lawrence et al ref 3  lawrence et al ref 4 
-##  [4] Mueller et al ref 9   Lawrence ref 16       Lawrence ref 18      
-##  [7] Lawrence ref 21       Lawrence ref 22       Sikora ref 23        
-## [10] Delaney ref 30        Delaney ref 31        Delaney ref 32       
-## [13] Delaney ref 34        Price et al ref 35    Mueller ref 36       
-## [16] Mueller ref 37        Mueller ref 38        Mueller ref 39       
-## [19] Mueller ref 40        Lawrence ref 41       Sikora ref 42        
-## [22] Mueller ref 45        Kemerait ref 46       Lawrence et al ref 53
-## [25] Lawrence et al ref 55 Lawrence et al ref 62 Douglas et al ref 65 
-## [28] Douglas et al ref 66  Lawrence et al ref 68
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>## 
+##   strobilurin triaz + strob      triazole 
+##            34            89            91
 </code></pre>
 
-<pre><code class="r">unique(yield.data$Reference[yield.data$category_ai==&quot;PYR&quot;])
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_class, 
+       FUN=function(x){length(unique(x))})
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                  Mueller et al  ref 1  Lawrence et al ref 3 
-##  [4] Mueller et al ref 9   Lawrence ref 16       Lawrence ref 22      
-##  [7] Sikora ref 23         Delaney ref 30        Delaney ref 31       
-## [10] Mueller ref 36        Mueller ref 37        Mueller ref 39       
-## [13] Lawrence ref 41       Harmon ref 47         Lawrence et al ref 55
-## [16] Douglas et al ref 65 
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>##   strobilurin triaz + strob      triazole 
+##            18            24            23
 </code></pre>
 
-<pre><code class="r">unique(yield.data$Reference[yield.data$category_ai==&quot;TEBU&quot;])
-</code></pre>
-
-<pre><code>##  [1] &lt;NA&gt;                  Lawrence et al ref 3  lawrence et al ref 4 
-##  [4] Mueller et al ref 9   Lawrence ref 16       Lawrence ref 18      
-##  [7] Lawrence ref 21       Delaney ref 30        Delaney ref 31       
-## [10] Delaney ref 34        Mueller ref 36        Mueller ref 37       
-## [13] Mueller ref 39        Mueller ref 45        Kemerait ref 46      
-## [16] Lawrence et al ref 55 Lawrence et al ref 62 Douglas et al ref 65 
-## [19] Douglas et al ref 66  Lawrence ref 41      
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
-</code></pre>
-
-<p>100-seed-weight</p>
-
-<pre><code class="r">seedwt.data$temp &lt;- paste0(seedwt.data$Reference,&quot;:&quot;,
-                          seedwt.data$category_class)
-length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quot;]))
-</code></pre>
-
-<pre><code>## [1] 9
-</code></pre>
-
-<pre><code class="r">length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;triazole&quot;]))
-</code></pre>
-
-<pre><code>## [1] 11
-</code></pre>
-
-<pre><code class="r">length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;triaz + strob&quot;]))
-</code></pre>
-
-<pre><code>## [1] 12
-</code></pre>
-
-<pre><code class="r">summaryBy(FID~category_class, 
-          data = seedwt.data[! is.na(seedwt.data$category_class),], FUN=length)
-</code></pre>
-
-<pre><code>##   category_class FID.length
-## 1    strobilurin         18
-## 2  triaz + strob         42
-## 3       triazole         58
-</code></pre>
+<p>Seedwt</p>
 
 <pre><code class="r">table(seedwt.data$category_ai)
 </code></pre>
@@ -1081,34 +840,230 @@ length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quo
 ##    30    59    18
 </code></pre>
 
-<pre><code class="r">unique(seedwt.data$Reference[seedwt.data$category_ai==&quot;FLUT&quot;])
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_ai, 
+       FUN=function(x){length(unique(x))})
 </code></pre>
 
-<pre><code>## [1] &lt;NA&gt;                 Delaney ref 30       Delaney ref 34      
-## [4] Mueller ref 37       Mueller ref 45       Douglas et al ref 65
-## [7] Douglas et al ref 66
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>##  FLUT MIXED  TEBU 
+##     6    12     9
 </code></pre>
 
-<pre><code class="r">unique(seedwt.data$Reference[seedwt.data$category_ai==&quot;MIXED&quot;])
+<pre><code class="r">table(seedwt.data$category_class)
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                 Mueller et al ref 9  Delaney ref 30      
-##  [4] Delaney ref 32       Delaney ref 34       Mueller ref 36      
-##  [7] Mueller ref 37       Mueller ref 38       Mueller ref 39      
-## [10] Mueller ref 40       Mueller ref 45       Douglas et al ref 65
-## [13] Douglas et al ref 66
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>## 
+##   strobilurin triaz + strob      triazole 
+##            18            42            58
 </code></pre>
 
-<pre><code class="r">unique(seedwt.data$Reference[seedwt.data$category_ai==&quot;TEBU&quot;])
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_class, 
+       FUN=function(x){length(unique(x))})
 </code></pre>
 
-<pre><code>##  [1] &lt;NA&gt;                 Mueller et al ref 9  Delaney ref 30      
-##  [4] Delaney ref 34       Mueller ref 36       Mueller ref 37      
-##  [7] Mueller ref 39       Mueller ref 45       Douglas et al ref 65
-## [10] Douglas et al ref 66
-## 61 Levels: Allen ref 11 Allen ref 12 Allen ref 13 ... Sikora ref 42
+<pre><code>##   strobilurin triaz + strob      triazole 
+##             8            11            10
+</code></pre>
+
+<h3>Table of other moderator variables</h3>
+
+<p>Number of applications</p>
+
+<pre><code class="r">table(rust.data$number_applications)
+</code></pre>
+
+<pre><code>## 
+##   1   2 
+## 129 170
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##  1  2 
+## 17 23
+</code></pre>
+
+<pre><code class="r">table(yield.data$number_applications)
+</code></pre>
+
+<pre><code>## 
+##   1   2 
+## 111 160
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##  1  2 
+## 15 22
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$number_applications)
+</code></pre>
+
+<pre><code>## 
+##  1  2 
+## 79 64
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 1 2 
+## 9 8
+</code></pre>
+
+<p>Growth stage</p>
+
+<pre><code class="r">table(rust.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+##  1+  2+   3   5 
+##  51  75 106  25
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 1+ 2+  3  5 
+##  8  9 14  7
+</code></pre>
+
+<pre><code class="r">table(yield.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+##  1+  2+   3   5 
+##  47  73 100  13
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 1+ 2+  3  5 
+##  7  9 13  5
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+##  3 
+## 44
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 3 
+## 5
+</code></pre>
+
+<p>Disease Pressure</p>
+
+<pre><code class="r">table(rust.data$category_pressure)
+</code></pre>
+
+<pre><code>## 
+##   high    low medium 
+##    167    109     44
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   high    low medium 
+##     16     13      4
+</code></pre>
+
+<pre><code class="r">table(yield.data$category_pressure)
+</code></pre>
+
+<pre><code>## 
+##   high    low medium 
+##    152     94     42
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   high    low medium 
+##     15     12      4
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$category_pressure)
+</code></pre>
+
+<pre><code>## 
+##   high    low medium 
+##     98     29     17
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   high    low medium 
+##      8      4      1
+</code></pre>
+
+<p>Study Year</p>
+
+<pre><code class="r">table(rust.data$category_year)
+</code></pre>
+
+<pre><code>## 
+## 2006 2007 2013 
+##  144   53   39
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_year, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 2006 2007 2013 
+##   13    7    5
+</code></pre>
+
+<pre><code class="r">table(yield.data$category_year)
+</code></pre>
+
+<pre><code>## 
+## 2006 2007 2013 
+##  121   44   39
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_year, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 2006 2007 2013 
+##   12    6    5
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$category_year)
+</code></pre>
+
+<pre><code>## 
+## 2006 
+##   76
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_year, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 2006 
+##    6
 </code></pre>
 
 <h3>Expanding regression results for plotting</h3>
