@@ -164,7 +164,7 @@ summary.means$Analysis[summary.means$Moderator=="1 Application" |
 summary.means$Analysis[summary.means$Moderator=="2006" | 
                          summary.means$Moderator=="2007"|
                          summary.means$Moderator=="2013"] <- "Study Year"
-summary.means$Analysis[summary.means$Moderator=="AZO + PROP"|
+summary.means$Analysis[summary.means$Moderator=="AZO_PROP"|
                          summary.means$Moderator=="FLUT"|
                          summary.means$Moderator=="PYR"|
                          summary.means$Moderator=="MIXED"|
