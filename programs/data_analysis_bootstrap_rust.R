@@ -41,7 +41,7 @@ colnames(results.rust) <- c("OVERALL","tau2",
                             "R1+", "R2+", 
                             "R3","R5",
                             "Application Intrcpt","Application Slope",
-                            "AZO + PROP",
+                            "AZO_PROP",
                             "high","low","medium",
                             "Year Intrcpt|2004","Year Slope",
                             "2006","2007","2013")
@@ -164,7 +164,6 @@ for(ii in 1:nsims){
     results.rust$`2013`[ii] <- 
       year.categ$b[rownames(year.categ$b)=="as.character(category_year)2013"]
   }
-}
 if(length(unique(newdata$category_year))==2 &
    unique(newdata$category_year[!is.na(newdata$category_year)]=="2006")){
   year.categ <- rma.uni(yi = yi,
@@ -172,14 +171,14 @@ if(length(unique(newdata$category_year))==2 &
                         data = newdata[!is.na(newdata$category_year),],
                         method = "REML")
   results.rust$`2006`[ii] <- year.categ$b
-  
+}
   # Mixed active ingredients
-  if(nrow(newdata[newdata$alphaIngred=="AZO + PROP",])>0){
+  if("AZO + PROP" %in% newdata$alphaIngred){
     mixed <- rma.uni(yi = yi,
                      vi = 1/m2i,
                      data = newdata[newdata$alphaIngred=="AZO + PROP",],
                      method = "REML")
-    results.rust$`AZO + PROP`[ii] <- mixed$b
+    results.rust$`AZO_PROP`[ii] <- mixed$b
   }
 }
 
