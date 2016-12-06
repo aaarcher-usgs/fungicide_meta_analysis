@@ -55,6 +55,43 @@ ggplot(data = wide[!is.na(wide$Analysis.x),], aes(x = Mean, y = Mean.y))+
   geom_errorbarh(aes(xmin=LL,xmax=UL))+
   theme_tufte()
 
+#' ### Scatter plot main results
+new.wide.rust <- category.split$Rust
+new.wide.y100 <- rbind(category.split$Yield, category.split$`Seed Weight`)
+new.wide <- merge(new.wide.rust, new.wide.y100, by = "Moderator",all = T)
+
+#' All analyses types
+ggplot(data = new.wide[!is.na(new.wide$Analysis.x),], 
+       aes(x = Mean.x, y = Mean.y, colour=Category.y, shape=Category.y))+
+  geom_errorbar(aes(ymin=LL.y,ymax=UL.y),colour="grey")+
+  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x),colour="grey")+
+  geom_point(size=2)+
+  geom_errorbar(data = new.wide[new.wide$Analysis.y=="Overall Mean",],
+                aes(ymin=LL.y,ymax=UL.y),colour="black",width=0)+
+  geom_errorbarh(data = new.wide[new.wide$Analysis.y=="Overall Mean",],
+                 aes(xmin=LL.x,xmax=UL.x),colour="black",height=0)+
+  geom_point(data = new.wide[new.wide$Analysis.y=="Overall Mean",],colour="black",size=2)+
+  theme_tufte()
+
+#' Active Ingredient
+ggplot(data = new.wide[new.wide$Analysis.x=="Active Ingredient"&
+                         !is.na(new.wide$Analysis.x),], 
+       aes(x = Mean.x, y = Mean.y, shape=Moderator, colour=Category.y))+
+  geom_point()+
+  geom_errorbar(aes(ymin=LL.y,ymax=UL.y))+
+  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x))+
+  theme_tufte()
+
+#' Active Ingredient
+ggplot(data = new.wide[new.wide$Analysis.x=="Study Year"&
+                         !is.na(new.wide$Analysis.x),], 
+       aes(x = Mean.x, y = Mean.y, shape=Moderator, colour=Category.y))+
+  geom_point()+
+  geom_errorbar(aes(ymin=LL.y,ymax=UL.y))+
+  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x))+
+  theme_tufte()
+
+
 #' ### Main results
 #' 
 pd <- position_dodge(width=0.2)
@@ -65,7 +102,7 @@ ggplot(data = summary.means[summary.means$Analysis=="Active Ingredient"|
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
   geom_hline(aes(yintercept=1), colour="grey")+
   geom_vline(aes(xintercept=1.5), colour="grey")+
-  scale_x_discrete(limits=c("OVERALL","FLUT","PYR","TEBU","MIXED","AZO + PROP"), 
+  scale_x_discrete(limits=c("OVERALL","FLUT","PYR","TEBU","MIXED","AZO_PROP"), 
                    labels=c("Overall","FLUT","PYR","TEBU","Mixed","AZO + \nPROP"))+
   ylab("Mean Effect Size (95% C.I.)")+
   xlab("Active Ingredient")+
