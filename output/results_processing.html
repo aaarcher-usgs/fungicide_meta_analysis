@@ -213,16 +213,7 @@ and entries/study)</p>
 <pre><code class="r">library(ezknitr)
 library(knitr)
 library(metafor)
-</code></pre>
-
-<pre><code>## Loading required package: Matrix
-</code></pre>
-
-<pre><code>## Loading &#39;metafor&#39; package (version 1.9-9). For an overview 
-## and introduction to the package please type: help(metafor).
-</code></pre>
-
-<pre><code class="r">library(devtools)
+library(devtools)
 library(doBy)
 </code></pre>
 
@@ -680,10 +671,24 @@ colnames(summary.means) &lt;- c(&quot;Category&quot;, &quot;Moderator&quot; , &q
 <p>Transform model results </p>
 
 <pre><code class="r">transform.rust &lt;- exp(results.rust)
-colnames(transform.rust) &lt;- colnames(results.rust)
-transform.rust$tau2 &lt;- results.rust$tau2
+</code></pre>
 
-transform.yield &lt;- exp(results.yield)
+<pre><code>## Error in Math.data.frame(results.rust): non-numeric variable in data frame: AZO + PROP
+</code></pre>
+
+<pre><code class="r">colnames(transform.rust) &lt;- colnames(results.rust)
+</code></pre>
+
+<pre><code>## Error in colnames(transform.rust) &lt;- colnames(results.rust): object &#39;transform.rust&#39; not found
+</code></pre>
+
+<pre><code class="r">transform.rust$tau2 &lt;- results.rust$tau2
+</code></pre>
+
+<pre><code>## Error in transform.rust$tau2 &lt;- results.rust$tau2: object &#39;transform.rust&#39; not found
+</code></pre>
+
+<pre><code class="r">transform.yield &lt;- exp(results.yield)
 colnames(transform.yield) &lt;- colnames(results.yield)
 transform.yield$tau2 &lt;- results.yield$tau2
 
@@ -695,12 +700,31 @@ transform.seedwt$tau2 &lt;- results.seedwt$tau2
 <p>Rust means</p>
 
 <pre><code class="r">summary.means$Moderator[1:23] &lt;- colnames(results.rust)
-summary.means$Category[1:23] &lt;- &quot;Rust&quot;
+</code></pre>
+
+<pre><code>## Warning in summary.means$Moderator[1:23] &lt;- colnames(results.rust): number
+## of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$Category[1:23] &lt;- &quot;Rust&quot;
 summary.means$Mean[1:23] &lt;- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[1:23] &lt;- apply(X = transform.rust, MARGIN = 2, 
+</code></pre>
+
+<pre><code>## Error in apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm = T): object &#39;transform.rust&#39; not found
+</code></pre>
+
+<pre><code class="r">summary.means$LL[1:23] &lt;- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[1:23] &lt;- apply(X = transform.rust, MARGIN = 2, 
+</code></pre>
+
+<pre><code>## Error in apply(X = transform.rust, MARGIN = 2, FUN = function(x) {: object &#39;transform.rust&#39; not found
+</code></pre>
+
+<pre><code class="r">summary.means$UL[1:23] &lt;- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+</code></pre>
+
+<pre><code>## Error in apply(X = transform.rust, MARGIN = 2, FUN = function(x) {: object &#39;transform.rust&#39; not found
 </code></pre>
 
 <p>Yield means</p>
@@ -1148,21 +1172,18 @@ length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quo
 <pre><code>##  package     * version date       source        
 ##  assertthat    0.1     2013-12-06 CRAN (R 3.3.0)
 ##  colorspace    1.3-1   2016-11-18 CRAN (R 3.3.2)
-##  DBI           0.5-1   2016-09-10 CRAN (R 3.3.0)
 ##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
 ##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
 ##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
-##  dplyr       * 0.5.0   2016-06-24 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
-##  ggplot2     * 2.2.0   2016-11-11 cran (@2.2.0) 
-##  ggthemes    * 3.3.0   2016-11-24 CRAN (R 3.3.2)
+##  ggplot2       2.2.0   2016-11-11 cran (@2.2.0) 
 ##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
 ##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
-##  labeling      0.3     2014-08-23 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.2)
 ##  lazyeval      0.2.0   2016-06-12 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
+##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
 ##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.2)
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.2)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
@@ -1172,7 +1193,6 @@ length(unique(seedwt.data$temp[seedwt.data$category_class==&quot;strobilurin&quo
 ##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
 ##  R.oo          1.21.0  2016-11-01 CRAN (R 3.3.0)
 ##  R.utils       2.5.0   2016-11-07 CRAN (R 3.3.0)
-##  R6            2.2.0   2016-10-05 CRAN (R 3.3.0)
 ##  Rcpp          0.12.8  2016-11-17 CRAN (R 3.3.2)
 ##  rstudioapi    0.6     2016-06-27 CRAN (R 3.3.0)
 ##  scales        0.4.1   2016-11-09 cran (@0.4.1) 
