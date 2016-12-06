@@ -33,6 +33,12 @@ load(file="data/output_data/results_rust.R")
 load(file="data/output_data/results_yield.R")
 load(file="data/output_data/results_seedwt.R")
 
+drop.cols <- "medium"
+drop.cols.seedwt <- c("medium","low")
+results.rust <- results.rust[,! colnames(results.rust) %in% drop.cols]
+results.yield <- results.yield[,! colnames(results.yield) %in% drop.cols]
+results.seedwt <- results.seedwt[,! colnames(results.seedwt) %in% drop.cols.seedwt]
+
 #' #############################################################################
 #' ### Step 1: Calculate numbers for paper: Dataset properties
 #' 
@@ -79,6 +85,7 @@ print(c("mean, SD of seedwt in control plants",
 print(c("mean, SD of seedwt response ratio in control plants",
         mean(exp(seedwt.data$yi)), sd(exp(seedwt.data$yi))))
 
+
 #' #############################################################################
 #' ### Step 2: Information for table with references
 summaryBy(FID~ReferenceNumb+Reference, data=raw.data, FUN=length)
@@ -107,8 +114,9 @@ print(c("CI of mean e.s. of seedwt severity",
         quantile(exp(results.seedwt$OVERALL), probs = c(0.025,0.975))))
 print(c("Mean tau^2 for seedwt", mean(results.seedwt$tau2)))
 
-#' ### Store means from each in new dataframe
-summary.means <- as.data.frame(matrix(NA, nrow = 68, ncol = 5))
+#' #############################################################################
+#' ### Step 4: Store means from each in new dataframe
+summary.means <- as.data.frame(matrix(NA, nrow = 64, ncol = 5))
 colnames(summary.means) <- c("Category", "Moderator" , "Mean", "LL", "UL")
 
 #' Transform model results 
@@ -125,30 +133,30 @@ colnames(transform.seedwt) <- colnames(results.seedwt)
 transform.seedwt$tau2 <- results.seedwt$tau2
 
 #' Rust means
-summary.means$Moderator[1:26] <- colnames(results.rust)
-summary.means$Category[1:26] <- "Rust"
-summary.means$Mean[1:26] <- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[1:26] <- apply(X = transform.rust, MARGIN = 2, 
+summary.means$Moderator[1:25] <- colnames(results.rust)
+summary.means$Category[1:25] <- "Rust"
+summary.means$Mean[1:25] <- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[1:25] <- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[1:26] <- apply(X = transform.rust, MARGIN = 2, 
+summary.means$UL[1:25] <- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 
 #' Yield means
-summary.means$Moderator[27:51] <- colnames(results.yield)
-summary.means$Category[27:51] <- "Yield"
-summary.means$Mean[27:51] <- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[27:51] <- apply(X = transform.yield, MARGIN = 2, 
+summary.means$Moderator[26:49] <- colnames(results.yield)
+summary.means$Category[26:49] <- "Yield"
+summary.means$Mean[26:49] <- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[26:49] <- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[27:51] <- apply(X = transform.yield, MARGIN = 2, 
+summary.means$UL[26:49] <- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 
 #' Seed weight means
-summary.means$Moderator[52:68] <- colnames(results.seedwt)
-summary.means$Category[52:68] <- "Seed Weight"
-summary.means$Mean[52:68] <- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[52:68] <- apply(X = transform.seedwt, MARGIN = 2, 
+summary.means$Moderator[50:64] <- colnames(results.seedwt)
+summary.means$Category[50:64] <- "Seed Weight"
+summary.means$Mean[50:64] <- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[50:64] <- apply(X = transform.seedwt, MARGIN = 2, 
                                  FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[52:68] <- apply(X = transform.seedwt, MARGIN = 2, 
+summary.means$UL[50:64] <- apply(X = transform.seedwt, MARGIN = 2, 
                                  FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 
 summary.means$Analysis[summary.means$Moderator=="1 Application" | 
@@ -162,7 +170,6 @@ summary.means$Analysis[summary.means$Moderator=="AZO + PROP"|
                          summary.means$Moderator=="MIXED"|
                          summary.means$Moderator=="TEBU"] <- "Active Ingredient"
 summary.means$Analysis[summary.means$Moderator=="low"|
-                         summary.means$Moderator=="medium"|
                          summary.means$Moderator=="high"] <- "Disease Pressure"
 summary.means$Analysis[summary.means$Moderator=="R1+"|
                          summary.means$Moderator=="R2+"|
@@ -173,10 +180,16 @@ summary.means$Analysis[summary.means$Moderator=="Strobilurin"|
                          summary.means$Moderator=="Triazole"] <- "Fungicide Class"
 summary.means$Analysis[summary.means$Moderator=="OVERALL"] <- "Overall Mean"
 
+#' Table of meta-analysis results
+summary.means[summary.means$Analysis=="Overall Mean"&
+                !is.na(summary.means$Analysis),]
+summary.means[summary.means$Moderator=="tau2",]
+
 #' Save summary.means
 save(summary.means, file="data/output_data/summary_results.R")
 
-#' ### Fungicide table for manuscript
+#' #############################################################################
+#' ### Step 5: Fungicide table for manuscript
 #' 
 #' Rust
 #' 
@@ -213,8 +226,8 @@ table(seedwt.data$category_class)
 tapply(seedwt.data$Reference, seedwt.data$category_class, 
        FUN=function(x){length(unique(x))})
 
-
-#' ### Table of other moderator variables
+#' #############################################################################
+#' ### Step 6: Table of other moderator variables
 #' Number of applications
 table(rust.data$number_applications)
 tapply(rust.data$Reference, rust.data$number_applications, 
@@ -267,7 +280,8 @@ table(seedwt.data$category_year)
 tapply(seedwt.data$Reference, seedwt.data$category_year, 
        FUN=function(x){length(unique(x))})
 
-#' ### Expanding regression results for plotting
+#' #############################################################################
+#' ### Step 7: Expanding regression results for plotting
 #' 
 #' Year analysis
 year.regression <- summary.means[summary.means$Moderator=="Year Slope",]
@@ -293,6 +307,13 @@ applic.regression.sims <- rbind(applic.regression.rust,
                                 applic.regression.seedwt)
 # combine
 applic.regression <- merge(applic.regression, applic.regression.sims, by = "Category")
+
+#' #############################################################################
+#' ### Step 8: Typical application rates
+rust.data[rust.data$category_ai=="PYR"&!is.na(rust.data$category_ai),c("amount","category_ai", "activeIngClean")]
+rust.data[rust.data$category_ai=="FLUT"&!is.na(rust.data$category_ai),c("amount","category_ai", "activeIngClean")]
+rust.data[rust.data$category_ai=="TEBU"&!is.na(rust.data$category_ai),c("amount","category_ai", "activeIngClean")]
+rust.data[rust.data$alphaIngred=="AZO + PYR"&!is.na(rust.data$alphaIngred),c("amount","category_ai", "activeIngClean")]
 
 #' ### Footer
 #' 

@@ -238,6 +238,12 @@ seedwt.data &lt;- as.data.frame(seedwt.data.ROM)
 load(file=&quot;data/output_data/results_rust.R&quot;)
 load(file=&quot;data/output_data/results_yield.R&quot;)
 load(file=&quot;data/output_data/results_seedwt.R&quot;)
+
+drop.cols &lt;- &quot;medium&quot;
+drop.cols.seedwt &lt;- c(&quot;medium&quot;,&quot;low&quot;)
+results.rust &lt;- results.rust[,! colnames(results.rust) %in% drop.cols]
+results.yield &lt;- results.yield[,! colnames(results.yield) %in% drop.cols]
+results.seedwt &lt;- results.seedwt[,! colnames(results.seedwt) %in% drop.cols.seedwt]
 </code></pre>
 
 <p>#############################################################################</p>
@@ -662,9 +668,11 @@ summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
 <pre><code>## [1] &quot;Mean tau^2 for seedwt&quot; &quot;0.00168248886301628&quot;
 </code></pre>
 
-<h3>Store means from each in new dataframe</h3>
+<p>#############################################################################</p>
 
-<pre><code class="r">summary.means &lt;- as.data.frame(matrix(NA, nrow = 68, ncol = 5))
+<h3>Step 4: Store means from each in new dataframe</h3>
+
+<pre><code class="r">summary.means &lt;- as.data.frame(matrix(NA, nrow = 64, ncol = 5))
 colnames(summary.means) &lt;- c(&quot;Category&quot;, &quot;Moderator&quot; , &quot;Mean&quot;, &quot;LL&quot;, &quot;UL&quot;)
 </code></pre>
 
@@ -685,34 +693,34 @@ transform.seedwt$tau2 &lt;- results.seedwt$tau2
 
 <p>Rust means</p>
 
-<pre><code class="r">summary.means$Moderator[1:26] &lt;- colnames(results.rust)
-summary.means$Category[1:26] &lt;- &quot;Rust&quot;
-summary.means$Mean[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, 
+<pre><code class="r">summary.means$Moderator[1:25] &lt;- colnames(results.rust)
+summary.means$Category[1:25] &lt;- &quot;Rust&quot;
+summary.means$Mean[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, 
+summary.means$UL[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 </code></pre>
 
 <p>Yield means</p>
 
-<pre><code class="r">summary.means$Moderator[27:51] &lt;- colnames(results.yield)
-summary.means$Category[27:51] &lt;- &quot;Yield&quot;
-summary.means$Mean[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, 
+<pre><code class="r">summary.means$Moderator[26:49] &lt;- colnames(results.yield)
+summary.means$Category[26:49] &lt;- &quot;Yield&quot;
+summary.means$Mean[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, 
+summary.means$UL[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 </code></pre>
 
 <p>Seed weight means</p>
 
-<pre><code class="r">summary.means$Moderator[52:68] &lt;- colnames(results.seedwt)
-summary.means$Category[52:68] &lt;- &quot;Seed Weight&quot;
-summary.means$Mean[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
+<pre><code class="r">summary.means$Moderator[50:64] &lt;- colnames(results.seedwt)
+summary.means$Category[50:64] &lt;- &quot;Seed Weight&quot;
+summary.means$Mean[50:64] &lt;- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[50:64] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
                                  FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
+summary.means$UL[50:64] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
                                  FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
 
 summary.means$Analysis[summary.means$Moderator==&quot;1 Application&quot; | 
@@ -726,7 +734,6 @@ summary.means$Analysis[summary.means$Moderator==&quot;AZO + PROP&quot;|
                          summary.means$Moderator==&quot;MIXED&quot;|
                          summary.means$Moderator==&quot;TEBU&quot;] &lt;- &quot;Active Ingredient&quot;
 summary.means$Analysis[summary.means$Moderator==&quot;low&quot;|
-                         summary.means$Moderator==&quot;medium&quot;|
                          summary.means$Moderator==&quot;high&quot;] &lt;- &quot;Disease Pressure&quot;
 summary.means$Analysis[summary.means$Moderator==&quot;R1+&quot;|
                          summary.means$Moderator==&quot;R2+&quot;|
@@ -738,12 +745,35 @@ summary.means$Analysis[summary.means$Moderator==&quot;Strobilurin&quot;|
 summary.means$Analysis[summary.means$Moderator==&quot;OVERALL&quot;] &lt;- &quot;Overall Mean&quot;
 </code></pre>
 
+<p>Table of meta-analysis results</p>
+
+<pre><code class="r">summary.means[summary.means$Analysis==&quot;Overall Mean&quot;&amp;
+                !is.na(summary.means$Analysis),]
+</code></pre>
+
+<pre><code>##       Category Moderator       Mean         LL        UL     Analysis
+## 1         Rust   OVERALL 0.08673227 0.02417906 0.2070185 Overall Mean
+## 26       Yield   OVERALL 1.27652556 1.20894190 1.3525662 Overall Mean
+## 50 Seed Weight   OVERALL 1.21159967 1.15830431 1.2793500 Overall Mean
+</code></pre>
+
+<pre><code class="r">summary.means[summary.means$Moderator==&quot;tau2&quot;,]
+</code></pre>
+
+<pre><code>##       Category Moderator         Mean          LL           UL Analysis
+## 2         Rust      tau2 14.569327183 6.421193568 22.439328653     &lt;NA&gt;
+## 27       Yield      tau2  0.016613024 0.001629016  0.036616434     &lt;NA&gt;
+## 51 Seed Weight      tau2  0.001682489 0.000000000  0.007539147     &lt;NA&gt;
+</code></pre>
+
 <p>Save summary.means</p>
 
 <pre><code class="r">save(summary.means, file=&quot;data/output_data/summary_results.R&quot;)
 </code></pre>
 
-<h3>Fungicide table for manuscript</h3>
+<p>#############################################################################</p>
+
+<h3>Step 5: Fungicide table for manuscript</h3>
 
 <p>Rust</p>
 
@@ -864,7 +894,9 @@ summary.means$Analysis[summary.means$Moderator==&quot;OVERALL&quot;] &lt;- &quot
 ##             8            11            10
 </code></pre>
 
-<h3>Table of other moderator variables</h3>
+<p>#############################################################################</p>
+
+<h3>Step 6: Table of other moderator variables</h3>
 
 <p>Number of applications</p>
 
@@ -1066,7 +1098,9 @@ summary.means$Analysis[summary.means$Moderator==&quot;OVERALL&quot;] &lt;- &quot
 ##    6
 </code></pre>
 
-<h3>Expanding regression results for plotting</h3>
+<p>#############################################################################</p>
+
+<h3>Step 7: Expanding regression results for plotting</h3>
 
 <p>Year analysis</p>
 
@@ -1094,6 +1128,131 @@ applic.regression.sims &lt;- rbind(applic.regression.rust,
                                 applic.regression.seedwt)
 # combine
 applic.regression &lt;- merge(applic.regression, applic.regression.sims, by = &quot;Category&quot;)
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 8: Typical application rates</h3>
+
+<pre><code class="r">rust.data[rust.data$category_ai==&quot;PYR&quot;&amp;!is.na(rust.data$category_ai),c(&quot;amount&quot;,&quot;category_ai&quot;, &quot;activeIngClean&quot;)]
+</code></pre>
+
+<pre><code>##      amount category_ai activeIngClean
+## 3       7.8         PYR            PYR
+## 48      5.5         PYR            PYR
+## 114     4.5         PYR            PYR
+## 115     7.8         PYR            PYR
+## 203     9.2         PYR            PYR
+## 204     9.2         PYR            PYR
+## 205     9.2         PYR            PYR
+## 222 9.2 + 4         PYR            PYR
+## 223 9.2 + 4         PYR            PYR
+## 224 4 + 9.2         PYR            PYR
+## 229     7.8         PYR            PYR
+## 257     7.8         PYR            PYR
+## 332     7.8         PYR            PYR
+## 338     7.8         PYR            PYR
+## 376   4 + 6         PYR            PYR
+## 461       6         PYR            PYR
+## 8       7.8         PYR            PYR
+## 75        6         PYR            PYR
+## 155       6         PYR            PYR
+## 164       6         PYR            PYR
+## 272       6         PYR            PYR
+## 280     9.2         PYR            PYR
+## 281     9.2         PYR            PYR
+## 282     9.2         PYR            PYR
+## 389       6         PYR            PYR
+</code></pre>
+
+<pre><code class="r">rust.data[rust.data$category_ai==&quot;FLUT&quot;&amp;!is.na(rust.data$category_ai),c(&quot;amount&quot;,&quot;category_ai&quot;, &quot;activeIngClean&quot;)]
+</code></pre>
+
+<pre><code>##          amount category_ai activeIngClean
+## 190           7        FLUT           FLUT
+## 191          10        FLUT           FLUT
+## 194           7        FLUT           FLUT
+## 195          10        FLUT           FLUT
+## 198           7        FLUT           FLUT
+## 199          10        FLUT           FLUT
+## 226           7        FLUT           FLUT
+## 308           7        FLUT           FLUT
+## 309          11        FLUT           FLUT
+## 310          14        FLUT           FLUT
+## 311           7        FLUT           FLUT
+## 312  7.0 + 11.0        FLUT           FLUT
+## 313  7.0 + 14.0        FLUT           FLUT
+## 314           7        FLUT           FLUT
+## 315  7.0 + 11.0        FLUT           FLUT
+## 316  7.0 + 14.0        FLUT           FLUT
+## 318         3.5        FLUT           FLUT
+## 319           5        FLUT           FLUT
+## 320           7        FLUT           FLUT
+## 321          11        FLUT           FLUT
+## 322 5.0 + 0.25%        FLUT           FLUT
+## 380           7        FLUT           FLUT
+## 447           7        FLUT           FLUT
+## 455           7        FLUT           FLUT
+## 465           7        FLUT           FLUT
+## 466          11        FLUT           FLUT
+## 467          14        FLUT           FLUT
+## 468         7,7        FLUT           FLUT
+## 469        7,11        FLUT           FLUT
+## 470        7,14        FLUT           FLUT
+## 471         7,7        FLUT           FLUT
+## 472        7,11        FLUT           FLUT
+## 473        7,14        FLUT           FLUT
+## 474    7+.25v/v        FLUT           FLUT
+## 78            7        FLUT           FLUT
+## 85            7        FLUT           FLUT
+## 152           7        FLUT           FLUT
+## 161           7        FLUT           FLUT
+## 178           7        FLUT           FLUT
+## 179           7        FLUT           FLUT
+</code></pre>
+
+<pre><code class="r">rust.data[rust.data$category_ai==&quot;TEBU&quot;&amp;!is.na(rust.data$category_ai),c(&quot;amount&quot;,&quot;category_ai&quot;, &quot;activeIngClean&quot;)]
+</code></pre>
+
+<pre><code>##     amount category_ai activeIngClean
+## 43     5.1        TEBU           TEBU
+## 46     6.8        TEBU           TEBU
+## 105      4        TEBU           TEBU
+## 206    3.6        TEBU           TEBU
+## 207    3.6        TEBU           TEBU
+## 208    3.6        TEBU           TEBU
+## 209    3.6        TEBU           TEBU
+## 210    3.6        TEBU           TEBU
+## 211    3.6        TEBU           TEBU
+## 227    3.6        TEBU           TEBU
+## 247      4        TEBU           TEBU
+## 248      4        TEBU           TEBU
+## 317    3.6        TEBU           TEBU
+## 453      4        TEBU           TEBU
+## 454      4        TEBU           TEBU
+## 477    4,4        TEBU           TEBU
+## 4        4        TEBU           TEBU
+## 16       4        TEBU           TEBU
+## 81       4        TEBU           TEBU
+## 97       4        TEBU           TEBU
+## 154      4        TEBU           TEBU
+## 163      4        TEBU           TEBU
+## 182      4        TEBU           TEBU
+## 183      4        TEBU           TEBU
+## 271      4        TEBU           TEBU
+## 283      4        TEBU           TEBU
+## 284      4        TEBU           TEBU
+## 285      4        TEBU           TEBU
+## 325      4        TEBU           TEBU
+## 391      4        TEBU           TEBU
+## 434      4        TEBU           TEBU
+</code></pre>
+
+<pre><code class="r">rust.data[rust.data$alphaIngred==&quot;AZO + PYR&quot;&amp;!is.na(rust.data$alphaIngred),c(&quot;amount&quot;,&quot;category_ai&quot;, &quot;activeIngClean&quot;)]
+</code></pre>
+
+<pre><code>##        amount category_ai activeIngClean
+## 239 6.2 + 7.8       MIXED          MIXED
 </code></pre>
 
 <h3>Footer</h3>
