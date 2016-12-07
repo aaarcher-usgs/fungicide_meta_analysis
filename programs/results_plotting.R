@@ -11,8 +11,8 @@ library(ezknitr)
 library(knitr)
 library(devtools)
 library(ggplot2)
-library(ggthemes)
 library(gridExtra)
+library(cowplot)
 
 #' Clear environment and set seed
 #+ clear
@@ -47,7 +47,7 @@ new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
 
 ################################################################################
 #' ### 3-way scatter plot
-#+ figure1, width=6
+#+ figure1, fig.width=8
 # First, will want to annotate 2013 result in facet 2
 annotate2013 <- data.frame(Comparison = "Rust vs. Yield",
                            Mean.x = 0.46,
@@ -71,27 +71,28 @@ ggplot(data = new.wide.3way,
 
 #' ### Main results
 #' 
-pd <- position_dodge(width=0.2)
-#' Active Ingredient
-#+ figure2
-ggplot(data = summary.means[summary.means$Analysis=="Active Ingredient"|
-                              summary.means$Moderator=="OVERALL",], 
-       aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
+pd <- position_dodge(width=0.3)
+#' Active Ingredient and Fungicide Class
+#+ figure2, fig.width=8
+annotateAI <- data.frame(Mean = 1.6, Moderator = "FLUT", Category="Rust")
+p1 <- ggplot(data = summary.means[summary.means$Analysis=="Active Ingredient",], 
+             aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
   geom_hline(aes(yintercept=1), colour="grey")+
-  geom_vline(aes(xintercept=1.5), colour="grey")+
-  scale_x_discrete(limits=c("OVERALL","FLUT","PYR","TEBU","MIXED","AZO_PROP"), 
-                   labels=c("Overall","FLUT","PYR","TEBU","Mixed","AZO + \nPROP"))+
-  ylab("Mean Effect Size (95% C.I.)")+
+  scale_x_discrete(limits=c("FLUT","PYR","TEBU","MIXED","AZO_PROP"), 
+                   labels=c("FLUT","PYR","TEBU","Mixed","AZO + \nPROP"))+
   xlab("Active Ingredient")+
+  ylab("")+
+  ylim(c(0,1.7))+
   theme_tufte()+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  geom_text(data = annotateAI, label="B", family="serif")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
 
-#' Fungicide Class
-#+ figure3
-ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
-                              summary.means$Moderator=="OVERALL",], 
-       aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
+annotateClass <- data.frame(Mean = 1.6, Moderator = "OVERALL", Category = "Rust")
+p2 <- ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
+                                    summary.means$Moderator=="OVERALL",], 
+             aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
   geom_hline(aes(yintercept=1), colour="grey")+
   geom_vline(aes(xintercept=1.5), colour="grey")+
@@ -99,53 +100,63 @@ ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
                    labels=c("Overall","Strobilurin", "Triazole", "Mixed Triazole\n& Strobilurin"))+
   ylab("Mean Effect Size (95% C.I.)")+
   xlab("Fungicide Class")+
+  ylim(c(0,1.7))+
   theme_tufte()+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  geom_text(data = annotateClass, label="A", family="serif")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
 
-#' Disease Pressure
-ggplot(data = summary.means[summary.means$Analysis=="Disease Pressure"|
-                              summary.means$Moderator=="OVERALL",], 
+grid.arrange(p2, p1, ncol=2)
+
+#' Disease Pressure, Growth Stage, and Applications
+#+ figure3, fig.width=8
+annotatePress <- data.frame(Mean = 1.6, Moderator = "low", Category="Rust")
+p3 <- ggplot(data = summary.means[summary.means$Analysis=="Disease Pressure",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
   geom_hline(aes(yintercept=1), colour="grey")+
-  geom_vline(aes(xintercept=1.5), colour="grey")+
-  scale_x_discrete(limits=c("OVERALL","low","medium","high"), 
-                   labels=c("Overall","Low","Medium","High"))+
-  ylab("Mean Effect Size (95% C.I.)")+
+  scale_x_discrete(limits=c("low","medium","high"), 
+                   labels=c("Low","Medium","High"))+
+  ylab("")+
   xlab("Disease Pressure")+
   theme_tufte()+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  geom_text(data = annotatePress, label="C", family="serif")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
 
-#' Growth Stage
-ggplot(data = summary.means[summary.means$Analysis=="Growth Stage"|
-                              summary.means$Moderator=="OVERALL",], 
+annotateRstage <- data.frame(Mean = 1.6, Moderator = "R1+", Category="Rust")
+p4 <- ggplot(data = summary.means[summary.means$Analysis=="Growth Stage",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
   geom_hline(aes(yintercept=1), colour="grey")+
-  geom_vline(aes(xintercept=1.5), colour="grey")+
-  scale_x_discrete(limits=c("OVERALL","R1+","R2+","R3","R5"), 
-                   labels=c("Overall","R1+","R2+","R3","R5"))+
-  ylab("Mean Effect Size (95% C.I.)")+
+  scale_x_discrete(limits=c("R1+","R2+","R3","R5"), 
+                   labels=c("R1+","R2+","R3","R5"))+
+  ylab("")+
   xlab("Growth Stage")+
   theme_tufte()+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  geom_text(data = annotateRstage, label="B", family="serif")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
 
-#' Number of Applications
-#+ figure5
-ggplot(data = summary.means[summary.means$Analysis=="Applications"|
+p5 <- ggplot(data = summary.means[summary.means$Analysis=="Applications"|
                               summary.means$Moderator=="OVERALL",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
   geom_hline(aes(yintercept=1), colour="grey")+
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","1 Application","2 Applications"), 
-                   labels=c("OVERALL","1 Application","2 Applications"))+
+                   labels=c("Overall","1","2"))+
   ylab("Mean Effect Size (95% C.I.)")+
   xlab("Applications")+
   theme_tufte()+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  geom_text(data = annotateAI, label="A", family="serif")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
+
+grid.arrange(p5, p4, p3, ncol=3)
 
 #' Study Year
+#+ figure4
 ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
                               summary.means$Moderator=="OVERALL",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
@@ -157,7 +168,8 @@ ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
   ylab("Mean Effect Size (95% C.I.)")+
   xlab("Study Year")+
   theme_tufte()+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
 
 
 
