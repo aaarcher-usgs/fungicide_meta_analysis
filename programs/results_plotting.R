@@ -12,6 +12,7 @@ library(knitr)
 library(devtools)
 library(ggplot2)
 library(ggthemes)
+library(gridExtra)
 
 #' Clear environment and set seed
 #+ clear
@@ -44,23 +45,29 @@ new.wide.3way <- rbind(new.wide, new.wide.yV100)
 new.wide.3way <- subset(new.wide.3way, !is.na(Comparison))
 new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
 
-#' ### Scatter plot main results
+################################################################################
+#' ### 3-way scatter plot
 #+ figure1, width=6
+# First, will want to annotate 2013 result in facet 2
+annotate2013 <- data.frame(Comparison = "Rust vs. Yield",
+                           Mean.x = 0.46,
+                           Mean.y = 1.09)
 ggplot(data = new.wide.3way, 
        aes(x = Mean.x, y = Mean.y))+
-  geom_point()+
-  geom_errorbar(aes(ymin=LL.y, ymax=UL.y))+
-  geom_errorbarh(aes(xmin=LL.x, xmax=UL.x))+
+  geom_point(colour="grey")+
+  geom_errorbar(aes(ymin=LL.y, ymax=UL.y),colour="grey")+
+  geom_errorbarh(aes(xmin=LL.x, xmax=UL.x),colour="grey")+
   geom_errorbar(data = new.wide.3way[new.wide.3way$Analysis.x=="Overall Mean",],
-                aes(ymin=LL.y,ymax=UL.y),colour="red",width=0)+
+                aes(ymin=LL.y,ymax=UL.y),colour="black",width=0)+
   geom_errorbarh(data = new.wide.3way[new.wide.3way$Analysis.x=="Overall Mean",],
-                 aes(xmin=LL.x,xmax=UL.x),colour="red",height=0)+
+                 aes(xmin=LL.x,xmax=UL.x),colour="black",height=0)+
   geom_point(data = new.wide.3way[new.wide.3way$Analysis.x=="Overall Mean",],
-             colour="red",size=2)+
+             colour="black",size=2)+
   theme_tufte()+
   ylab("Response Ratio (95% C.I.)")+
   xlab("Response Ratio (95% C.I.)")+
-  facet_wrap(~Comparison, scales = "free_x")
+  facet_wrap(~Comparison, scales = "free_x")+
+  geom_text(data = annotate2013, label = "2013", family="serif")
 
 #' ### Main results
 #' 
