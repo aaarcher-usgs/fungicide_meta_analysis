@@ -98,6 +98,7 @@ ggplot(data = new.wide[new.wide$Analysis.x=="Study Year"&
   theme_tufte()
 
 #' ### Panel of scatter plots
+#+ figure1, width=6
 ggplot(data = new.wide.3way[!is.na(new.wide.3way$Analysis.x),], 
        aes(x = Mean.x, y = Mean.y))+
   geom_point()+
@@ -118,6 +119,7 @@ ggplot(data = new.wide.3way[!is.na(new.wide.3way$Analysis.x),],
 #' 
 pd <- position_dodge(width=0.2)
 #' Active Ingredient
+#+ figure2
 ggplot(data = summary.means[summary.means$Analysis=="Active Ingredient"|
                               summary.means$Moderator=="OVERALL",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
@@ -132,6 +134,7 @@ ggplot(data = summary.means[summary.means$Analysis=="Active Ingredient"|
   theme(legend.position = "none")
 
 #' Fungicide Class
+#+ figure3
 ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
                               summary.means$Moderator=="OVERALL",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
@@ -174,6 +177,7 @@ ggplot(data = summary.means[summary.means$Analysis=="Growth Stage"|
   theme(legend.position = "none")
 
 #' Number of Applications
+#+ figure5
 ggplot(data = summary.means[summary.means$Analysis=="Applications"|
                               summary.means$Moderator=="OVERALL",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
