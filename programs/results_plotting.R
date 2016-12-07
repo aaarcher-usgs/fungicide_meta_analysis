@@ -138,6 +138,7 @@ p4 <- ggplot(data = summary.means[summary.means$Analysis=="Growth Stage",],
   geom_text(data = annotateRstage, label="B", family="serif")+
   scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
 
+annotateApps <- data.frame(Mean = 1.6, Moderator = "OVERALL", Category="Rust")
 p5 <- ggplot(data = summary.means[summary.means$Analysis=="Applications"|
                               summary.means$Moderator=="OVERALL",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
@@ -150,7 +151,7 @@ p5 <- ggplot(data = summary.means[summary.means$Analysis=="Applications"|
   xlab("Applications")+
   theme_tufte()+
   theme(legend.position = "none")+
-  geom_text(data = annotateAI, label="A", family="serif")+
+  geom_text(data = annotateApps, label="A", family="serif")+
   scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
 
 grid.arrange(p5, p4, p3, ncol=3)
