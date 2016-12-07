@@ -64,42 +64,12 @@ new.wide <- merge(new.wide.rust, new.wide.y100, by = "Moderator",all = T)
 new.wide$Comparison[new.wide$Category.y=="Seed Weight"] <- "Rust vs. 100-sw"
 new.wide$Comparison[new.wide$Category.y=="Yield"] <- "Rust vs. Yield"
 new.wide.3way <- rbind(new.wide, new.wide.yV100)
+new.wide.3way <- subset(new.wide.3way, !is.na(Comparison))
+new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
 
-
-#' All analyses types
-ggplot(data = new.wide[!is.na(new.wide$Analysis.x),], 
-       aes(x = Mean.x, y = Mean.y, colour=Category.y, shape=Category.y))+
-  geom_errorbar(aes(ymin=LL.y,ymax=UL.y),colour="grey")+
-  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x),colour="grey")+
-  geom_point(size=2)+
-  geom_errorbar(data = new.wide[new.wide$Analysis.y=="Overall Mean",],
-                aes(ymin=LL.y,ymax=UL.y),colour="black",width=0)+
-  geom_errorbarh(data = new.wide[new.wide$Analysis.y=="Overall Mean",],
-                 aes(xmin=LL.x,xmax=UL.x),colour="black",height=0)+
-  geom_point(data = new.wide[new.wide$Analysis.y=="Overall Mean",],colour="black",size=2)+
-  theme_tufte()
-
-#' Active Ingredient
-ggplot(data = new.wide[new.wide$Analysis.x=="Active Ingredient"&
-                         !is.na(new.wide$Analysis.x),], 
-       aes(x = Mean.x, y = Mean.y, shape=Moderator, colour=Category.y))+
-  geom_point()+
-  geom_errorbar(aes(ymin=LL.y,ymax=UL.y))+
-  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x))+
-  theme_tufte()
-
-#' Active Ingredient
-ggplot(data = new.wide[new.wide$Analysis.x=="Study Year"&
-                         !is.na(new.wide$Analysis.x),], 
-       aes(x = Mean.x, y = Mean.y, shape=Moderator, colour=Category.y))+
-  geom_point()+
-  geom_errorbar(aes(ymin=LL.y,ymax=UL.y))+
-  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x))+
-  theme_tufte()
-
-#' ### Panel of scatter plots
+#' Panel of scatter plots
 #+ figure1, width=6
-ggplot(data = new.wide.3way[!is.na(new.wide.3way$Analysis.x),], 
+ggplot(data = new.wide.3way, 
        aes(x = Mean.x, y = Mean.y))+
   geom_point()+
   geom_errorbar(aes(ymin=LL.y, ymax=UL.y))+
@@ -113,7 +83,7 @@ ggplot(data = new.wide.3way[!is.na(new.wide.3way$Analysis.x),],
   theme_tufte()+
   ylab("Response Ratio (95% C.I.)")+
   xlab("Response Ratio (95% C.I.)")+
-  facet_grid(~Comparison, scales = "free_x")
+  facet_wrap(~Comparison, scales = "free_x")
 
 #' ### Main results
 #' 
