@@ -50,8 +50,8 @@ new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
 #+ figure1, fig.width=8
 # First, will want to annotate 2013 result in facet 2
 annotate2013 <- data.frame(Comparison = "Rust vs. Yield",
-                           Mean.x = 0.46,
-                           Mean.y = 1.09)
+                           Mean.x = 0.44,
+                           Mean.y = 1.1)
 ggplot(data = new.wide.3way, 
        aes(x = Mean.x, y = Mean.y))+
   geom_point(colour="grey")+
