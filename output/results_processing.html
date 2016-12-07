@@ -213,7 +213,16 @@ and entries/study)</p>
 <pre><code class="r">library(ezknitr)
 library(knitr)
 library(metafor)
-library(devtools)
+</code></pre>
+
+<pre><code>## Loading required package: Matrix
+</code></pre>
+
+<pre><code>## Loading &#39;metafor&#39; package (version 1.9-9). For an overview 
+## and introduction to the package please type: help(metafor).
+</code></pre>
+
+<pre><code class="r">library(devtools)
 library(doBy)
 </code></pre>
 
@@ -608,6 +617,12 @@ summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
 <pre><code>## [1] &quot;Mean e.s. of rust severity&quot; &quot;0.0867322664501827&quot;
 </code></pre>
 
+<pre><code class="r">print(c(&quot;SD e.s. of rust severity&quot;, sd(exp(results.rust$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;SD e.s. of rust severity&quot; &quot;0.0478620915892458&quot;
+</code></pre>
+
 <pre><code class="r">print(c(&quot;CI of mean e.s. of rust severity&quot;, 
         quantile(exp(results.rust$OVERALL), probs = c(0.025,0.975))))
 </code></pre>
@@ -624,20 +639,26 @@ summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
 <pre><code>## [1] &quot;Mean tau^2 for rust&quot; &quot;14.5693271830589&quot;
 </code></pre>
 
-<pre><code class="r">print(c(&quot;Mean e.s. of yield severity&quot;, mean(exp(results.yield$OVERALL))))
+<pre><code class="r">print(c(&quot;Mean e.s. of yield&quot;, mean(exp(results.yield$OVERALL))))
 </code></pre>
 
-<pre><code>## [1] &quot;Mean e.s. of yield severity&quot; &quot;1.27652556332507&quot;
+<pre><code>## [1] &quot;Mean e.s. of yield&quot; &quot;1.27652556332507&quot;
 </code></pre>
 
-<pre><code class="r">print(c(&quot;CI of mean e.s. of yield severity&quot;, 
+<pre><code class="r">print(c(&quot;SD es of yield&quot;, sd(exp(results.yield$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;SD es of yield&quot;     &quot;0.0368943911886343&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;CI of mean e.s. of yield&quot;, 
         quantile(exp(results.yield$OVERALL), probs = c(0.025,0.975))))
 </code></pre>
 
-<pre><code>##                                                                    2.5% 
-## &quot;CI of mean e.s. of yield severity&quot;                  &quot;1.20894190057049&quot; 
-##                               97.5% 
-##                  &quot;1.35256618307631&quot;
+<pre><code>##                                                  2.5% 
+## &quot;CI of mean e.s. of yield&quot;         &quot;1.20894190057049&quot; 
+##                      97.5% 
+##         &quot;1.35256618307631&quot;
 </code></pre>
 
 <pre><code class="r">print(c(&quot;Mean tau^2 for yield&quot;, mean(results.yield$tau2)))
@@ -650,6 +671,12 @@ summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
 </code></pre>
 
 <pre><code>## [1] &quot;Mean e.s. of seedwt severity&quot; &quot;1.21159967140728&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;SD es of yield&quot;, sd(exp(results.seedwt$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;SD es of yield&quot;     &quot;0.0301736021468863&quot;
 </code></pre>
 
 <pre><code class="r">print(c(&quot;CI of mean e.s. of seedwt severity&quot;, 
@@ -672,8 +699,8 @@ summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
 
 <h3>Step 4: Store means from each in new dataframe</h3>
 
-<pre><code class="r">summary.means &lt;- as.data.frame(matrix(NA, nrow = 64, ncol = 5))
-colnames(summary.means) &lt;- c(&quot;Category&quot;, &quot;Moderator&quot; , &quot;Mean&quot;, &quot;LL&quot;, &quot;UL&quot;)
+<pre><code class="r">summary.means &lt;- as.data.frame(matrix(NA, nrow = 68, ncol = 6))
+colnames(summary.means) &lt;- c(&quot;Category&quot;, &quot;Moderator&quot; , &quot;Mean&quot;, &quot;LL&quot;, &quot;UL&quot;, &quot;SD&quot;)
 </code></pre>
 
 <p>Transform model results </p>
@@ -693,37 +720,128 @@ transform.seedwt$tau2 &lt;- results.seedwt$tau2
 
 <p>Rust means</p>
 
-<pre><code class="r">summary.means$Moderator[1:25] &lt;- colnames(results.rust)
-summary.means$Category[1:25] &lt;- &quot;Rust&quot;
-summary.means$Mean[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, 
+<pre><code class="r">summary.means$Moderator[1:26] &lt;- colnames(results.rust)
+</code></pre>
+
+<pre><code>## Warning in summary.means$Moderator[1:26] &lt;- colnames(results.rust): number
+## of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$Category[1:26] &lt;- &quot;Rust&quot;
+summary.means$Mean[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
+</code></pre>
+
+<pre><code>## Warning in summary.means$Mean[1:26] &lt;- apply(X = transform.rust, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$LL[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, 
+</code></pre>
+
+<pre><code>## Warning in summary.means$LL[1:26] &lt;- apply(X = transform.rust, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$UL[1:26] &lt;- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+</code></pre>
+
+<pre><code>## Warning in summary.means$UL[1:26] &lt;- apply(X = transform.rust, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$SD[1:26] &lt;- apply(X = transform.rust, MARGIN = 2,
+                                FUN = sd, na.rm=T)
+</code></pre>
+
+<pre><code>## Warning in summary.means$SD[1:26] &lt;- apply(X = transform.rust, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
 </code></pre>
 
 <p>Yield means</p>
 
-<pre><code class="r">summary.means$Moderator[26:49] &lt;- colnames(results.yield)
-summary.means$Category[26:49] &lt;- &quot;Yield&quot;
-summary.means$Mean[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, 
+<pre><code class="r">summary.means$Moderator[27:51] &lt;- colnames(results.yield)
+</code></pre>
+
+<pre><code>## Warning in summary.means$Moderator[27:51] &lt;- colnames(results.yield):
+## number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$Category[27:51] &lt;- &quot;Yield&quot;
+summary.means$Mean[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
+</code></pre>
+
+<pre><code>## Warning in summary.means$Mean[27:51] &lt;- apply(X = transform.yield, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$LL[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, 
+</code></pre>
+
+<pre><code>## Warning in summary.means$LL[27:51] &lt;- apply(X = transform.yield, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$UL[27:51] &lt;- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+</code></pre>
+
+<pre><code>## Warning in summary.means$UL[27:51] &lt;- apply(X = transform.yield, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$SD[27:51] &lt;- apply(X = transform.yield, MARGIN = 2,
+                                 FUN = sd, na.rm=T)
+</code></pre>
+
+<pre><code>## Warning in summary.means$SD[27:51] &lt;- apply(X = transform.yield, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
 </code></pre>
 
 <p>Seed weight means</p>
 
-<pre><code class="r">summary.means$Moderator[50:64] &lt;- colnames(results.seedwt)
-summary.means$Category[50:64] &lt;- &quot;Seed Weight&quot;
-summary.means$Mean[50:64] &lt;- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[50:64] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
-                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[50:64] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
-                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+<pre><code class="r">summary.means$Moderator[52:68] &lt;- colnames(results.seedwt)
+</code></pre>
 
-summary.means$Analysis[summary.means$Moderator==&quot;1 Application&quot; | 
+<pre><code>## Warning in summary.means$Moderator[52:68] &lt;- colnames(results.seedwt):
+## number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$Category[52:68] &lt;- &quot;Seed Weight&quot;
+summary.means$Mean[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
+</code></pre>
+
+<pre><code>## Warning in summary.means$Mean[52:68] &lt;- apply(X = transform.seedwt, MARGIN
+## = 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$LL[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
+                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
+</code></pre>
+
+<pre><code>## Warning in summary.means$LL[52:68] &lt;- apply(X = transform.seedwt, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$UL[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2, 
+                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+</code></pre>
+
+<pre><code>## Warning in summary.means$UL[52:68] &lt;- apply(X = transform.seedwt, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$SD[52:68] &lt;- apply(X = transform.seedwt, MARGIN = 2,
+                                 FUN = sd, na.rm=T)
+</code></pre>
+
+<pre><code>## Warning in summary.means$SD[52:68] &lt;- apply(X = transform.seedwt, MARGIN =
+## 2, : number of items to replace is not a multiple of replacement length
+</code></pre>
+
+<pre><code class="r">summary.means$Analysis[summary.means$Moderator==&quot;1 Application&quot; | 
                          summary.means$Moderator==&quot;2 Applications&quot;] &lt;- &quot;Applications&quot;
 summary.means$Analysis[summary.means$Moderator==&quot;2006&quot; | 
                          summary.means$Moderator==&quot;2007&quot;|
@@ -751,19 +869,35 @@ summary.means$Analysis[summary.means$Moderator==&quot;OVERALL&quot;] &lt;- &quot
                 !is.na(summary.means$Analysis),]
 </code></pre>
 
-<pre><code>##       Category Moderator       Mean         LL        UL     Analysis
-## 1         Rust   OVERALL 0.08673227 0.02417906 0.2070185 Overall Mean
-## 26       Yield   OVERALL 1.27652556 1.20894190 1.3525662 Overall Mean
-## 50 Seed Weight   OVERALL 1.21159967 1.15830431 1.2793500 Overall Mean
+<pre><code>##       Category Moderator       Mean         LL        UL         SD
+## 1         Rust   OVERALL 0.08673227 0.02417906 0.2070185 0.04786209
+## 26        Rust   OVERALL 0.08673227 0.02417906 0.2070185 0.04786209
+## 27       Yield   OVERALL 1.27652556 1.20894190 1.3525662 0.03689439
+## 51       Yield   OVERALL 1.27652556 1.20894190 1.3525662 0.03689439
+## 52 Seed Weight   OVERALL 1.21159967 1.15830431 1.2793500 0.03017360
+## 67 Seed Weight   OVERALL 1.21159967 1.15830431 1.2793500 0.03017360
+##        Analysis
+## 1  Overall Mean
+## 26 Overall Mean
+## 27 Overall Mean
+## 51 Overall Mean
+## 52 Overall Mean
+## 67 Overall Mean
 </code></pre>
 
 <pre><code class="r">summary.means[summary.means$Moderator==&quot;tau2&quot;,]
 </code></pre>
 
-<pre><code>##       Category Moderator         Mean          LL           UL Analysis
-## 2         Rust      tau2 14.569327183 6.421193568 22.439328653     &lt;NA&gt;
-## 27       Yield      tau2  0.016613024 0.001629016  0.036616434     &lt;NA&gt;
-## 51 Seed Weight      tau2  0.001682489 0.000000000  0.007539147     &lt;NA&gt;
+<pre><code>##       Category Moderator         Mean          LL           UL          SD
+## 2         Rust      tau2 14.569327183 6.421193568 22.439328653 4.198315249
+## 28       Yield      tau2  0.016613024 0.001629016  0.036616434 0.009197851
+## 53 Seed Weight      tau2  0.001682489 0.000000000  0.007539147 0.002240498
+## 68 Seed Weight      tau2  0.001682489 0.000000000  0.007539147 0.002240498
+##    Analysis
+## 2      &lt;NA&gt;
+## 28     &lt;NA&gt;
+## 53     &lt;NA&gt;
+## 68     &lt;NA&gt;
 </code></pre>
 
 <p>Save summary.means</p>
@@ -1274,7 +1408,7 @@ applic.regression &lt;- merge(applic.regression, applic.regression.sims, by = &q
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-12-06
+##  date     2016-12-07
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
@@ -1283,6 +1417,7 @@ applic.regression &lt;- merge(applic.regression, applic.regression.sims, by = &q
 <pre><code>##  package     * version date       source        
 ##  assertthat    0.1     2013-12-06 CRAN (R 3.3.0)
 ##  colorspace    1.3-1   2016-11-18 CRAN (R 3.3.2)
+##  cowplot     * 0.7.0   2016-10-28 CRAN (R 3.3.0)
 ##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
 ##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
 ##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
@@ -1290,6 +1425,7 @@ applic.regression &lt;- merge(applic.regression, applic.regression.sims, by = &q
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
 ##  ggplot2     * 2.2.0   2016-11-11 cran (@2.2.0) 
 ##  ggthemes    * 3.3.0   2016-11-24 CRAN (R 3.3.2)
+##  gridExtra   * 2.2.1   2016-02-29 CRAN (R 3.3.0)
 ##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
 ##  highr         0.6     2016-05-09 CRAN (R 3.3.0)
 ##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
@@ -1309,6 +1445,7 @@ applic.regression &lt;- merge(applic.regression, applic.regression.sims, by = &q
 ##  R.oo          1.21.0  2016-11-01 CRAN (R 3.3.0)
 ##  R.utils       2.5.0   2016-11-07 CRAN (R 3.3.0)
 ##  Rcpp          0.12.8  2016-11-17 CRAN (R 3.3.2)
+##  reshape2      1.4.2   2016-10-22 CRAN (R 3.3.0)
 ##  rstudioapi    0.6     2016-06-27 CRAN (R 3.3.0)
 ##  scales        0.4.1   2016-11-09 cran (@0.4.1) 
 ##  stringi       1.1.2   2016-10-01 CRAN (R 3.3.0)

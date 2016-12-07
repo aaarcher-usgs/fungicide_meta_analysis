@@ -100,24 +100,27 @@ summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
 #' 
 #' **Overall mean, 95% CI and Tau^2**
 print(c("Mean e.s. of rust severity", mean(exp(results.rust$OVERALL))))
+print(c("SD e.s. of rust severity", sd(exp(results.rust$OVERALL))))
 print(c("CI of mean e.s. of rust severity", 
         quantile(exp(results.rust$OVERALL), probs = c(0.025,0.975))))
 print(c("Mean tau^2 for rust", mean(results.rust$tau2)))
 
-print(c("Mean e.s. of yield severity", mean(exp(results.yield$OVERALL))))
-print(c("CI of mean e.s. of yield severity", 
+print(c("Mean e.s. of yield", mean(exp(results.yield$OVERALL))))
+print(c("SD es of yield", sd(exp(results.yield$OVERALL))))
+print(c("CI of mean e.s. of yield", 
         quantile(exp(results.yield$OVERALL), probs = c(0.025,0.975))))
 print(c("Mean tau^2 for yield", mean(results.yield$tau2)))
 
 print(c("Mean e.s. of seedwt severity", mean(exp(results.seedwt$OVERALL))))
+print(c("SD es of yield", sd(exp(results.seedwt$OVERALL))))
 print(c("CI of mean e.s. of seedwt severity", 
         quantile(exp(results.seedwt$OVERALL), probs = c(0.025,0.975))))
 print(c("Mean tau^2 for seedwt", mean(results.seedwt$tau2)))
 
 #' #############################################################################
 #' ### Step 4: Store means from each in new dataframe
-summary.means <- as.data.frame(matrix(NA, nrow = 64, ncol = 5))
-colnames(summary.means) <- c("Category", "Moderator" , "Mean", "LL", "UL")
+summary.means <- as.data.frame(matrix(NA, nrow = 68, ncol = 6))
+colnames(summary.means) <- c("Category", "Moderator" , "Mean", "LL", "UL", "SD")
 
 #' Transform model results 
 transform.rust <- exp(results.rust)
@@ -133,31 +136,37 @@ colnames(transform.seedwt) <- colnames(results.seedwt)
 transform.seedwt$tau2 <- results.seedwt$tau2
 
 #' Rust means
-summary.means$Moderator[1:25] <- colnames(results.rust)
-summary.means$Category[1:25] <- "Rust"
-summary.means$Mean[1:25] <- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[1:25] <- apply(X = transform.rust, MARGIN = 2, 
+summary.means$Moderator[1:26] <- colnames(results.rust)
+summary.means$Category[1:26] <- "Rust"
+summary.means$Mean[1:26] <- apply(X = transform.rust, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[1:26] <- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[1:25] <- apply(X = transform.rust, MARGIN = 2, 
+summary.means$UL[1:26] <- apply(X = transform.rust, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+summary.means$SD[1:26] <- apply(X = transform.rust, MARGIN = 2,
+                                FUN = sd, na.rm=T)
 
 #' Yield means
-summary.means$Moderator[26:49] <- colnames(results.yield)
-summary.means$Category[26:49] <- "Yield"
-summary.means$Mean[26:49] <- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[26:49] <- apply(X = transform.yield, MARGIN = 2, 
+summary.means$Moderator[27:51] <- colnames(results.yield)
+summary.means$Category[27:51] <- "Yield"
+summary.means$Mean[27:51] <- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[27:51] <- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[26:49] <- apply(X = transform.yield, MARGIN = 2, 
+summary.means$UL[27:51] <- apply(X = transform.yield, MARGIN = 2, 
                                 FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+summary.means$SD[27:51] <- apply(X = transform.yield, MARGIN = 2,
+                                 FUN = sd, na.rm=T)
 
 #' Seed weight means
-summary.means$Moderator[50:64] <- colnames(results.seedwt)
-summary.means$Category[50:64] <- "Seed Weight"
-summary.means$Mean[50:64] <- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
-summary.means$LL[50:64] <- apply(X = transform.seedwt, MARGIN = 2, 
+summary.means$Moderator[52:68] <- colnames(results.seedwt)
+summary.means$Category[52:68] <- "Seed Weight"
+summary.means$Mean[52:68] <- apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[52:68] <- apply(X = transform.seedwt, MARGIN = 2, 
                                  FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
-summary.means$UL[50:64] <- apply(X = transform.seedwt, MARGIN = 2, 
+summary.means$UL[52:68] <- apply(X = transform.seedwt, MARGIN = 2, 
                                  FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+summary.means$SD[52:68] <- apply(X = transform.seedwt, MARGIN = 2,
+                                 FUN = sd, na.rm=T)
 
 summary.means$Analysis[summary.means$Moderator=="1 Application" | 
                          summary.means$Moderator=="2 Applications"] <- "Applications"
