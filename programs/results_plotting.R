@@ -32,30 +32,7 @@ category.split <- split(summary.means, summary.means$Category)
 wide <- merge(category.split$Rust, category.split$Yield, by = "Moderator",all=T)
 wide <- merge(wide, category.split$`Seed Weight`, by = "Moderator",all = T)
 
-#' ### Scatter plots of Relationships between dependent variables 
-#' 
-#' Rust vs Yield
-ggplot(data = wide[!is.na(wide$Analysis.x),], aes(x = Mean.x, y = Mean.y))+
-  geom_point()+
-  geom_errorbar(aes(ymin=LL.y,ymax=UL.y))+
-  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x))+
-  theme_tufte()
-
-#' Rust vs Seed Weight
-ggplot(data = wide[!is.na(wide$Analysis.x),], aes(x = Mean.x, y = Mean))+
-  geom_point()+
-  geom_errorbar(aes(ymin=LL,ymax=UL))+
-  geom_errorbarh(aes(xmin=LL.x,xmax=UL.x))+
-  theme_tufte()
-
-#' Seed Weight vs Yield
-ggplot(data = wide[!is.na(wide$Analysis.x),], aes(x = Mean, y = Mean.y))+
-  geom_point()+
-  geom_errorbar(aes(ymin=LL.y,ymax=UL.y))+
-  geom_errorbarh(aes(xmin=LL,xmax=UL))+
-  theme_tufte()
-
-#' ### Scatter plot main results
+#' make 3-way comparison
 new.wide.rust <- category.split$Rust
 new.wide.y100 <- rbind(category.split$Yield, category.split$`Seed Weight`)
 new.wide.yV100 <- merge(category.split$Yield, category.split$`Seed Weight`, all=T, by="Moderator")
@@ -67,7 +44,7 @@ new.wide.3way <- rbind(new.wide, new.wide.yV100)
 new.wide.3way <- subset(new.wide.3way, !is.na(Comparison))
 new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
 
-#' Panel of scatter plots
+#' ### Scatter plot main results
 #+ figure1, width=6
 ggplot(data = new.wide.3way, 
        aes(x = Mean.x, y = Mean.y))+
