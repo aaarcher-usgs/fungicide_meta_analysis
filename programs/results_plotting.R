@@ -11,6 +11,7 @@ library(ezknitr)
 library(knitr)
 library(devtools)
 library(ggplot2)
+library(ggthemes)
 library(gridExtra)
 library(cowplot)
 
