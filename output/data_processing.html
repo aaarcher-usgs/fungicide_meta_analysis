@@ -219,11 +219,6 @@ library(devtools)
 <pre><code class="r">remove(list=ls())
 </code></pre>
 
-<p>Document settings</p>
-
-<pre><code class="r">opts_chunk$set(fig.width = 6, fig.height = 4)
-</code></pre>
-
 <h3>Load data</h3>
 
 <pre><code class="r">raw.data &lt;- read.csv(&quot;data/workspace.csv&quot;)
@@ -235,16 +230,18 @@ raw.data$FID[raw.data$FID==279&amp;raw.data$trade.name==&quot;Folicur&quot;] &lt
 <h3>Processing data Steps</h3>
 
 <ol>
-<li>New dataset with only selected fields</li>
+<li>Filter dataset with only selected fields</li>
 <li>Standardize categorical moderators</li>
 <li>Partition data</li>
 <li>Standardize effect size information</li>
-<li>Make sure categorical moderators have n &gt; 5</li>
+<li>Make sure categorical moderators are from at least 5 studies with at least 15 entries</li>
 <li>Calculate effect sizes</li>
 <li>Save files for analysis</li>
 </ol>
 
-<h3>1. New dataset with only selected fields</h3>
+<h2>1. New dataset with only selected fields</h2>
+
+<p>Remove fields that we don&#39;t use in analysis or processing</p>
 
 <pre><code class="r">data.reduced &lt;- raw.data[,c(1:7,10:17,19:48)]
 # take out three data points with information on control treatments only
@@ -322,12 +319,11 @@ data.reduced &lt;- data.reduced[data.reduced$FID!=105 &amp;
 ## 61          Sikora ref 42            42      2005    AL          7
 </code></pre>
 
-<pre><code class="r">#summaryBy(FID~ReferenceNumb+Reference+studyYear+State, data = data.reduced, FUN = length)
-</code></pre>
+<h2>2. Standardize categorical moderators</h2>
 
-<h3>2. Standardize categorical moderators</h3>
+<h3>Active ingredients</h3>
 
-<p>Active ingredients: define mixed and 2+ applications of mixed (if 2+ applications of same, just use that active ingredient as is.)</p>
+<p>Define mixed and 2+ applications of mixed (if 2+ applications of same, just use that active ingredient as is.)</p>
 
 <pre><code class="r"># Active ingredients - fix typos in original dataset
 data.reduced$active.ingredient.coded &lt;- as.character(data.reduced$active.ingredient.coded)
@@ -339,10 +335,13 @@ data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Folicur + He
 data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Laredo&quot;] &lt;- &quot;MYC&quot;
 data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Punch fb Punch&quot;] &lt;- &quot;FLUS&quot;
 data.reduced$active.ingredient.coded[data.reduced$trade.name==&quot;Stratego&quot;] &lt;- &quot;prop + trif&quot;
+</code></pre>
 
+<p>Active ingredients:</p>
 
-# Active ingredients - new code for analysis (e.g. &gt;5 obs)
-#     Start by making new field and storing the old code
+<p>New code for analysis (e.g. &gt;15 obs)</p>
+
+<pre><code class="r">#     Start by making new field and storing the old code
 data.reduced$activeIngClean &lt;- &quot;empty&quot;
 #     Mixed
 mixed.indices &lt;- grep(&quot;+&quot;, data.reduced$active.ingredient.coded, fixed=TRUE)
@@ -687,10 +686,11 @@ data.reduced$combo_complete[!is.na(data.reduced$alphaIngred)] &lt;- &quot;comple
 </code></pre>
 
 <pre><code class="r">#  only pyr + tebu and azo + prop have &gt;15
+</code></pre>
 
+<p>Single applications</p>
 
-#     Single applications
-data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;empty&quot;] &lt;- 
+<pre><code class="r">data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;empty&quot;] &lt;- 
   as.character(data.reduced$active.ingredient.coded[data.reduced$activeIngClean==&quot;empty&quot;])
 #     Clean up so labels are consistent (e.g., &quot;pyr&quot; vs &quot;pyra&quot;)
 data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;pyr&quot;] &lt;- &quot;PYR&quot;
@@ -737,7 +737,9 @@ sort(table(data.reduced$activeIngClean))
 data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;FEBU&quot;] &lt;- &quot;FENB&quot;
 </code></pre>
 
-<p>Class of fungicide: clean up labels to be consistent </p>
+<h3>Class of fungicide</h3>
+
+<p>Clean up labels to be consistent </p>
 
 <pre><code class="r"># Table to see how it looks as is
 table(data.reduced$class.code)
@@ -1154,7 +1156,7 @@ data.reduced$activeIngClean[data.reduced$activeIngClean==&quot;UNKNOWN&quot;] &l
 data.reduced$classClean[data.reduced$classClean==&quot;unknown&quot;] &lt;- &quot;other&quot;
 </code></pre>
 
-<p>Growth stages of application</p>
+<h3>Growth stages of application</h3>
 
 <pre><code class="r"># Examine original data
 sort(table(data.reduced$Growth.stage.applied))
@@ -1258,7 +1260,7 @@ table(data.reduced$growthStateClean)
 ##      20      61      22     125     204      16      78      27      13
 </code></pre>
 
-<p>Number of applications</p>
+<h3>Number of applications</h3>
 
 <pre><code class="r"># Check with table
 table(data.reduced$applicationsNumb)
@@ -1269,7 +1271,7 @@ table(data.reduced$applicationsNumb)
 ## 282 254  23   6   1
 </code></pre>
 
-<h3>3. Partition data</h3>
+<h2>3. Partition data</h2>
 
 <p>Rust data</p>
 
@@ -1311,37 +1313,7 @@ yield.data &lt;- rust.data[!is.na(rust.data$yield),]
 seedwt.data &lt;- rust.data[!is.na(rust.data$seedWt),] 
 </code></pre>
 
-<p>Cercospora data</p>
-
-<pre><code class="r"># Data that had Cercospora data
-cerco.data &lt;- data.reduced[!is.na(data.reduced$CercoSever),]
-# Define the scale used
-cerco.data$scale &lt;- &quot;empty&quot;
-# Data from Padgett et al. studies used scale 0-10
-cerco.data$scale[grep(&quot;^Pa&quot;, cerco.data$Reference)] &lt;- &quot;Scale 0-10&quot;
-# Data from Price et al. studies used scale 0-8
-cerco.data$scale[grep(&quot;^Pr&quot;, cerco.data$Reference)] &lt;- &quot;Scale 0-8&quot;
-# Data from others used 0-5 scale
-cerco.data$scale[cerco.data$scale==&quot;empty&quot;] &lt;- &quot;Scale 0-5&quot;
-</code></pre>
-
-<p>Target spot data</p>
-
-<pre><code class="r"># Data that had Target Spot data
-target.spot.data &lt;- data.reduced[!is.na(data.reduced$Tsseverity)|
-                                   !is.na(data.reduced$Tsincidence),]
-# Define the scale used
-target.spot.data$scale &lt;- &quot;empty&quot;
-# Percentage originally
-target.spot.data$scale[target.spot.data$ReferenceNumb==55 | 
-                         target.spot.data$ReferenceNumb==21] &lt;- &quot;Percent&quot;
-# Data with scale 0-10
-target.spot.data$scale[target.spot.data$ReferenceNumb==30] &lt;- &quot;Scale 0-10&quot;
-# Data with scale 0-5
-target.spot.data$scale[target.spot.data$scale==&quot;empty&quot;] &lt;- &quot;Scale 0-5&quot;
-</code></pre>
-
-<h3>4. Standardize effect size information</h3>
+<h2>4. Standardize effect size information</h2>
 
 <ul>
 <li>Convert group means, n, and std into form needed for metafor package</li>
@@ -1506,153 +1478,21 @@ seedwt.data &lt;- merge(seedwt.data,
                      by.y = &quot;FIDrust&quot;)
 </code></pre>
 
-<p>Cercospora data</p>
+<h2>5. Take out categorical moderators with records &lt; 15 from &lt; 5 studies</h2>
 
-<pre><code class="r"># Scale 0-10
-cerco.data$m1i[cerco.data$scale==&quot;Scale 0-10&quot;] &lt;- 
-  cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-10&quot;]*10
-cerco.data$m2i[cerco.data$scale==&quot;Scale 0-10&quot;] &lt;- 
-  cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-10&quot;]*10
-# Scale 0-8
-cerco.data$m1i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
-                cerco.data$CercoSever &lt;= 2] &lt;-
-  cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
-                           cerco.data$CercoSever &lt;= 2]*2.5
-cerco.data$m1i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
-                cerco.data$CercoSever &gt; 2 &amp;
-                cerco.data$CercoSever &lt;= 4] &lt;- 5 +
-  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
-                            cerco.data$CercoSever &gt; 2 &amp;
-                            cerco.data$CercoSever &lt;= 4]-2)*5
-cerco.data$m1i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
-                cerco.data$CercoSever &gt; 4 &amp;
-                cerco.data$CercoSever &lt;= 6] &lt;- 15 +
-  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
-                            cerco.data$CercoSever &gt; 4 &amp;
-                            cerco.data$CercoSever &lt;= 6]-4)*10
-cerco.data$m1i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
-                cerco.data$CercoSever &gt; 6] &lt;- 35 +
-  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
-                            cerco.data$CercoSever &gt; 6]-6)*32.5
-# Control
-cerco.data$m2i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
-                 cerco.data$CercoSeverCont &lt;= 2] &lt;-
-  cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
-                          cerco.data$CercoSeverCont &lt;= 2]*2.5
-cerco.data$m2i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
-                 cerco.data$CercoSeverCont &gt; 2 &amp;
-                 cerco.data$CercoSeverCont &lt;= 4] &lt;- 5 +
-  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
-                           cerco.data$CercoSeverCont &gt; 2 &amp;
-                           cerco.data$CercoSeverCont &lt;= 4]-2)*5
-cerco.data$m2i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
-                 cerco.data$CercoSeverCont &gt; 4 &amp;
-                 cerco.data$CercoSeverCont &lt;= 6] &lt;- 15 +
-  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
-                           cerco.data$CercoSeverCont &gt; 4 &amp;
-                           cerco.data$CercoSeverCont &lt;= 6]-4)*10
-cerco.data$m2i[cerco.data$scale==&quot;Scale 0-8&quot; &amp; 
-                 cerco.data$CercoSeverCont &gt; 6] &lt;- 35 +
-  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-8&quot;&amp;
-                           cerco.data$CercoSeverCont &gt; 6]-6)*32.5
-</code></pre>
+<h3>Rust data</h3>
 
-<p>Scale 0-5</p>
+<p>Take out values of control rust severity &lt;5%</p>
 
-<ul>
-<li>if scale is less than or equal to 1; 10*scale</li>
-<li>if scale is greater than 1, less than or equal to 2; 10 + 15*(scale-1)</li>
-<li>if scale is greater than 2; 25 + 25*(scale-2)</li>
-</ul>
-
-<pre><code class="r">cerco.data$m1i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 cerco.data$CercoSever &lt;= 1] &lt;-
-  cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-5&quot;&amp;
-                          cerco.data$CercoSever &lt;= 1]*10
-cerco.data$m1i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 cerco.data$CercoSever &gt; 1 &amp;
-                 cerco.data$CercoSever &lt;= 2] &lt;- 10 +
-  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
-                           cerco.data$CercoSever &gt; 1 &amp;
-                           cerco.data$CercoSever &lt;= 2]-1)*15
-cerco.data$m1i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 cerco.data$CercoSever &gt; 2 ] &lt;- 25 +
-  (cerco.data$CercoSever[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
-                           cerco.data$CercoSever &gt; 2]-2)*25
-# Control
-cerco.data$m2i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 cerco.data$CercoSeverCont &lt;= 1] &lt;-
-  cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-5&quot;&amp;
-                          cerco.data$CercoSeverCont &lt;= 1]*10
-cerco.data$m2i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 cerco.data$CercoSeverCont &gt; 1 &amp;
-                 cerco.data$CercoSeverCont &lt;= 2] &lt;- 10 +
-  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
-                           cerco.data$CercoSeverCont &gt; 1 &amp;
-                           cerco.data$CercoSeverCont &lt;= 2]-1)*15
-cerco.data$m2i[cerco.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 cerco.data$CercoSeverCont &gt; 2 ] &lt;- 25 +
-  (cerco.data$CercoSeverCont[cerco.data$scale==&quot;Scale 0-5&quot;&amp; 
-                           cerco.data$CercoSeverCont &gt; 2]-2)*25
-cerco.data$n1i &lt;- cerco.data$n2i &lt;- cerco.data$replications
-</code></pre>
-
-<p>Target spot data</p>
-
-<pre><code class="r"># Scale 0-10
-target.spot.data$m1i[target.spot.data$scale==&quot;Scale 0-10&quot;] &lt;- 
-  target.spot.data$Tsseverity[target.spot.data$scale==&quot;Scale 0-10&quot;]*10
-target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-10&quot;] &lt;- 
-  target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-10&quot;]*10
-# Percentage
-target.spot.data$m1i[target.spot.data$scale==&quot;Percent&quot;] &lt;- 
-  target.spot.data$Tsincidence[target.spot.data$scale==&quot;Percent&quot;]
-target.spot.data$m2i[target.spot.data$scale==&quot;Percent&quot;] &lt;- 
-  target.spot.data$TSincidenceCont[target.spot.data$scale==&quot;Percent&quot;]
-# Scale 0-5
-target.spot.data$m1i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 target.spot.data$Tsseverity &lt;= 1] &lt;-
-  target.spot.data$Tsseverity[target.spot.data$scale==&quot;Scale 0-5&quot;&amp;
-                          target.spot.data$Tsseverity &lt;= 1]*10
-target.spot.data$m1i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 target.spot.data$Tsseverity &gt; 1 &amp;
-                 target.spot.data$Tsseverity &lt;= 2] &lt;- 10 +
-  (target.spot.data$Tsseverity[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
-                           target.spot.data$Tsseverity &gt; 1 &amp;
-                           target.spot.data$Tsseverity &lt;= 2]-1)*15
-target.spot.data$m1i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 target.spot.data$Tsseverity &gt; 2 ] &lt;- 25 +
-  (target.spot.data$Tsseverity[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
-                           target.spot.data$Tsseverity &gt; 2]-2)*25
-# Control
-target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 target.spot.data$TSseverityCont &lt;= 1] &lt;-
-  target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-5&quot;&amp;
-                              target.spot.data$TSseverityCont &lt;= 1]*10
-target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 target.spot.data$TSseverityCont &gt; 1 &amp;
-                 target.spot.data$TSseverityCont &lt;= 2] &lt;- 10 +
-  (target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
-                               target.spot.data$TSseverityCont &gt; 1 &amp;
-                               target.spot.data$TSseverityCont &lt;= 2]-1)*15
-target.spot.data$m2i[target.spot.data$scale==&quot;Scale 0-5&quot; &amp; 
-                 target.spot.data$TSseverityCont &gt; 2 ] &lt;- 25 +
-  (target.spot.data$TSseverityCont[target.spot.data$scale==&quot;Scale 0-5&quot;&amp; 
-                               target.spot.data$TSseverityCont &gt; 2]-2)*25
-target.spot.data$n1i &lt;- target.spot.data$n2i &lt;- target.spot.data$replications
-</code></pre>
-
-<h3>5. Take out categorical moderators with records &lt; 15 from &lt; 5 studies</h3>
-
-<p>Rust data</p>
-
-<pre><code class="r"># Take out values of control rust severity &lt;5%
-too.low.pressure &lt;- rust.data$ReferenceNumb[rust.data$m2i&lt;5] 
+<pre><code class="r">too.low.pressure &lt;- rust.data$ReferenceNumb[rust.data$m2i&lt;5] 
 rust.data &lt;- rust.data[!rust.data$ReferenceNumb %in% too.low.pressure,]
 yield.data &lt;- yield.data[!yield.data$ReferenceNumb %in% too.low.pressure,]
 seedwt.data &lt;- seedwt.data[!seedwt.data$ReferenceNumb %in% too.low.pressure,]
-# Active ingredients
-sort(table(rust.data$activeIngClean))
+</code></pre>
+
+<p>Active ingredients</p>
+
+<pre><code class="r">sort(table(rust.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
@@ -1764,9 +1604,11 @@ summaryBy(FID~category_ai+ReferenceNumb,
 </code></pre>
 
 <pre><code class="r">rust.data$category_ai[rust.data$category_ai==&quot;DUAL&quot;] &lt;- NA
+</code></pre>
 
-# Class
-sort(table(rust.data$classClean))
+<p>Class</p>
+
+<pre><code class="r">sort(table(rust.data$classClean))
 </code></pre>
 
 <pre><code>## 
@@ -1883,8 +1725,9 @@ summaryBy(FID~category_class+ReferenceNumb,
 ## 71       triazole            74          4
 </code></pre>
 
-<pre><code class="r"># R-stage
-sort(table(rust.data$growthStateClean))
+<p>R-stage</p>
+
+<pre><code class="r">sort(table(rust.data$growthStateClean))
 </code></pre>
 
 <pre><code>## 
@@ -1953,9 +1796,11 @@ summaryBy(FID~category_rstage+ReferenceNumb,
 </code></pre>
 
 <pre><code class="r">rust.data$category_rstage[rust.data$category_rstage==&quot;4&quot;] &lt;- NA
+</code></pre>
 
-# Applications 
-sort(table(rust.data$applicationsNumb))
+<p>Applications </p>
+
+<pre><code class="r">sort(table(rust.data$applicationsNumb))
 </code></pre>
 
 <pre><code>## 
@@ -2111,10 +1956,11 @@ summaryBy(FID~category_year+ReferenceNumb,
                           rust.data$studyYear==&quot;2005&quot;] &lt;- NA
 </code></pre>
 
-<p>Yield data</p>
+<h3>Yield data</h3>
 
-<pre><code class="r"># Applications
-sort(table(yield.data$applicationsNumb))
+<p>Applications</p>
+
+<pre><code class="r">sort(table(yield.data$applicationsNumb))
 </code></pre>
 
 <pre><code>## 
@@ -2178,8 +2024,9 @@ summaryBy(FID~number_applications+ReferenceNumb,
 ## 37                   2            74         12
 </code></pre>
 
-<pre><code class="r"># R-stage
-sort(table(yield.data$growthStateClean))
+<p>R-stage</p>
+
+<pre><code class="r">sort(table(yield.data$growthStateClean))
 </code></pre>
 
 <pre><code>## 
@@ -2243,10 +2090,11 @@ summaryBy(FID~category_rstage+ReferenceNumb,
 </code></pre>
 
 <pre><code class="r">yield.data$category_rstage[yield.data$category_rstage==&quot;4&quot;] &lt;- NA
+</code></pre>
 
+<p>Active ingredients</p>
 
-# Active ingredients
-sort(table(yield.data$activeIngClean))
+<pre><code class="r">sort(table(yield.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
@@ -2347,8 +2195,9 @@ summaryBy(FID~category_ai+ReferenceNumb,
 ## 71        TEBU            66          1
 </code></pre>
 
-<pre><code class="r"># Class
-sort(table(yield.data$classClean))
+<p>Class</p>
+
+<pre><code class="r">sort(table(yield.data$classClean))
 </code></pre>
 
 <pre><code>## 
@@ -2529,10 +2378,11 @@ summaryBy(FID~category_year+ReferenceNumb,
                           yield.data$studyYear==&quot;2005&quot;] &lt;- NA
 </code></pre>
 
-<p>100-seed weight data</p>
+<h3>100-seed weight data</h3>
 
-<pre><code class="r"># Applications 
-sort(table(seedwt.data$applicationsNumb))
+<p>Applications </p>
+
+<pre><code class="r">sort(table(seedwt.data$applicationsNumb))
 </code></pre>
 
 <pre><code>## 
@@ -2576,8 +2426,9 @@ summaryBy(FID~number_applications+ReferenceNumb,
 ## 17                   2            66          7
 </code></pre>
 
-<pre><code class="r"># growth stage
-sort(table(seedwt.data$growthStateClean))
+<p>Growth stage</p>
+
+<pre><code class="r">sort(table(seedwt.data$growthStateClean))
 </code></pre>
 
 <pre><code>## 
@@ -2619,9 +2470,11 @@ summaryBy(FID~category_rstage+ReferenceNumb,
 </code></pre>
 
 <pre><code class="r">seedwt.data$category_rstage[seedwt.data$category_rstage!=&quot;3&quot;] &lt;- NA
+</code></pre>
 
-# Active ingredients
-sort(table(seedwt.data$activeIngClean))
+<p>Active ingredients</p>
+
+<pre><code class="r">sort(table(seedwt.data$activeIngClean))
 </code></pre>
 
 <pre><code>## 
@@ -2678,8 +2531,9 @@ summaryBy(FID~category_ai+ReferenceNumb,
 ## 27        TEBU            66          1
 </code></pre>
 
-<pre><code class="r"># Class
-sort(table(seedwt.data$classClean))
+<p>Class</p>
+
+<pre><code class="r">sort(table(seedwt.data$classClean))
 </code></pre>
 
 <pre><code>## 
@@ -2802,7 +2656,7 @@ summaryBy(FID~category_year+ReferenceNumb,
 <pre><code class="r">seedwt.data$category_year[seedwt.data$studyYear!=&quot;2006&quot;] &lt;- NA
 </code></pre>
 
-<h3>6. Calculate effect sizes</h3>
+<h2>6. Calculate effect sizes</h2>
 
 <p>Using log response ratio, cannot have 0s in data; so changing 0 to 0.0001</p>
 
@@ -2814,15 +2668,13 @@ yield.data$m2i[yield.data$m2i==0] &lt;- 0.0001
 
 seedwt.data$m1i[seedwt.data$m1i==0] &lt;- 0.0001
 seedwt.data$m2i[seedwt.data$m2i==0] &lt;- 0.0001
-
-cerco.data$m1i[cerco.data$m1i==0] &lt;- 0.0001
-cerco.data$m2i[cerco.data$m2i==0] &lt;- 0.0001
-
-target.spot.data$m1i[target.spot.data$m1i==0] &lt;- 0.0001
-target.spot.data$m2i[target.spot.data$m2i==0] &lt;- 0.0001
 </code></pre>
 
-<p>Overall means (raw mean difference)</p>
+<p>Log response ratio (&ldquo;ROM&rdquo;)</p>
+
+<p><em>Even though here we impute 1s as the standard deviations for each record, 
+we are using the log response ratio, and it does not use SD in its 
+calculation.</em> </p>
 
 <pre><code class="r">rust.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i, 
                     sd1i = rep(1,nrow(rust.data)), 
@@ -2839,19 +2691,9 @@ seedwt.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i,
                       sd2i = rep(1,nrow(seedwt.data)), 
                       n1i = n1i, n2i = n2i,
                       data = seedwt.data)
-cerco.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i, 
-                              sd1i = rep(1,nrow(cerco.data)), 
-                         sd2i = rep(1,nrow(cerco.data)), 
-                         n1i = n1i, n2i = n2i,
-                              data = cerco.data)
-target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2i, 
-                              sd1i = rep(1,nrow(target.spot.data)), 
-                              sd2i = rep(1,nrow(target.spot.data)), 
-                              n1i = n1i, n2i = n2i,
-                              data = target.spot.data)
 </code></pre>
 
-<h3>7. Save files for analysis</h3>
+<h2>7. Save files for analysis</h2>
 
 <pre><code class="r">save(rust.data.ROM, yield.data.ROM, seedwt.data.ROM,
      cerco.data.ROM, target.spot.data.ROM,
@@ -2873,11 +2715,11 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 <pre><code>##  setting  value                       
 ##  version  R version 3.3.2 (2016-10-31)
 ##  system   x86_64, darwin13.4.0        
-##  ui       RStudio (0.99.902)          
+##  ui       RStudio (0.99.893)          
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-12-06
+##  date     2016-12-27
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
@@ -2885,18 +2727,15 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 
 <pre><code>##  package     * version date       source        
 ##  assertthat    0.1     2013-12-06 CRAN (R 3.3.0)
-##  colorspace    1.3-1   2016-11-18 CRAN (R 3.3.2)
+##  colorspace    1.3-2   2016-12-14 CRAN (R 3.3.2)
 ##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
 ##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
 ##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
-##  ggplot2     * 2.2.0   2016-11-11 cran (@2.2.0) 
-##  ggthemes    * 3.3.0   2016-11-24 CRAN (R 3.3.2)
+##  ggplot2       2.2.0   2016-11-11 cran (@2.2.0) 
 ##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
-##  highr         0.6     2016-05-09 CRAN (R 3.3.0)
 ##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
-##  labeling      0.3     2014-08-23 CRAN (R 3.3.0)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.2)
 ##  lazyeval      0.2.0   2016-06-12 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
@@ -2905,7 +2744,6 @@ target.spot.data.ROM &lt;- escalc(measure = &quot;ROM&quot;, m1i = m1i, m2i = m2
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.2)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
 ##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)
-##  mime          0.5     2016-07-07 CRAN (R 3.3.0)
 ##  munsell       0.4.3   2016-02-13 CRAN (R 3.3.0)
 ##  plyr          1.8.4   2016-06-08 CRAN (R 3.3.0)
 ##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)

@@ -14,10 +14,6 @@ library(devtools)
 #+ clear
 remove(list=ls())
 
-#' Document settings
-#+ settings
-opts_chunk$set(fig.width = 6, fig.height = 4)
-
 #' ### Load data
 #+ data
 raw.data <- read.csv("data/workspace.csv")
@@ -29,29 +25,33 @@ raw.data$FID[raw.data$FID==279&raw.data$trade.name=="Folicur"] <- 999
 #' ### Processing data Steps
 #' 
 #' 
-#' 1. New dataset with only selected fields
+#' 1. Filter dataset with only selected fields
 #' 2. Standardize categorical moderators
 #' 3. Partition data
 #' 4. Standardize effect size information
-#' 5. Make sure categorical moderators have n > 5
+#' 5. Make sure categorical moderators are from at least 5 studies with at least 15 entries
 #' 6. Calculate effect sizes
 #' 7. Save files for analysis
 #' 
-#' ### 1. New dataset with only selected fields
+#' ## 1. New dataset with only selected fields
+#' 
+#' Remove fields that we don't use in analysis or processing
 #+ selectFields
 data.reduced <- raw.data[,c(1:7,10:17,19:48)]
 # take out three data points with information on control treatments only
 data.reduced <- data.reduced[data.reduced$FID!=105 &
                                data.reduced$FID!=154 &
                                data.reduced$FID!=211,]
+
 #' Table of all data
 #+ datatable
 summaryBy(FID~Reference+ReferenceNumb+studyYear+State, data = data.reduced, FUN = length)
-#summaryBy(FID~ReferenceNumb+Reference+studyYear+State, data = data.reduced, FUN = length)
 
-#' ### 2. Standardize categorical moderators
+#' ## 2. Standardize categorical moderators
 #' 
-#' Active ingredients: define mixed and 2+ applications of mixed (if 2+ applications of same, just use that active ingredient as is.)
+#' ### Active ingredients
+#' 
+#' Define mixed and 2+ applications of mixed (if 2+ applications of same, just use that active ingredient as is.)
 #+ standardizeActive
 # Active ingredients - fix typos in original dataset
 data.reduced$active.ingredient.coded <- as.character(data.reduced$active.ingredient.coded)
@@ -65,7 +65,9 @@ data.reduced$active.ingredient.coded[data.reduced$trade.name=="Punch fb Punch"] 
 data.reduced$active.ingredient.coded[data.reduced$trade.name=="Stratego"] <- "prop + trif"
 
 
-# Active ingredients - new code for analysis (e.g. >5 obs)
+#' Active ingredients:
+#' 
+#' New code for analysis (e.g. >15 obs)
 #     Start by making new field and storing the old code
 data.reduced$activeIngClean <- "empty"
 #     Mixed
@@ -331,7 +333,7 @@ sort(table(data.reduced$alphaIngred))
 #  only pyr + tebu and azo + prop have >15
 
 
-#     Single applications
+#' Single applications
 data.reduced$activeIngClean[data.reduced$activeIngClean=="empty"] <- 
   as.character(data.reduced$active.ingredient.coded[data.reduced$activeIngClean=="empty"])
 #     Clean up so labels are consistent (e.g., "pyr" vs "pyra")
@@ -357,7 +359,9 @@ data.reduced$activeIngClean[data.reduced$activeIngClean=="FEBU"] <- "FENB"
 
 
 
-#' Class of fungicide: clean up labels to be consistent 
+#' ### Class of fungicide
+#' 
+#' Clean up labels to be consistent 
 #' 
 #+ standardizeClass
 # Table to see how it looks as is
@@ -497,7 +501,7 @@ data.reduced$classClean[data.reduced$classClean=="unknown"] <- "other"
 
 
 
-#' Growth stages of application
+#' ### Growth stages of application
 #' 
 #+ standardizeRclass
 # Examine original data
@@ -535,13 +539,13 @@ data.reduced$growthStateClean[data.reduced$growthStateClean=="empty"] <- "unknow
 #sort(table(data.reduced$Growth.stage.applied[data.reduced$growthStateClean=="empty"]))
 table(data.reduced$growthStateClean)
 
-#' Number of applications
+#' ### Number of applications
 #' 
 #+ standardizeNumbApps
 # Check with table
 table(data.reduced$applicationsNumb)
 
-#' ### 3. Partition data
+#' ## 3. Partition data
 #' 
 #' Rust data
 #+ rustData
@@ -580,37 +584,9 @@ yield.data <- rust.data[!is.na(rust.data$yield),]
     # Column #39 is 100sw
 seedwt.data <- rust.data[!is.na(rust.data$seedWt),] 
 
-#' Cercospora data
-#+ cercosporaData
-# Data that had Cercospora data
-cerco.data <- data.reduced[!is.na(data.reduced$CercoSever),]
-# Define the scale used
-cerco.data$scale <- "empty"
-# Data from Padgett et al. studies used scale 0-10
-cerco.data$scale[grep("^Pa", cerco.data$Reference)] <- "Scale 0-10"
-# Data from Price et al. studies used scale 0-8
-cerco.data$scale[grep("^Pr", cerco.data$Reference)] <- "Scale 0-8"
-# Data from others used 0-5 scale
-cerco.data$scale[cerco.data$scale=="empty"] <- "Scale 0-5"
-
-#' Target spot data
-#+ targetSpotData
-# Data that had Target Spot data
-target.spot.data <- data.reduced[!is.na(data.reduced$Tsseverity)|
-                                   !is.na(data.reduced$Tsincidence),]
-# Define the scale used
-target.spot.data$scale <- "empty"
-# Percentage originally
-target.spot.data$scale[target.spot.data$ReferenceNumb==55 | 
-                         target.spot.data$ReferenceNumb==21] <- "Percent"
-# Data with scale 0-10
-target.spot.data$scale[target.spot.data$ReferenceNumb==30] <- "Scale 0-10"
-# Data with scale 0-5
-target.spot.data$scale[target.spot.data$scale=="empty"] <- "Scale 0-5"
-
-#' ### 4. Standardize effect size information
+#' ## 4. Standardize effect size information
 #' 
-#' * Convert group means, n, and std into form needed for metafor package
+#' - Convert group means, n, and std into form needed for metafor package
 #' 
 #' For rust severity on scale 0-8, convert to percent
 #' 
@@ -765,147 +741,18 @@ seedwt.data <- merge(seedwt.data,
                      by.x = "FID", 
                      by.y = "FIDrust")
 
-#' Cercospora data
-#+ cercoMetafor
-# Scale 0-10
-cerco.data$m1i[cerco.data$scale=="Scale 0-10"] <- 
-  cerco.data$CercoSever[cerco.data$scale=="Scale 0-10"]*10
-cerco.data$m2i[cerco.data$scale=="Scale 0-10"] <- 
-  cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-10"]*10
-# Scale 0-8
-cerco.data$m1i[cerco.data$scale=="Scale 0-8" & 
-                cerco.data$CercoSever <= 2] <-
-  cerco.data$CercoSever[cerco.data$scale=="Scale 0-8"&
-                           cerco.data$CercoSever <= 2]*2.5
-cerco.data$m1i[cerco.data$scale=="Scale 0-8" & 
-                cerco.data$CercoSever > 2 &
-                cerco.data$CercoSever <= 4] <- 5 +
-  (cerco.data$CercoSever[cerco.data$scale=="Scale 0-8"&
-                            cerco.data$CercoSever > 2 &
-                            cerco.data$CercoSever <= 4]-2)*5
-cerco.data$m1i[cerco.data$scale=="Scale 0-8" & 
-                cerco.data$CercoSever > 4 &
-                cerco.data$CercoSever <= 6] <- 15 +
-  (cerco.data$CercoSever[cerco.data$scale=="Scale 0-8"&
-                            cerco.data$CercoSever > 4 &
-                            cerco.data$CercoSever <= 6]-4)*10
-cerco.data$m1i[cerco.data$scale=="Scale 0-8" & 
-                cerco.data$CercoSever > 6] <- 35 +
-  (cerco.data$CercoSever[cerco.data$scale=="Scale 0-8"&
-                            cerco.data$CercoSever > 6]-6)*32.5
-# Control
-cerco.data$m2i[cerco.data$scale=="Scale 0-8" & 
-                 cerco.data$CercoSeverCont <= 2] <-
-  cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-8"&
-                          cerco.data$CercoSeverCont <= 2]*2.5
-cerco.data$m2i[cerco.data$scale=="Scale 0-8" & 
-                 cerco.data$CercoSeverCont > 2 &
-                 cerco.data$CercoSeverCont <= 4] <- 5 +
-  (cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-8"&
-                           cerco.data$CercoSeverCont > 2 &
-                           cerco.data$CercoSeverCont <= 4]-2)*5
-cerco.data$m2i[cerco.data$scale=="Scale 0-8" & 
-                 cerco.data$CercoSeverCont > 4 &
-                 cerco.data$CercoSeverCont <= 6] <- 15 +
-  (cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-8"&
-                           cerco.data$CercoSeverCont > 4 &
-                           cerco.data$CercoSeverCont <= 6]-4)*10
-cerco.data$m2i[cerco.data$scale=="Scale 0-8" & 
-                 cerco.data$CercoSeverCont > 6] <- 35 +
-  (cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-8"&
-                           cerco.data$CercoSeverCont > 6]-6)*32.5
-#' Scale 0-5
-#' 
-#' * if scale is less than or equal to 1; 10*scale
-#' * if scale is greater than 1, less than or equal to 2; 10 + 15*(scale-1)
-#' * if scale is greater than 2; 25 + 25*(scale-2)
-#' 
-#+ scale05cerco
-cerco.data$m1i[cerco.data$scale=="Scale 0-5" & 
-                 cerco.data$CercoSever <= 1] <-
-  cerco.data$CercoSever[cerco.data$scale=="Scale 0-5"&
-                          cerco.data$CercoSever <= 1]*10
-cerco.data$m1i[cerco.data$scale=="Scale 0-5" & 
-                 cerco.data$CercoSever > 1 &
-                 cerco.data$CercoSever <= 2] <- 10 +
-  (cerco.data$CercoSever[cerco.data$scale=="Scale 0-5"& 
-                           cerco.data$CercoSever > 1 &
-                           cerco.data$CercoSever <= 2]-1)*15
-cerco.data$m1i[cerco.data$scale=="Scale 0-5" & 
-                 cerco.data$CercoSever > 2 ] <- 25 +
-  (cerco.data$CercoSever[cerco.data$scale=="Scale 0-5"& 
-                           cerco.data$CercoSever > 2]-2)*25
-# Control
-cerco.data$m2i[cerco.data$scale=="Scale 0-5" & 
-                 cerco.data$CercoSeverCont <= 1] <-
-  cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-5"&
-                          cerco.data$CercoSeverCont <= 1]*10
-cerco.data$m2i[cerco.data$scale=="Scale 0-5" & 
-                 cerco.data$CercoSeverCont > 1 &
-                 cerco.data$CercoSeverCont <= 2] <- 10 +
-  (cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-5"& 
-                           cerco.data$CercoSeverCont > 1 &
-                           cerco.data$CercoSeverCont <= 2]-1)*15
-cerco.data$m2i[cerco.data$scale=="Scale 0-5" & 
-                 cerco.data$CercoSeverCont > 2 ] <- 25 +
-  (cerco.data$CercoSeverCont[cerco.data$scale=="Scale 0-5"& 
-                           cerco.data$CercoSeverCont > 2]-2)*25
-cerco.data$n1i <- cerco.data$n2i <- cerco.data$replications
 
-#' Target spot data
-#+ targetSpotMetafor
-# Scale 0-10
-target.spot.data$m1i[target.spot.data$scale=="Scale 0-10"] <- 
-  target.spot.data$Tsseverity[target.spot.data$scale=="Scale 0-10"]*10
-target.spot.data$m2i[target.spot.data$scale=="Scale 0-10"] <- 
-  target.spot.data$TSseverityCont[target.spot.data$scale=="Scale 0-10"]*10
-# Percentage
-target.spot.data$m1i[target.spot.data$scale=="Percent"] <- 
-  target.spot.data$Tsincidence[target.spot.data$scale=="Percent"]
-target.spot.data$m2i[target.spot.data$scale=="Percent"] <- 
-  target.spot.data$TSincidenceCont[target.spot.data$scale=="Percent"]
-# Scale 0-5
-target.spot.data$m1i[target.spot.data$scale=="Scale 0-5" & 
-                 target.spot.data$Tsseverity <= 1] <-
-  target.spot.data$Tsseverity[target.spot.data$scale=="Scale 0-5"&
-                          target.spot.data$Tsseverity <= 1]*10
-target.spot.data$m1i[target.spot.data$scale=="Scale 0-5" & 
-                 target.spot.data$Tsseverity > 1 &
-                 target.spot.data$Tsseverity <= 2] <- 10 +
-  (target.spot.data$Tsseverity[target.spot.data$scale=="Scale 0-5"& 
-                           target.spot.data$Tsseverity > 1 &
-                           target.spot.data$Tsseverity <= 2]-1)*15
-target.spot.data$m1i[target.spot.data$scale=="Scale 0-5" & 
-                 target.spot.data$Tsseverity > 2 ] <- 25 +
-  (target.spot.data$Tsseverity[target.spot.data$scale=="Scale 0-5"& 
-                           target.spot.data$Tsseverity > 2]-2)*25
-# Control
-target.spot.data$m2i[target.spot.data$scale=="Scale 0-5" & 
-                 target.spot.data$TSseverityCont <= 1] <-
-  target.spot.data$TSseverityCont[target.spot.data$scale=="Scale 0-5"&
-                              target.spot.data$TSseverityCont <= 1]*10
-target.spot.data$m2i[target.spot.data$scale=="Scale 0-5" & 
-                 target.spot.data$TSseverityCont > 1 &
-                 target.spot.data$TSseverityCont <= 2] <- 10 +
-  (target.spot.data$TSseverityCont[target.spot.data$scale=="Scale 0-5"& 
-                               target.spot.data$TSseverityCont > 1 &
-                               target.spot.data$TSseverityCont <= 2]-1)*15
-target.spot.data$m2i[target.spot.data$scale=="Scale 0-5" & 
-                 target.spot.data$TSseverityCont > 2 ] <- 25 +
-  (target.spot.data$TSseverityCont[target.spot.data$scale=="Scale 0-5"& 
-                               target.spot.data$TSseverityCont > 2]-2)*25
-target.spot.data$n1i <- target.spot.data$n2i <- target.spot.data$replications
-
-#' ### 5. Take out categorical moderators with records < 15 from < 5 studies
+#' ## 5. Take out categorical moderators with records < 15 from < 5 studies
 #' 
-#' Rust data
+#' ### Rust data
 #' 
-# Take out values of control rust severity <5%
+#' Take out values of control rust severity <5%
 too.low.pressure <- rust.data$ReferenceNumb[rust.data$m2i<5] 
 rust.data <- rust.data[!rust.data$ReferenceNumb %in% too.low.pressure,]
 yield.data <- yield.data[!yield.data$ReferenceNumb %in% too.low.pressure,]
 seedwt.data <- seedwt.data[!seedwt.data$ReferenceNumb %in% too.low.pressure,]
-# Active ingredients
+
+#' Active ingredients
 sort(table(rust.data$activeIngClean))
 analyze.ai <- c("DUAL", "PYR","TEBU","FLUT","MIXED")
 rust.data$category_ai[rust.data$activeIngClean %in% analyze.ai] <- 
@@ -917,7 +764,7 @@ summaryBy(FID~category_ai+ReferenceNumb,
           FUN=length)
 rust.data$category_ai[rust.data$category_ai=="DUAL"] <- NA
 
-# Class
+#' Class
 sort(table(rust.data$classClean))
 analyze.class <- c("strobilurin","triaz + strob","triazole")
 rust.data$category_class[rust.data$classClean %in% analyze.class] <- 
@@ -928,7 +775,7 @@ summaryBy(FID~category_class+ReferenceNumb,
           data=rust.data[! is.na(rust.data$category_class),],
           FUN=length)
 
-# R-stage
+#' R-stage
 sort(table(rust.data$growthStateClean))
 analyze.rstage <- c("4","5","1+","2+","3")
 rust.data$category_rstage[rust.data$growthStateClean %in% analyze.rstage] <- 
@@ -940,7 +787,7 @@ summaryBy(FID~category_rstage+ReferenceNumb,
           FUN=length)
 rust.data$category_rstage[rust.data$category_rstage=="4"] <- NA
 
-# Applications 
+#' Applications 
 sort(table(rust.data$applicationsNumb))
 rust.data$number_applications[rust.data$applicationsNumb!=5] <- 
   rust.data$applicationsNumb[rust.data$applicationsNumb!=5]
@@ -976,8 +823,8 @@ summaryBy(FID~category_year+ReferenceNumb,
 rust.data$category_year[rust.data$studyYear=="2008"|
                           rust.data$studyYear=="2005"] <- NA
 
-#' Yield data
-# Applications
+#' ### Yield data
+#' Applications
 sort(table(yield.data$applicationsNumb))
 yield.data$number_applications[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2] <- 
   yield.data$applicationsNumb[yield.data$applicationsNumb==1|yield.data$applicationsNumb==2]
@@ -987,7 +834,7 @@ summaryBy(FID~number_applications+ReferenceNumb,
           data=yield.data[! is.na(yield.data$number_applications),],
           FUN=length)
 
-# R-stage
+#' R-stage
 sort(table(yield.data$growthStateClean))
 yield.data$category_rstage[yield.data$growthStateClean %in% analyze.rstage] <- 
   yield.data$growthStateClean[yield.data$growthStateClean %in% analyze.rstage]
@@ -999,7 +846,7 @@ summaryBy(FID~category_rstage+ReferenceNumb,
 yield.data$category_rstage[yield.data$category_rstage=="4"] <- NA
 
 
-# Active ingredients
+#' Active ingredients
 sort(table(yield.data$activeIngClean))
 analyze.ai <- c("PYR","TEBU","FLUT","MIXED")
 yield.data$category_ai[yield.data$activeIngClean %in% analyze.ai] <- 
@@ -1010,7 +857,7 @@ summaryBy(FID~category_ai+ReferenceNumb,
           data=yield.data[! is.na(yield.data$category_ai),],
           FUN=length)
 
-# Class
+#' Class
 sort(table(yield.data$classClean))
 yield.data$category_class[yield.data$classClean %in% analyze.class] <- 
   yield.data$classClean[yield.data$classClean %in% analyze.class]
@@ -1040,8 +887,8 @@ summaryBy(FID~category_year+ReferenceNumb,
 yield.data$category_year[yield.data$studyYear=="2008"|
                           yield.data$studyYear=="2005"] <- NA
 
-#' 100-seed weight data
-# Applications 
+#' ### 100-seed weight data
+#' Applications 
 sort(table(seedwt.data$applicationsNumb))
 seedwt.data$number_applications[seedwt.data$applicationsNumb!=3] <-
   seedwt.data$applicationsNumb[seedwt.data$applicationsNumb!=3]
@@ -1051,7 +898,7 @@ summaryBy(FID~number_applications+ReferenceNumb,
           data=seedwt.data[! is.na(seedwt.data$number_applications),],
           FUN=length)
 
-# growth stage
+#' Growth stage
 sort(table(seedwt.data$growthStateClean))
 analyze.rstage <- c("4","1+","2+","3")
 seedwt.data$category_rstage[seedwt.data$growthStateClean %in% analyze.rstage] <-
@@ -1063,7 +910,7 @@ summaryBy(FID~category_rstage+ReferenceNumb,
           FUN=length)
 seedwt.data$category_rstage[seedwt.data$category_rstage!="3"] <- NA
 
-# Active ingredients
+#' Active ingredients
 sort(table(seedwt.data$activeIngClean))
 analyze.ai <- c("TEBU","FLUT","MIXED")
 seedwt.data$category_ai[seedwt.data$activeIngClean %in% analyze.ai] <- 
@@ -1074,7 +921,7 @@ summaryBy(FID~category_ai+ReferenceNumb,
           data=seedwt.data[! is.na(seedwt.data$category_ai),],
           FUN=length)
 
-# Class
+#' Class
 sort(table(seedwt.data$classClean))
 seedwt.data$category_class[seedwt.data$classClean %in% analyze.class] <- 
   seedwt.data$classClean[seedwt.data$classClean %in% analyze.class]
@@ -1103,7 +950,7 @@ summaryBy(FID~category_year+ReferenceNumb,
           FUN=length)
 seedwt.data$category_year[seedwt.data$studyYear!="2006"] <- NA
 
-#' ### 6. Calculate effect sizes
+#' ## 6. Calculate effect sizes
 #' 
 #' Using log response ratio, cannot have 0s in data; so changing 0 to 0.0001
 rust.data$m1i[rust.data$m1i==0] <- 0.0001
@@ -1114,16 +961,13 @@ yield.data$m2i[yield.data$m2i==0] <- 0.0001
 
 seedwt.data$m1i[seedwt.data$m1i==0] <- 0.0001
 seedwt.data$m2i[seedwt.data$m2i==0] <- 0.0001
-
-cerco.data$m1i[cerco.data$m1i==0] <- 0.0001
-cerco.data$m2i[cerco.data$m2i==0] <- 0.0001
-
-target.spot.data$m1i[target.spot.data$m1i==0] <- 0.0001
-target.spot.data$m2i[target.spot.data$m2i==0] <- 0.0001
-
 #' 
-#' Overall means (raw mean difference)
-#+ effectSizeMD
+#' Log response ratio ("ROM")
+#' 
+#' *Even though here we impute 1s as the standard deviations for each record, 
+#' we are using the log response ratio, and it does not use SD in its 
+#' calculation.* 
+#' 
 rust.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
                     sd1i = rep(1,nrow(rust.data)), 
                     sd2i = rep(1,nrow(rust.data)), 
@@ -1139,18 +983,8 @@ seedwt.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i,
                       sd2i = rep(1,nrow(seedwt.data)), 
                       n1i = n1i, n2i = n2i,
                       data = seedwt.data)
-cerco.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
-                              sd1i = rep(1,nrow(cerco.data)), 
-                         sd2i = rep(1,nrow(cerco.data)), 
-                         n1i = n1i, n2i = n2i,
-                              data = cerco.data)
-target.spot.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i, 
-                              sd1i = rep(1,nrow(target.spot.data)), 
-                              sd2i = rep(1,nrow(target.spot.data)), 
-                              n1i = n1i, n2i = n2i,
-                              data = target.spot.data)
 
-#' ### 7. Save files for analysis
+#' ## 7. Save files for analysis
 #+ save
 save(rust.data.ROM, yield.data.ROM, seedwt.data.ROM,
      cerco.data.ROM, target.spot.data.ROM,
