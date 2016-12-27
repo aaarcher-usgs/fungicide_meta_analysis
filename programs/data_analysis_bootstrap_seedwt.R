@@ -16,10 +16,6 @@ library(devtools)
 remove(list=ls())
 set.seed(18837)
 
-#' Document settings
-#+ settings
-opts_chunk$set(fig.width = 6, fig.height = 4)
-
 #' ### Load data
 #+ loadData
 load(file="data/output_data/data_cleaned.R")
