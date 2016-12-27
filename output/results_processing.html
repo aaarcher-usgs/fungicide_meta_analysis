@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Results processing for plots</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>Results processing for plots</h1>
+
+<p>Also, analysis for the numbers reported in the paper (e.g., number of studies
+and entries/study)</p>
+
+<h3>Preamble</h3>
+
+<p>Load Libraries</p>
+
+<pre><code class="r">library(ezknitr)
+library(knitr)
+library(metafor)
+library(devtools)
+library(doBy)
+</code></pre>
+
+<p>Clear environment and set seed</p>
+
+<pre><code class="r">remove(list=ls())
+set.seed(281)
+</code></pre>
+
+<h3>Load data</h3>
+
+<pre><code class="r">raw.data &lt;- read.csv(&quot;data/workspace.csv&quot;)
+load(file=&quot;data/output_data/data_cleaned.R&quot;)
+rust.data &lt;- as.data.frame(rust.data.ROM)
+yield.data &lt;- as.data.frame(yield.data.ROM)
+seedwt.data &lt;- as.data.frame(seedwt.data.ROM)
+load(file=&quot;data/output_data/results_rust.R&quot;)
+load(file=&quot;data/output_data/results_yield.R&quot;)
+load(file=&quot;data/output_data/results_seedwt.R&quot;)
+</code></pre>
+
+<p>Remove categories that shouldn&#39;t have been analyzed (not enough records)</p>
+
+<pre><code class="r">drop.cols &lt;- &quot;medium&quot;
+drop.cols.seedwt &lt;- c(&quot;medium&quot;,&quot;low&quot;)
+results.rust &lt;- results.rust[,! colnames(results.rust) %in% drop.cols]
+results.yield &lt;- results.yield[,! colnames(results.yield) %in% drop.cols]
+results.seedwt &lt;- results.seedwt[,! colnames(results.seedwt) %in% drop.cols.seedwt]
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 1: Calculate numbers for paper: Dataset properties</h3>
+
+<p><strong>Number of studies and entries of raw data</strong></p>
+
+<pre><code class="r">print(c(&quot;Studies in raw data&quot;, length(unique(raw.data$Reference))))
+</code></pre>
+
+<pre><code>## [1] &quot;Studies in raw data&quot; &quot;61&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Entries in raw data&quot;, nrow(raw.data)))
+</code></pre>
+
+<pre><code>## [1] &quot;Entries in raw data&quot; &quot;569&quot;
+</code></pre>
+
+<p><strong>Number of studies/category and number of entries/category</strong></p>
+
+<p>Number of studies overall</p>
+
+<pre><code class="r">print(c(&quot;Studies in rust dataset: &quot;,length(unique(rust.data$ReferenceNumb))))
+</code></pre>
+
+<pre><code>## [1] &quot;Studies in rust dataset: &quot; &quot;33&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Studies in yield dataset: &quot;,length(unique(yield.data$ReferenceNumb))))
+</code></pre>
+
+<pre><code>## [1] &quot;Studies in yield dataset: &quot; &quot;31&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Studies in seedwt dataset: &quot;,length(unique(seedwt.data$ReferenceNumb))))
+</code></pre>
+
+<pre><code>## [1] &quot;Studies in seedwt dataset: &quot; &quot;13&quot;
+</code></pre>
+
+<p>Number of entries overall</p>
+
+<pre><code class="r">print(c(&quot;Entries in rust dataset: &quot;,nrow(rust.data)))
+</code></pre>
+
+<pre><code>## [1] &quot;Entries in rust dataset: &quot; &quot;320&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Entries in yield dataset: &quot;,nrow(yield.data)))
+</code></pre>
+
+<pre><code>## [1] &quot;Entries in yield dataset: &quot; &quot;288&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Entries in seedwt dataset: &quot;,nrow(seedwt.data)))
+</code></pre>
+
+<pre><code>## [1] &quot;Entries in seedwt dataset: &quot; &quot;144&quot;
+</code></pre>
+
+<p><strong>Number of entries and studies by year and location</strong></p>
+
+<pre><code class="r">summaryBy(FID~studyYear+Reference, data=rust.data, FUN=length)
+</code></pre>
+
+<pre><code>##    studyYear             Reference FID.length
+## 1       2005  lawrence et al ref 4          6
+## 2       2005       Lawrence ref 21          6
+## 3       2005         Sikora ref 42          7
+## 4       2006         Harmon ref 47         12
+## 5       2006       Kemerait ref 46          5
+## 6       2006 Lawrence et al ref 55         10
+## 7       2006       Lawrence ref 18          3
+## 8       2006       Lawrence ref 41         11
+## 9       2006        Mueller ref 36         23
+## 10      2006        Mueller ref 37         15
+## 11      2006        Mueller ref 38          6
+## 12      2006        Mueller ref 39         11
+## 13      2006        Mueller ref 40          4
+## 14      2006        Mueller ref 43         15
+## 15      2006        Mueller ref 45         17
+## 16      2006   Sikora et al ref 74         12
+## 17      2007  Lawrence et al ref 3          7
+## 18      2007 Lawrence et al ref 53          6
+## 19      2007 Lawrence et al ref 62          7
+## 20      2007  Mueller et al  ref 1          3
+## 21      2007   Mueller et al ref 9          9
+## 22      2007  Padgett et al ref 54          9
+## 23      2007         Sikora ref 23         12
+## 24      2008  Douglas et al ref 65         18
+## 25      2008  Douglas et al ref 66         13
+## 26      2008       Lawrence ref 16         13
+## 27      2008       Lawrence ref 22          9
+## 28      2012    Price et al ref 35         12
+## 29      2013        Delaney ref 30          9
+## 30      2013        Delaney ref 31          9
+## 31      2013        Delaney ref 32          4
+## 32      2013        Delaney ref 34         12
+## 33      2013 Lawrence et al ref 68          5
+</code></pre>
+
+<pre><code class="r">table(rust.data$studyYear)
+</code></pre>
+
+<pre><code>## 
+## 2005 2006 2007 2008 2012 2013 
+##   19  144   53   53   12   39
+</code></pre>
+
+<pre><code class="r">summaryBy(FID~State+Reference, data=rust.data, FUN=length)
+</code></pre>
+
+<pre><code>##    State             Reference FID.length
+## 1     AL        Delaney ref 30          9
+## 2     AL        Delaney ref 31          9
+## 3     AL        Delaney ref 32          4
+## 4     AL        Delaney ref 34         12
+## 5     AL  Lawrence et al ref 3          7
+## 6     AL  lawrence et al ref 4          6
+## 7     AL Lawrence et al ref 53          6
+## 8     AL Lawrence et al ref 55         10
+## 9     AL Lawrence et al ref 62          7
+## 10    AL Lawrence et al ref 68          5
+## 11    AL       Lawrence ref 16         13
+## 12    AL       Lawrence ref 18          3
+## 13    AL       Lawrence ref 21          6
+## 14    AL       Lawrence ref 22          9
+## 15    AL   Sikora et al ref 74         12
+## 16    AL         Sikora ref 23         12
+## 17    AL         Sikora ref 42          7
+## 18   AL        Lawrence ref 41         11
+## 19    FL  Douglas et al ref 65         18
+## 20    FL  Douglas et al ref 66         13
+## 21    FL         Harmon ref 47         12
+## 22    FL  Mueller et al  ref 1          3
+## 23    FL   Mueller et al ref 9          9
+## 24    FL        Mueller ref 36         23
+## 25    FL        Mueller ref 37         15
+## 26    FL        Mueller ref 38          6
+## 27    FL        Mueller ref 39         11
+## 28    FL        Mueller ref 40          4
+## 29    FL        Mueller ref 45         17
+## 30    GA       Kemerait ref 46          5
+## 31    GA        Mueller ref 43         15
+## 32    LA  Padgett et al ref 54          9
+## 33    LA    Price et al ref 35         12
+</code></pre>
+
+<pre><code class="r">table(rust.data$State)
+</code></pre>
+
+<pre><code>## 
+##  AL AL   FL  GA  LA  MS 
+## 137  11 131  20  21   0
+</code></pre>
+
+<p><strong>Mean and std of dependent vars</strong></p>
+
+<pre><code class="r">print(c(&quot;mean, SD of rust severity in treated plants&quot;,
+        mean(rust.data$m1i), sd(rust.data$m1i)))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of rust severity in treated plants&quot;
+## [2] &quot;24.4085020833333&quot;                           
+## [3] &quot;28.9950610143505&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;mean, SD of rust severity in control plants&quot;,
+        mean(rust.data$m2i), sd(rust.data$m2i)))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of rust severity in control plants&quot;
+## [2] &quot;60.1640625&quot;                                 
+## [3] &quot;33.4041850999308&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;mean, SD of rust severity response ratio in control plants&quot;,
+        mean(exp(rust.data$yi)), sd(exp(rust.data$yi))))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of rust severity response ratio in control plants&quot;
+## [2] &quot;0.377096200042875&quot;                                         
+## [3] &quot;0.334528920445451&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;mean, SD of yield in treated plants&quot;,
+        mean(yield.data$m1i), sd(yield.data$m1i)))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of yield in treated plants&quot;
+## [2] &quot;3731.41201736111&quot;                   
+## [3] &quot;1166.65952730187&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;mean, SD of yield in control plants&quot;,
+        mean(yield.data$m2i), sd(yield.data$m2i)))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of yield in control plants&quot;
+## [2] &quot;3064.02441840278&quot;                   
+## [3] &quot;1000.89112658311&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;mean, SD of yield response ratio in control plants&quot;,
+        mean(exp(yield.data$yi)), sd(exp(yield.data$yi))))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of yield response ratio in control plants&quot;
+## [2] &quot;1.25188232429643&quot;                                  
+## [3] &quot;0.249848371042816&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;mean, SD of seedwt in treated plants&quot;,
+        mean(seedwt.data$m1i), sd(seedwt.data$m1i)))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of seedwt in treated plants&quot;
+## [2] &quot;11.9063722569444&quot;                    
+## [3] &quot;6.22630903932661&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;mean, SD of seedwt in control plants&quot;,
+        mean(seedwt.data$m2i), sd(seedwt.data$m2i)))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of seedwt in control plants&quot;
+## [2] &quot;10.4764800347222&quot;                    
+## [3] &quot;5.62464013581265&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;mean, SD of seedwt response ratio in control plants&quot;,
+        mean(exp(seedwt.data$yi)), sd(exp(seedwt.data$yi))))
+</code></pre>
+
+<pre><code>## [1] &quot;mean, SD of seedwt response ratio in control plants&quot;
+## [2] &quot;1.18847764847298&quot;                                   
+## [3] &quot;0.157947343409103&quot;
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 2: Information for table with references</h3>
+
+<pre><code class="r">summaryBy(FID~ReferenceNumb+Reference, data=raw.data, FUN=length)
+</code></pre>
+
+<pre><code>##    ReferenceNumb              Reference FID.length
+## 1              1   Mueller et al  ref 1          3
+## 2              3   Lawrence et al ref 3          7
+## 3              4   lawrence et al ref 4          6
+## 4              6    Delaney et al ref 6          8
+## 5              7     Sikora et al ref 7          4
+## 6              8    Delaney et al ref 8         12
+## 7              9    Mueller et al ref 9          9
+## 8             11           Allen ref 11          7
+## 9             12           Allen ref 12          8
+## 10            13           Allen ref 13          5
+## 11            14           Allen ref 14          5
+## 12            16        Lawrence ref 16         13
+## 13            17         Delaney ref 17          9
+## 14            18        Lawrence ref 18          3
+## 15            21        Lawrence ref 21          6
+## 16            22        Lawrence ref 22          9
+## 17            23          Sikora ref 23         12
+## 18            24         Delaney ref 24          8
+## 19            25         O&#39;Brien ref 25          7
+## 20            26         Delaney ref 26          4
+## 21            27         Delaney ref 27          2
+## 22            28        Delanely ref 28          2
+## 23            29         Delaney ref 29          2
+## 24            30         Delaney ref 30          9
+## 25            31         Delaney ref 31          9
+## 26            32         Delaney ref 32          4
+## 27            33         Delaney ref 33          4
+## 28            34         Delaney ref 34         12
+## 29            35     Price et al ref 35         13
+## 30            36         Mueller ref 36         23
+## 31            37         Mueller ref 37         15
+## 32            38         Mueller ref 38          6
+## 33            39         Mueller ref 39         11
+## 34            40         Mueller ref 40          4
+## 35            41        Lawrence ref 41         11
+## 36            42          Sikora ref 42          7
+## 37            43         Mueller ref 43         15
+## 38            44         Delaney ref 44         13
+## 39            45         Mueller ref 45         17
+## 40            46        Kemerait ref 46          5
+## 41            47          Harmon ref 47         12
+## 42            49        Kemerait ref 49         12
+## 43            50        Kemerait ref 50         10
+## 44            51        Kemerait ref 51          7
+## 45            53  Lawrence et al ref 53          6
+## 46            54   Padgett et al ref 54          9
+## 47            55  Lawrence et al ref 55         10
+## 48            59  Kemerait et al ref 59         15
+## 49            60 Schneider et al ref 60         23
+## 50            62  Lawrence et al ref 62          7
+## 51            63   Mueller et al ref 63          6
+## 52            65   Douglas et al ref 65         18
+## 53            66   Douglas et al ref 66         13
+## 54            67   Douglas et al ref 67         11
+## 55            68  Lawrence et al ref 68          5
+## 56            69   O&#39;Brien et al ref 69         13
+## 57            70    Sikora et al ref 70         13
+## 58            71  Kemerait et al ref 71          8
+## 59            72   Padgett et al ref 72         15
+## 60            73   Padgett et al ref 73         15
+## 61            74    Sikora et al ref 74         12
+</code></pre>
+
+<pre><code class="r"># For Rust analysis
+summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
+</code></pre>
+
+<pre><code>##    ReferenceNumb             Reference FID.length
+## 1              1  Mueller et al  ref 1          3
+## 2              3  Lawrence et al ref 3          7
+## 3              4  lawrence et al ref 4          6
+## 4              9   Mueller et al ref 9          9
+## 5             16       Lawrence ref 16         13
+## 6             18       Lawrence ref 18          3
+## 7             21       Lawrence ref 21          6
+## 8             22       Lawrence ref 22          9
+## 9             23         Sikora ref 23         12
+## 10            30        Delaney ref 30          9
+## 11            31        Delaney ref 31          9
+## 12            32        Delaney ref 32          4
+## 13            34        Delaney ref 34         12
+## 14            35    Price et al ref 35         12
+## 15            36        Mueller ref 36         23
+## 16            37        Mueller ref 37         15
+## 17            38        Mueller ref 38          6
+## 18            39        Mueller ref 39         11
+## 19            40        Mueller ref 40          4
+## 20            41       Lawrence ref 41         11
+## 21            42         Sikora ref 42          7
+## 22            43        Mueller ref 43         15
+## 23            45        Mueller ref 45         17
+## 24            46       Kemerait ref 46          5
+## 25            47         Harmon ref 47         12
+## 26            53 Lawrence et al ref 53          6
+## 27            54  Padgett et al ref 54          9
+## 28            55 Lawrence et al ref 55         10
+## 29            62 Lawrence et al ref 62          7
+## 30            65  Douglas et al ref 65         18
+## 31            66  Douglas et al ref 66         13
+## 32            68 Lawrence et al ref 68          5
+## 33            74   Sikora et al ref 74         12
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 3: Calculate numbers for paper: Results</h3>
+
+<p><strong>Overall mean, 95% CI and Tau<sup>2</sup></strong></p>
+
+<pre><code class="r">print(c(&quot;Mean e.s. of rust severity&quot;, mean(exp(results.rust$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;Mean e.s. of rust severity&quot; &quot;0.0867322664501827&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;SD e.s. of rust severity&quot;, sd(exp(results.rust$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;SD e.s. of rust severity&quot; &quot;0.0478620915892458&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;CI of mean e.s. of rust severity&quot;, 
+        quantile(exp(results.rust$OVERALL), probs = c(0.025,0.975))))
+</code></pre>
+
+<pre><code>##                                                                  2.5% 
+## &quot;CI of mean e.s. of rust severity&quot;               &quot;0.0241790593032055&quot; 
+##                              97.5% 
+##                &quot;0.207018518105641&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Mean tau^2 for rust&quot;, mean(results.rust$tau2)))
+</code></pre>
+
+<pre><code>## [1] &quot;Mean tau^2 for rust&quot; &quot;14.5693271830589&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Mean e.s. of yield&quot;, mean(exp(results.yield$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;Mean e.s. of yield&quot; &quot;1.27652556332507&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;SD es of yield&quot;, sd(exp(results.yield$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;SD es of yield&quot;     &quot;0.0368943911886343&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;CI of mean e.s. of yield&quot;, 
+        quantile(exp(results.yield$OVERALL), probs = c(0.025,0.975))))
+</code></pre>
+
+<pre><code>##                                                  2.5% 
+## &quot;CI of mean e.s. of yield&quot;         &quot;1.20894190057049&quot; 
+##                      97.5% 
+##         &quot;1.35256618307631&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Mean tau^2 for yield&quot;, mean(results.yield$tau2)))
+</code></pre>
+
+<pre><code>## [1] &quot;Mean tau^2 for yield&quot; &quot;0.0166130238687126&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Mean e.s. of seedwt severity&quot;, mean(exp(results.seedwt$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;Mean e.s. of seedwt severity&quot; &quot;1.21159967140728&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;SD es of yield&quot;, sd(exp(results.seedwt$OVERALL))))
+</code></pre>
+
+<pre><code>## [1] &quot;SD es of yield&quot;     &quot;0.0301736021468863&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;CI of mean e.s. of seedwt severity&quot;, 
+        quantile(exp(results.seedwt$OVERALL), probs = c(0.025,0.975))))
+</code></pre>
+
+<pre><code>##                                                                      2.5% 
+## &quot;CI of mean e.s. of seedwt severity&quot;                   &quot;1.15830431403257&quot; 
+##                                97.5% 
+##                   &quot;1.27935002811905&quot;
+</code></pre>
+
+<pre><code class="r">print(c(&quot;Mean tau^2 for seedwt&quot;, mean(results.seedwt$tau2)))
+</code></pre>
+
+<pre><code>## [1] &quot;Mean tau^2 for seedwt&quot; &quot;0.00168248886301628&quot;
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 4: Store means from each in new dataframe</h3>
+
+<pre><code class="r">summary.means &lt;- as.data.frame(matrix(NA, nrow = 64, ncol = 6))
+colnames(summary.means) &lt;- c(&quot;Category&quot;, &quot;Moderator&quot; , &quot;Mean&quot;, &quot;LL&quot;, &quot;UL&quot;, &quot;SD&quot;)
+</code></pre>
+
+<p>Transform model results </p>
+
+<pre><code class="r">transform.rust &lt;- exp(results.rust)
+colnames(transform.rust) &lt;- colnames(results.rust)
+transform.rust$tau2 &lt;- results.rust$tau2
+
+transform.yield &lt;- exp(results.yield)
+colnames(transform.yield) &lt;- colnames(results.yield)
+transform.yield$tau2 &lt;- results.yield$tau2
+
+transform.seedwt &lt;- exp(results.seedwt)
+colnames(transform.seedwt) &lt;- colnames(results.seedwt)
+transform.seedwt$tau2 &lt;- results.seedwt$tau2
+</code></pre>
+
+<p>Rust means</p>
+
+<pre><code class="r">summary.means$Moderator[1:25] &lt;- colnames(results.rust)
+summary.means$Category[1:25] &lt;- &quot;Rust&quot;
+summary.means$Mean[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, 
+                                  FUN = mean, na.rm=T)
+summary.means$LL[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
+summary.means$UL[1:25] &lt;- apply(X = transform.rust, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+summary.means$SD[1:25] &lt;- apply(X = transform.rust, MARGIN = 2,
+                                FUN = sd, na.rm=T)
+</code></pre>
+
+<p>Yield means</p>
+
+<pre><code class="r">summary.means$Moderator[26:49] &lt;- colnames(results.yield)
+summary.means$Category[26:49] &lt;- &quot;Yield&quot;
+summary.means$Mean[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
+summary.means$UL[26:49] &lt;- apply(X = transform.yield, MARGIN = 2, 
+                                FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+summary.means$SD[26:49] &lt;- apply(X = transform.yield, MARGIN = 2,
+                                 FUN = sd, na.rm=T)
+</code></pre>
+
+<p>Seed weight means</p>
+
+<pre><code class="r">summary.means$Moderator[50:64] &lt;- colnames(results.seedwt)
+summary.means$Category[50:64] &lt;- &quot;Seed Weight&quot;
+summary.means$Mean[50:64] &lt;- 
+  apply(X = transform.seedwt, MARGIN = 2, FUN = mean, na.rm=T)
+summary.means$LL[50:64] &lt;- 
+  apply(X = transform.seedwt, MARGIN = 2,
+        FUN = function(x){quantile(x, probs = c(0.025), na.rm=T)})
+summary.means$UL[50:64] &lt;- 
+  apply(X = transform.seedwt, MARGIN = 2,
+        FUN = function(x){quantile(x, probs = c(0.975), na.rm=T)})
+summary.means$SD[50:64] &lt;- 
+  apply(X = transform.seedwt, MARGIN = 2,
+        FUN = sd, na.rm=T)
+</code></pre>
+
+<p>Specify analysis for graphing</p>
+
+<pre><code class="r">summary.means$Analysis[summary.means$Moderator==&quot;1 Application&quot; | 
+                         summary.means$Moderator==&quot;2 Applications&quot;] &lt;- &quot;Applications&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;2006&quot; | 
+                         summary.means$Moderator==&quot;2007&quot;|
+                         summary.means$Moderator==&quot;2013&quot;] &lt;- &quot;Study Year&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;AZO_PROP&quot;|
+                         summary.means$Moderator==&quot;FLUT&quot;|
+                         summary.means$Moderator==&quot;PYR&quot;|
+                         summary.means$Moderator==&quot;MIXED&quot;|
+                         summary.means$Moderator==&quot;TEBU&quot;] &lt;- &quot;Active Ingredient&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;low&quot;|
+                         summary.means$Moderator==&quot;high&quot;] &lt;- &quot;Disease Pressure&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;R1+&quot;|
+                         summary.means$Moderator==&quot;R2+&quot;|
+                         summary.means$Moderator==&quot;R3&quot;|
+                         summary.means$Moderator==&quot;R5&quot;] &lt;- &quot;Growth Stage&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;Strobilurin&quot;|
+                         summary.means$Moderator==&quot;Triaz_Strob&quot;|
+                         summary.means$Moderator==&quot;Triazole&quot;] &lt;- &quot;Fungicide Class&quot;
+summary.means$Analysis[summary.means$Moderator==&quot;OVERALL&quot;] &lt;- &quot;Overall Mean&quot;
+</code></pre>
+
+<p>Table of meta-analysis results</p>
+
+<pre><code class="r">summary.means[summary.means$Analysis==&quot;Overall Mean&quot;&amp;
+                !is.na(summary.means$Analysis),]
+</code></pre>
+
+<pre><code>##       Category Moderator       Mean         LL        UL         SD
+## 1         Rust   OVERALL 0.08673227 0.02417906 0.2070185 0.04786209
+## 26       Yield   OVERALL 1.27652556 1.20894190 1.3525662 0.03689439
+## 50 Seed Weight   OVERALL 1.21159967 1.15830431 1.2793500 0.03017360
+##        Analysis
+## 1  Overall Mean
+## 26 Overall Mean
+## 50 Overall Mean
+</code></pre>
+
+<pre><code class="r">summary.means[summary.means$Moderator==&quot;tau2&quot;,]
+</code></pre>
+
+<pre><code>##       Category Moderator         Mean          LL           UL          SD
+## 2         Rust      tau2 14.569327183 6.421193568 22.439328653 4.198315249
+## 27       Yield      tau2  0.016613024 0.001629016  0.036616434 0.009197851
+## 51 Seed Weight      tau2  0.001682489 0.000000000  0.007539147 0.002240498
+##    Analysis
+## 2      &lt;NA&gt;
+## 27     &lt;NA&gt;
+## 51     &lt;NA&gt;
+</code></pre>
+
+<p>Save summary.means</p>
+
+<pre><code class="r">save(summary.means, file=&quot;data/output_data/summary_results.R&quot;)
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 5: Fungicide table for manuscript</h3>
+
+<p>Rust</p>
+
+<pre><code class="r">table(rust.data$category_ai)
+</code></pre>
+
+<pre><code>## 
+##  FLUT MIXED   PYR  TEBU 
+##    40   129    25    31
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_ai, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##  FLUT MIXED   PYR  TEBU 
+##    10    30    17    20
+</code></pre>
+
+<pre><code class="r">table(rust.data$category_class)
+</code></pre>
+
+<pre><code>## 
+##   strobilurin triaz + strob      triazole 
+##            40            98            98
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_class, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   strobilurin triaz + strob      triazole 
+##            20            26            25
+</code></pre>
+
+<pre><code class="r">table(rust.data$alphaIngred[rust.data$alphaIngred==&quot;AZO + PROP&quot;])
+</code></pre>
+
+<pre><code>## 
+## AZO + PROP 
+##         16
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference[rust.data$alphaIngred==&quot;AZO + PROP&quot;], 
+       rust.data$category_class[rust.data$alphaIngred==&quot;AZO + PROP&quot;], 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## triaz + strob 
+##             8
+</code></pre>
+
+<p>Yield</p>
+
+<pre><code class="r">table(yield.data$category_ai)
+</code></pre>
+
+<pre><code>## 
+##  FLUT MIXED   PYR  TEBU 
+##    39   119    20    28
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_ai, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##  FLUT MIXED   PYR  TEBU 
+##     9    28    15    19
+</code></pre>
+
+<pre><code class="r">table(yield.data$category_class)
+</code></pre>
+
+<pre><code>## 
+##   strobilurin triaz + strob      triazole 
+##            34            89            91
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_class, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   strobilurin triaz + strob      triazole 
+##            18            24            23
+</code></pre>
+
+<p>Seedwt</p>
+
+<pre><code class="r">table(seedwt.data$category_ai)
+</code></pre>
+
+<pre><code>## 
+##  FLUT MIXED  TEBU 
+##    30    59    18
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_ai, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##  FLUT MIXED  TEBU 
+##     6    12     9
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$category_class)
+</code></pre>
+
+<pre><code>## 
+##   strobilurin triaz + strob      triazole 
+##            18            42            58
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_class, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   strobilurin triaz + strob      triazole 
+##             8            11            10
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 6: Table of other moderator variables</h3>
+
+<p>Number of applications</p>
+
+<pre><code class="r">table(rust.data$number_applications)
+</code></pre>
+
+<pre><code>## 
+##   1   2 
+## 129 170
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##  1  2 
+## 17 23
+</code></pre>
+
+<pre><code class="r">table(yield.data$number_applications)
+</code></pre>
+
+<pre><code>## 
+##   1   2 
+## 111 160
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##  1  2 
+## 15 22
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$number_applications)
+</code></pre>
+
+<pre><code>## 
+##  1  2 
+## 79 64
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$number_applications, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 1 2 
+## 9 8
+</code></pre>
+
+<p>Growth stage</p>
+
+<pre><code class="r">table(rust.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+##  1+  2+   3   5 
+##  51  75 106  25
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 1+ 2+  3  5 
+##  8  9 14  7
+</code></pre>
+
+<pre><code class="r">table(yield.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+##  1+  2+   3   5 
+##  47  73 100  13
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 1+ 2+  3  5 
+##  7  9 13  5
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$category_rstage)
+</code></pre>
+
+<pre><code>## 
+##  3 
+## 44
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_rstage, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 3 
+## 5
+</code></pre>
+
+<p>Disease Pressure</p>
+
+<pre><code class="r">table(rust.data$category_pressure)
+</code></pre>
+
+<pre><code>## 
+##   high    low medium 
+##    167    109     44
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   high    low medium 
+##     16     13      4
+</code></pre>
+
+<pre><code class="r">table(yield.data$category_pressure)
+</code></pre>
+
+<pre><code>## 
+##   high    low medium 
+##    152     94     42
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   high    low medium 
+##     15     12      4
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$category_pressure)
+</code></pre>
+
+<pre><code>## 
+##   high    low medium 
+##     98     29     17
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_pressure, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>##   high    low medium 
+##      8      4      1
+</code></pre>
+
+<p>Study Year</p>
+
+<pre><code class="r">table(rust.data$category_year)
+</code></pre>
+
+<pre><code>## 
+## 2006 2007 2013 
+##  144   53   39
+</code></pre>
+
+<pre><code class="r">tapply(rust.data$Reference, rust.data$category_year, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 2006 2007 2013 
+##   13    7    5
+</code></pre>
+
+<pre><code class="r">table(yield.data$category_year)
+</code></pre>
+
+<pre><code>## 
+## 2006 2007 2013 
+##  121   44   39
+</code></pre>
+
+<pre><code class="r">tapply(yield.data$Reference, yield.data$category_year, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 2006 2007 2013 
+##   12    6    5
+</code></pre>
+
+<pre><code class="r">table(seedwt.data$category_year)
+</code></pre>
+
+<pre><code>## 
+## 2006 
+##   76
+</code></pre>
+
+<pre><code class="r">tapply(seedwt.data$Reference, seedwt.data$category_year, 
+       FUN=function(x){length(unique(x))})
+</code></pre>
+
+<pre><code>## 2006 
+##    6
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 7: Expanding regression results for plotting</h3>
+
+<p>Year analysis</p>
+
+<pre><code class="r">year.regression &lt;- summary.means[summary.means$Moderator==&quot;Year Slope&quot;,]
+year.regression.rust &lt;- results.rust[,c(&quot;Year Intrcpt|2004&quot;, &quot;Year Slope&quot;)]
+year.regression.rust$Category &lt;- &quot;Rust&quot;
+year.regression.yield &lt;- results.yield[,c(&quot;Year Intrcpt|2004&quot;, &quot;Year Slope&quot;)]
+year.regression.yield$Category &lt;- &quot;Yield&quot;
+year.regression.sims &lt;- rbind(year.regression.rust, year.regression.yield)
+# combine
+year.regression &lt;- merge(year.regression, year.regression.sims, by = &quot;Category&quot;)
+</code></pre>
+
+<p>Applications analysis</p>
+
+<pre><code class="r">applic.regression &lt;- summary.means[summary.means$Moderator==&quot;Application Slope&quot;,]
+applic.regression.rust &lt;- results.rust[,c(&quot;Application Intrcpt&quot;, &quot;Application Slope&quot;)]
+applic.regression.rust$Category &lt;- &quot;Rust&quot;
+applic.regression.yield &lt;- results.yield[,c(&quot;Application Intrcpt&quot;, &quot;Application Slope&quot;)]
+applic.regression.yield$Category &lt;- &quot;Yield&quot;
+applic.regression.seedwt &lt;- results.yield[,c(&quot;Application Intrcpt&quot;, &quot;Application Slope&quot;)]
+applic.regression.seedwt$Category &lt;- &quot;Seed Weight&quot;
+applic.regression.sims &lt;- rbind(applic.regression.rust, 
+                                applic.regression.yield, 
+                                applic.regression.seedwt)
+# combine
+applic.regression &lt;- merge(applic.regression, applic.regression.sims, by = &quot;Category&quot;)
+</code></pre>
+
+<p>#############################################################################</p>
+
+<h3>Step 8: Typical application rates</h3>
+
+<pre><code class="r">rust.data[rust.data$category_ai==&quot;PYR&quot;&amp;!is.na(rust.data$category_ai),c(&quot;amount&quot;,&quot;category_ai&quot;, &quot;activeIngClean&quot;)]
+</code></pre>
+
+<pre><code>##      amount category_ai activeIngClean
+## 3       7.8         PYR            PYR
+## 48      5.5         PYR            PYR
+## 114     4.5         PYR            PYR
+## 115     7.8         PYR            PYR
+## 203     9.2         PYR            PYR
+## 204     9.2         PYR            PYR
+## 205     9.2         PYR            PYR
+## 222 9.2 + 4         PYR            PYR
+## 223 9.2 + 4         PYR            PYR
+## 224 4 + 9.2         PYR            PYR
+## 229     7.8         PYR            PYR
+## 257     7.8         PYR            PYR
+## 332     7.8         PYR            PYR
+## 338     7.8         PYR            PYR
+## 376   4 + 6         PYR            PYR
+## 461       6         PYR            PYR
+## 8       7.8         PYR            PYR
+## 75        6         PYR            PYR
+## 155       6         PYR            PYR
+## 164       6         PYR            PYR
+## 272       6         PYR            PYR
+## 280     9.2         PYR            PYR
+## 281     9.2         PYR            PYR
+## 282     9.2         PYR            PYR
+## 389       6         PYR            PYR
+</code></pre>
+
+<pre><code class="r">rust.data[rust.data$category_ai==&quot;FLUT&quot;&amp;!is.na(rust.data$category_ai),c(&quot;amount&quot;,&quot;category_ai&quot;, &quot;activeIngClean&quot;)]
+</code></pre>
+
+<pre><code>##          amount category_ai activeIngClean
+## 190           7        FLUT           FLUT
+## 191          10        FLUT           FLUT
+## 194           7        FLUT           FLUT
+## 195          10        FLUT           FLUT
+## 198           7        FLUT           FLUT
+## 199          10        FLUT           FLUT
+## 226           7        FLUT           FLUT
+## 308           7        FLUT           FLUT
+## 309          11        FLUT           FLUT
+## 310          14        FLUT           FLUT
+## 311           7        FLUT           FLUT
+## 312  7.0 + 11.0        FLUT           FLUT
+## 313  7.0 + 14.0        FLUT           FLUT
+## 314           7        FLUT           FLUT
+## 315  7.0 + 11.0        FLUT           FLUT
+## 316  7.0 + 14.0        FLUT           FLUT
+## 318         3.5        FLUT           FLUT
+## 319           5        FLUT           FLUT
+## 320           7        FLUT           FLUT
+## 321          11        FLUT           FLUT
+## 322 5.0 + 0.25%        FLUT           FLUT
+## 380           7        FLUT           FLUT
+## 447           7        FLUT           FLUT
+## 455           7        FLUT           FLUT
+## 465           7        FLUT           FLUT
+## 466          11        FLUT           FLUT
+## 467          14        FLUT           FLUT
+## 468         7,7        FLUT           FLUT
+## 469        7,11        FLUT           FLUT
+## 470        7,14        FLUT           FLUT
+## 471         7,7        FLUT           FLUT
+## 472        7,11        FLUT           FLUT
+## 473        7,14        FLUT           FLUT
+## 474    7+.25v/v        FLUT           FLUT
+## 78            7        FLUT           FLUT
+## 85            7        FLUT           FLUT
+## 152           7        FLUT           FLUT
+## 161           7        FLUT           FLUT
+## 178           7        FLUT           FLUT
+## 179           7        FLUT           FLUT
+</code></pre>
+
+<pre><code class="r">rust.data[rust.data$category_ai==&quot;TEBU&quot;&amp;!is.na(rust.data$category_ai),c(&quot;amount&quot;,&quot;category_ai&quot;, &quot;activeIngClean&quot;)]
+</code></pre>
+
+<pre><code>##     amount category_ai activeIngClean
+## 43     5.1        TEBU           TEBU
+## 46     6.8        TEBU           TEBU
+## 105      4        TEBU           TEBU
+## 206    3.6        TEBU           TEBU
+## 207    3.6        TEBU           TEBU
+## 208    3.6        TEBU           TEBU
+## 209    3.6        TEBU           TEBU
+## 210    3.6        TEBU           TEBU
+## 211    3.6        TEBU           TEBU
+## 227    3.6        TEBU           TEBU
+## 247      4        TEBU           TEBU
+## 248      4        TEBU           TEBU
+## 317    3.6        TEBU           TEBU
+## 453      4        TEBU           TEBU
+## 454      4        TEBU           TEBU
+## 477    4,4        TEBU           TEBU
+## 4        4        TEBU           TEBU
+## 16       4        TEBU           TEBU
+## 81       4        TEBU           TEBU
+## 97       4        TEBU           TEBU
+## 154      4        TEBU           TEBU
+## 163      4        TEBU           TEBU
+## 182      4        TEBU           TEBU
+## 183      4        TEBU           TEBU
+## 271      4        TEBU           TEBU
+## 283      4        TEBU           TEBU
+## 284      4        TEBU           TEBU
+## 285      4        TEBU           TEBU
+## 325      4        TEBU           TEBU
+## 391      4        TEBU           TEBU
+## 434      4        TEBU           TEBU
+</code></pre>
+
+<pre><code class="r">rust.data[rust.data$alphaIngred==&quot;AZO + PYR&quot;&amp;!is.na(rust.data$alphaIngred),c(&quot;amount&quot;,&quot;category_ai&quot;, &quot;activeIngClean&quot;)]
+</code></pre>
+
+<pre><code>##        amount category_ai activeIngClean
+## 239 6.2 + 7.8       MIXED          MIXED
+</code></pre>
+
+<h3>Footer</h3>
+
+<p>Spun with ezspin(&ldquo;programs/results_processing.R&rdquo;, out_dir=&ldquo;output&rdquo;, fig_dir=&ldquo;figures&rdquo;, keep_md=FALSE)</p>
+
+<p>Session Info:</p>
+
+<pre><code class="r">devtools::session_info()
+</code></pre>
+
+<pre><code>## Session info --------------------------------------------------------------
+</code></pre>
+
+<pre><code>##  setting  value                       
+##  version  R version 3.3.2 (2016-10-31)
+##  system   x86_64, darwin13.4.0        
+##  ui       RStudio (0.99.893)          
+##  language (EN)                        
+##  collate  en_US.UTF-8                 
+##  tz       America/Chicago             
+##  date     2016-12-27
+</code></pre>
+
+<pre><code>## Packages ------------------------------------------------------------------
+</code></pre>
+
+<pre><code>##  package     * version date       source        
+##  assertthat    0.1     2013-12-06 CRAN (R 3.3.0)
+##  colorspace    1.3-2   2016-12-14 CRAN (R 3.3.2)
+##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
+##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
+##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
+##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
+##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
+##  ggplot2       2.2.0   2016-11-11 cran (@2.2.0) 
+##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
+##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
+##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.2)
+##  lazyeval      0.2.0   2016-06-12 CRAN (R 3.3.0)
+##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
+##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
+##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.2)
+##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.2)
+##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
+##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)
+##  munsell       0.4.3   2016-02-13 CRAN (R 3.3.0)
+##  plyr          1.8.4   2016-06-08 CRAN (R 3.3.0)
+##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
+##  R.oo          1.21.0  2016-11-01 CRAN (R 3.3.0)
+##  R.utils       2.5.0   2016-11-07 CRAN (R 3.3.0)
+##  Rcpp          0.12.8  2016-11-17 CRAN (R 3.3.2)
+##  rstudioapi    0.6     2016-06-27 CRAN (R 3.3.0)
+##  scales        0.4.1   2016-11-09 cran (@0.4.1) 
+##  stringi       1.1.2   2016-10-01 CRAN (R 3.3.0)
+##  stringr       1.1.0   2016-08-19 CRAN (R 3.3.0)
+##  tibble        1.2     2016-08-26 CRAN (R 3.3.0)
+##  withr         1.0.2   2016-06-20 CRAN (R 3.3.0)
+</code></pre>
+
+</body>
+
+</html>
