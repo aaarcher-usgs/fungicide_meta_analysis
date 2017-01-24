@@ -20,9 +20,7 @@ set.seed(18837)
 #+ loadData
 load(file="data/output_data/data_cleaned.R")
 remove(list=c(#"rust.data.ROM",
-              "cerco.data.ROM",
               "seedwt.data.ROM",
-              "target.spot.data.ROM",
               "yield.data.ROM"
               ))
 
