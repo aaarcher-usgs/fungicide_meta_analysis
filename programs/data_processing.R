@@ -987,8 +987,13 @@ seedwt.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i,
 #' ## 7. Save files for analysis
 #+ save
 save(rust.data.ROM, yield.data.ROM, seedwt.data.ROM,
-     cerco.data.ROM, target.spot.data.ROM,
      file="data/output_data/data_cleaned.R")
+
+#' Save files to csv 
+write.csv(x = rust.data.ROM, file = "data/rust_data_cleaned.csv")
+write.csv(x = yield.data.ROM, file = "data/yield_data_cleaned.csv")
+write.csv(x = seedwt.data.ROM, file = "data/seedwt_data_cleaned.csv")
+
 
 #' ### Footer
 #' 
