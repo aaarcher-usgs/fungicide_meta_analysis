@@ -213,7 +213,16 @@ and entries/study)</p>
 <pre><code class="r">library(ezknitr)
 library(knitr)
 library(metafor)
-library(devtools)
+</code></pre>
+
+<pre><code>## Loading required package: Matrix
+</code></pre>
+
+<pre><code>## Loading &#39;metafor&#39; package (version 1.9-9). For an overview 
+## and introduction to the package please type: help(metafor).
+</code></pre>
+
+<pre><code class="r">library(devtools)
 library(doBy)
 </code></pre>
 
@@ -675,7 +684,7 @@ summaryBy(FID~ReferenceNumb+Reference, data=rust.data, FUN=length)
 <pre><code>##                                                                      2.5% 
 ## &quot;CI of mean e.s. of seedwt severity&quot;                   &quot;1.15830431403257&quot; 
 ##                                97.5% 
-##                   &quot;1.27935002811905&quot;
+##                   &quot;1.27935002811906&quot;
 </code></pre>
 
 <pre><code class="r">print(c(&quot;Mean tau^2 for seedwt&quot;, mean(results.seedwt$tau2)))
@@ -1308,46 +1317,34 @@ applic.regression &lt;- merge(applic.regression, applic.regression.sims, by = &q
 <pre><code>##  setting  value                       
 ##  version  R version 3.3.2 (2016-10-31)
 ##  system   x86_64, darwin13.4.0        
-##  ui       RStudio (0.99.893)          
+##  ui       RStudio (0.99.902)          
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2016-12-27
+##  date     2017-01-25
 </code></pre>
 
 <pre><code>## Packages ------------------------------------------------------------------
 </code></pre>
 
 <pre><code>##  package     * version date       source        
-##  assertthat    0.1     2013-12-06 CRAN (R 3.3.0)
-##  colorspace    1.3-2   2016-12-14 CRAN (R 3.3.2)
 ##  devtools    * 1.12.0  2016-06-24 CRAN (R 3.3.0)
 ##  digest        0.6.10  2016-08-02 CRAN (R 3.3.0)
 ##  doBy        * 4.5-15  2016-03-31 CRAN (R 3.3.0)
 ##  evaluate      0.10    2016-10-11 CRAN (R 3.3.0)
 ##  ezknitr     * 0.6     2016-09-16 CRAN (R 3.3.0)
-##  ggplot2       2.2.0   2016-11-11 cran (@2.2.0) 
-##  gtable        0.2.0   2016-02-26 CRAN (R 3.3.0)
 ##  knitr       * 1.15.1  2016-11-22 CRAN (R 3.3.2)
 ##  lattice       0.20-34 2016-09-06 CRAN (R 3.3.2)
-##  lazyeval      0.2.0   2016-06-12 CRAN (R 3.3.0)
 ##  magrittr      1.5     2014-11-22 CRAN (R 3.3.0)
-##  markdown      0.7.7   2015-04-22 CRAN (R 3.3.0)
 ##  MASS          7.3-45  2016-04-21 CRAN (R 3.3.2)
 ##  Matrix      * 1.2-7.1 2016-09-01 CRAN (R 3.3.2)
 ##  memoise       1.0.0   2016-01-29 CRAN (R 3.3.0)
 ##  metafor     * 1.9-9   2016-09-25 CRAN (R 3.3.0)
-##  munsell       0.4.3   2016-02-13 CRAN (R 3.3.0)
-##  plyr          1.8.4   2016-06-08 CRAN (R 3.3.0)
 ##  R.methodsS3   1.7.1   2016-02-16 CRAN (R 3.3.0)
 ##  R.oo          1.21.0  2016-11-01 CRAN (R 3.3.0)
 ##  R.utils       2.5.0   2016-11-07 CRAN (R 3.3.0)
-##  Rcpp          0.12.8  2016-11-17 CRAN (R 3.3.2)
-##  rstudioapi    0.6     2016-06-27 CRAN (R 3.3.0)
-##  scales        0.4.1   2016-11-09 cran (@0.4.1) 
 ##  stringi       1.1.2   2016-10-01 CRAN (R 3.3.0)
 ##  stringr       1.1.0   2016-08-19 CRAN (R 3.3.0)
-##  tibble        1.2     2016-08-26 CRAN (R 3.3.0)
 ##  withr         1.0.2   2016-06-20 CRAN (R 3.3.0)
 </code></pre>
 
