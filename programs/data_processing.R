@@ -990,10 +990,11 @@ save(rust.data.ROM, yield.data.ROM, seedwt.data.ROM,
      file="data/output_data/data_cleaned.R")
 
 #' Save files to csv for DRUM archival
-rust.data.cleaned <- rust.data.ROM[,c(1:6,46:63)]
+rust.data.cleaned <- rust.data.ROM[,c(1:6,52:63)]
 write.csv(x = rust.data.cleaned, file = "data/rust_data_cleaned.csv")
-yield.data.cleaned <- yield.data.ROM[,c(1:6,46:63)]
+yield.data.cleaned <- yield.data.ROM[,c(1:6,54:66)]
 write.csv(x = yield.data.cleaned, file = "data/yield_data_cleaned.csv")
+seedwt.data.cleaned <- seedwt.data.ROM[,c(1:6,52:64)]
 write.csv(x = seedwt.data.cleaned, file = "data/seedwt_data_cleaned.csv")
 
 
