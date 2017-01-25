@@ -203,7 +203,7 @@ hr {
 <body>
 <h1>Data analysis using bootstrapping</h1>
 
-<p>Rust severity as dependent variable</p>
+<p>Yield as dependent variable</p>
 
 <h3>Preamble</h3>
 
@@ -224,9 +224,9 @@ set.seed(18837)
 <h3>Load data</h3>
 
 <pre><code class="r">load(file=&quot;data/output_data/data_cleaned.R&quot;)
-remove(list=c(#&quot;rust.data.ROM&quot;,
+remove(list=c(#&quot;yield.data.ROM&quot;,
               &quot;seedwt.data.ROM&quot;,
-              &quot;yield.data.ROM&quot;
+              &quot;rust.data.ROM&quot;
               ))
 </code></pre>
 
@@ -237,15 +237,15 @@ remove(list=c(#&quot;rust.data.ROM&quot;,
 
 <p>Empty data frame to hold results</p>
 
-<pre><code class="r">results.rust &lt;- as.data.frame(matrix(NA,ncol=24,nrow=nsims))
-colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
+<pre><code class="r">results.yield &lt;- as.data.frame(matrix(NA,ncol=25,nrow=nsims))
+colnames(results.yield) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
                             &quot;FLUT&quot;,&quot;MIXED&quot;,&quot;PYR&quot;,&quot;TEBU&quot;,
                             &quot;Strobilurin&quot;,&quot;Triaz_Strob&quot;,&quot;Triazole&quot;,
                             &quot;R1+&quot;, &quot;R2+&quot;, 
                             &quot;R3&quot;,&quot;R5&quot;,
                             &quot;Application Intrcpt&quot;,&quot;Application Slope&quot;,
-                            &quot;AZO_PROP&quot;,
-                            &quot;high&quot;,&quot;low&quot;,&quot;medium&quot;,
+                            &quot;1 Application&quot;, &quot;2 Applications&quot;,
+                            &quot;high&quot;,&quot;medium&quot;,&quot;low&quot;,
                             &quot;Year Intrcpt|2004&quot;,&quot;Year Slope&quot;,
                             &quot;2006&quot;,&quot;2007&quot;,&quot;2013&quot;)
 </code></pre>
@@ -253,155 +253,151 @@ colnames(results.rust) &lt;- c(&quot;OVERALL&quot;,&quot;tau2&quot;,
 <p>Running the bootstraps</p>
 
 <pre><code class="r">for(ii in 1:nsims){
-  studyIDS &lt;- data.frame(ReferenceNumb = sample(rust.data.ROM$ReferenceNumb, 
-                                                length(unique(rust.data.ROM$ReferenceNumb)),
+  studyIDS &lt;- data.frame(ReferenceNumb = sample(yield.data.ROM$ReferenceNumb, 
+                                                length(unique(yield.data.ROM$ReferenceNumb)),
                                                 replace=T))
-  newdata &lt;- merge(studyIDS, rust.data.ROM)
-
+  newdata &lt;- merge(studyIDS, yield.data.ROM)
   # Overall analysis
   meta &lt;- rma.uni(yi = yi,
-                  vi = 1/m2i,
+                  vi = 1/rust.m2i,
                   data = newdata,
                   method = &quot;REML&quot;)
-  results.rust$OVERALL[ii] &lt;- meta$b
-  results.rust$tau2[ii] &lt;- meta$tau2
+  results.yield$OVERALL[ii] &lt;- meta$b
+  results.yield$tau2[ii] &lt;- meta$tau2
 
   # Active Ingredients
   ai &lt;- rma.uni(yi = yi,
-                vi = 1/m2i,
+                vi = 1/rust.m2i,
                 data = newdata,
                 method = &quot;REML&quot;,
                 mods = ~category_ai-1)
-  results.rust$FLUT[ii] &lt;- ai$b[rownames(ai$b)==&quot;category_aiFLUT&quot;]
-  results.rust$MIXED[ii] &lt;- ai$b[rownames(ai$b)==&quot;category_aiMIXED&quot;]
-  results.rust$PYR[ii] &lt;- ai$b[rownames(ai$b)==&quot;category_aiPYR&quot;]
-  results.rust$TEBU[ii] &lt;- ai$b[rownames(ai$b)==&quot;category_aiTEBU&quot;]
+  results.yield$FLUT[ii] &lt;- ai$b[rownames(ai$b)==&quot;category_aiFLUT&quot;]
+  results.yield$MIXED[ii] &lt;- ai$b[rownames(ai$b)==&quot;category_aiMIXED&quot;]
+  results.yield$PYR[ii] &lt;- ai$b[rownames(ai$b)==&quot;category_aiPYR&quot;]
+  results.yield$TEBU[ii] &lt;- ai$b[rownames(ai$b)==&quot;category_aiTEBU&quot;]
 
   # Classes
   class &lt;- rma.uni(yi = yi,
-                   vi = 1/m2i,
+                   vi = 1/rust.m2i,
                    data = newdata,
                    method = &quot;REML&quot;,
                    mods = ~category_class-1)
-  results.rust$Strobilurin[ii] &lt;- 
+  results.yield$Strobilurin[ii] &lt;- 
     class$b[rownames(class$b)==&quot;category_classstrobilurin&quot;]
-  results.rust$Triaz_Strob[ii] &lt;- 
+  results.yield$Triaz_Strob[ii] &lt;- 
     class$b[rownames(class$b)==&quot;category_classtriaz + strob&quot;]
-  results.rust$Triazole[ii] &lt;- 
+  results.yield$Triazole[ii] &lt;- 
     class$b[rownames(class$b)==&quot;category_classtriazole&quot;]
 
   # Growth stage
   rstage &lt;- rma.uni(yi = yi,
-                    vi = 1/m2i,
+                    vi = 1/rust.m2i,
                     data = newdata,
                     method = &quot;REML&quot;,
                     mods = ~category_rstage-1)
-  results.rust$`R1+`[ii] &lt;- 
-    rstage$b[rownames(rstage$b)==&quot;category_rstage1+&quot;]
-  results.rust$`R2+`[ii] &lt;- 
-    rstage$b[rownames(rstage$b)==&quot;category_rstage2+&quot;]
-  results.rust$R3[ii] &lt;- 
-    rstage$b[rownames(rstage$b)==&quot;category_rstage3&quot;]
-  results.rust$R5[ii] &lt;- 
-    rstage$b[rownames(rstage$b)==&quot;category_rstage5&quot;]
+    if(&quot;1+&quot; %in% unique(newdata$category_rstage)){
+      results.yield$`R1+`[ii] &lt;- 
+        rstage$b[rownames(rstage$b)==&quot;category_rstage1+&quot;]
+    }
+    results.yield$`R2+`[ii] &lt;- 
+      rstage$b[rownames(rstage$b)==&quot;category_rstage2+&quot;]
+    results.yield$R3[ii] &lt;- 
+      rstage$b[rownames(rstage$b)==&quot;category_rstage3&quot;]
+    if(&quot;5&quot; %in% unique(newdata$category_rstage)){
+      results.yield$R5[ii] &lt;- 
+        rstage$b[rownames(rstage$b)==&quot;category_rstage5&quot;]
+    }
 
-  # Disease pressure
-  pressure &lt;- rma.uni(yi = yi,
-                      vi = (n1i+n2i)/(n1i*n2i),
-                      data = newdata,
-                      method = &quot;REML&quot;,
-                      mods = ~category_pressure-1)
-  results.rust$low[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressurelow&quot;]
-  if(nrow(newdata[newdata$category_pressure==&quot;medium&quot;,])&gt;0){
-  results.rust$medium[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressuremedium&quot;]
-  }
-  results.rust$high[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressurehigh&quot;]
+    # Disease pressure
+    pressure &lt;- rma.uni(yi = yi,
+                        vi = (n1i+n2i)/(n1i*n2i),
+                        data = newdata,
+                        method = &quot;REML&quot;,
+                        mods = ~category_pressure-1)
+    results.yield$low[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressurelow&quot;]
+    if(nrow(newdata[newdata$category_pressure==&quot;medium&quot;,])&gt;0){
+      results.yield$medium[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressuremedium&quot;]
+    }
+    results.yield$high[ii] &lt;- pressure$b[rownames(pressure$b)==&quot;category_pressurehigh&quot;]
+
 
   # Number of applications
   applications &lt;- rma.uni(yi = yi,
-                          vi = 1/m2i,
+                          vi = 1/rust.m2i,
                           data = newdata,
                           method = &quot;REML&quot;,
                           mods = ~number_applications)
-  results.rust$`Application Intrcpt`[ii] &lt;- 
+  results.yield$`Application Intrcpt`[ii] &lt;- 
     applications$b[rownames(applications$b)==&quot;intrcpt&quot;]
-  results.rust$`Application Slope`[ii] &lt;- 
+  results.yield$`Application Slope`[ii] &lt;- 
     applications$b[rownames(applications$b)==&quot;number_applications&quot;]
 
   # Number of applications as category
   apps.categ &lt;- rma.uni(yi = yi,
-                        vi = 1/m2i,
+                        vi = 1/rust.m2i,
                         data = newdata,
                         method = &quot;REML&quot;,
                         mods = ~as.character(number_applications)-1)
-  results.rust$`1 Application`[ii] &lt;- 
+  results.yield$`1 Application`[ii] &lt;- 
     apps.categ$b[rownames(apps.categ$b)==&quot;as.character(number_applications)1&quot;]
-  results.rust$`2 Applications`[ii] &lt;- 
+  results.yield$`2 Applications`[ii] &lt;- 
     apps.categ$b[rownames(apps.categ$b)==&quot;as.character(number_applications)2&quot;]
 
   # Study year
   # Condition on year1 = 2005
-  newdata$category_yearc &lt;- newdata$category_year - 2004
+  if(length(unique(newdata$category_year))&gt;2){
+  newdata$category_yearC &lt;- newdata$category_year - 2004
   year &lt;- rma.uni(yi = yi,
                   vi = (n1i+n2i)/(n1i*n2i),
                   data = newdata,
                   method = &quot;REML&quot;,
-                  mods = ~category_yearc)
-  results.rust$`Year Intrcpt|2004`[ii] &lt;- year$b[rownames(year$b)==&quot;intrcpt&quot;]
-  results.rust$`Year Slope`[ii] &lt;- year$b[rownames(year$b)==&quot;category_yearc&quot;]
+                  mods = ~category_yearC)
+  results.yield$`Year Intrcpt|2004`[ii] &lt;- year$b[rownames(year$b)==&quot;intrcpt&quot;]
+  results.yield$`Year Slope`[ii] &lt;- year$b[rownames(year$b)==&quot;category_yearC&quot;]
 
   # Study year as category
   year.categ &lt;- rma.uni(yi = yi,
-                        vi = (n1i+n2i)/(n1i*n2i),
-                        data = newdata,
-                        method = &quot;REML&quot;,
-                        mods = ~as.character(category_year)-1)
-  if(&quot;2006&quot; %in% unique(newdata$category_year)){
-  results.rust$`2006`[ii] &lt;- 
+                 vi = (n1i+n2i)/(n1i*n2i),
+                 data = newdata,
+                 method = &quot;REML&quot;,
+                 mods = ~as.character(category_year)-1)
+  results.yield$`2006`[ii] &lt;- 
     year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2006&quot;]
-  }
   if(&quot;2007&quot; %in% unique(newdata$category_year)){
-    results.rust$`2007`[ii] &lt;- 
+    results.yield$`2007`[ii] &lt;- 
       year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2007&quot;]
   }
   if(&quot;2013&quot; %in% unique(newdata$category_year)){
-    results.rust$`2013`[ii] &lt;- 
+    results.yield$`2013`[ii] &lt;- 
       year.categ$b[rownames(year.categ$b)==&quot;as.character(category_year)2013&quot;]
   }
-if(length(unique(newdata$category_year))==2 &amp;
-   unique(newdata$category_year[!is.na(newdata$category_year)]==&quot;2006&quot;)){
-  year.categ &lt;- rma.uni(yi = yi,
-                        vi = (n1i+n2i)/(n1i*n2i),
-                        data = newdata[!is.na(newdata$category_year),],
-                        method = &quot;REML&quot;)
-  results.rust$`2006`[ii] &lt;- year.categ$b
-}
-  # Mixed active ingredients
-  if(&quot;AZO + PROP&quot; %in% newdata$alphaIngred){
-    mixed &lt;- rma.uni(yi = yi,
-                     vi = 1/m2i,
-                     data = newdata[newdata$alphaIngred==&quot;AZO + PROP&quot;,],
-                     method = &quot;REML&quot;)
-    results.rust$`AZO_PROP`[ii] &lt;- mixed$b
+  }
+  if(length(unique(newdata$category_year))==2 &amp;
+     unique(newdata$category_year[!is.na(newdata$category_year)]==&quot;2006&quot;)){
+    year.categ &lt;- rma.uni(yi = yi,
+                          vi = (n1i+n2i)/(n1i*n2i),
+                          data = newdata[!is.na(newdata$category_year),],
+                          method = &quot;REML&quot;)
+    results.yield$`2006`[ii] &lt;- year.categ$b
   }
 }
 </code></pre>
 
 <h3>Save final results</h3>
 
-<pre><code class="r">save(results.rust, file=&quot;data/output_data/results_rust.R&quot;)
+<pre><code class="r">save(results.yield, file=&quot;data/output_data/results_yield.R&quot;)
 </code></pre>
 
 <h3>Footer</h3>
 
-<p>Spun with ezspin(&ldquo;programs/data_analysis_bootstrap_rust.R&rdquo;, out_dir=&ldquo;output&rdquo;, fig_dir=&ldquo;figures&rdquo;, keep_md=FALSE)</p>
+<p>Spun with ezspin(&ldquo;programs/data_analysis_bootstrap_yield.R&rdquo;, out_dir=&ldquo;output&rdquo;, fig_dir=&ldquo;figures&rdquo;, keep_md=FALSE)</p>
 
 <p>Session Info:</p>
 
 <pre><code class="r">devtools::session_info()
 </code></pre>
 
-<pre><code>## Session info --------------------------------------------------------------
+<pre><code>## Session info --------------------------------------------------------------------------------------------------------------------------
 </code></pre>
 
 <pre><code>##  setting  value                       
@@ -414,7 +410,7 @@ if(length(unique(newdata$category_year))==2 &amp;
 ##  date     2017-01-25
 </code></pre>
 
-<pre><code>## Packages ------------------------------------------------------------------
+<pre><code>## Packages ------------------------------------------------------------------------------------------------------------------------------
 </code></pre>
 
 <pre><code>##  package     * version date       source        

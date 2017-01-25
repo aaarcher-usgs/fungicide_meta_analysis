@@ -989,10 +989,12 @@ seedwt.data.ROM <- escalc(measure = "ROM", m1i = m1i, m2i = m2i,
 save(rust.data.ROM, yield.data.ROM, seedwt.data.ROM,
      file="data/output_data/data_cleaned.R")
 
-#' Save files to csv 
-write.csv(x = rust.data.ROM, file = "data/rust_data_cleaned.csv")
-write.csv(x = yield.data.ROM, file = "data/yield_data_cleaned.csv")
-write.csv(x = seedwt.data.ROM, file = "data/seedwt_data_cleaned.csv")
+#' Save files to csv for DRUM archival
+rust.data.cleaned <- rust.data.ROM[,c(1:6,46:63)]
+write.csv(x = rust.data.cleaned, file = "data/rust_data_cleaned.csv")
+yield.data.cleaned <- yield.data.ROM[,c(1:6,46:63)]
+write.csv(x = yield.data.cleaned, file = "data/yield_data_cleaned.csv")
+write.csv(x = seedwt.data.cleaned, file = "data/seedwt_data_cleaned.csv")
 
 
 #' ### Footer
