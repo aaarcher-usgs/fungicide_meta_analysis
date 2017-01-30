@@ -145,13 +145,19 @@ DATA & FILE OVERVIEW
 
    B. data_analysis_bootstrap_rust.html
       
-        Code used to for meta-analysis, including raw differences for soybean rust severity, yield, 100-seed-weight, and ancillary diseases (Cercospora blight and target spot) and the standardized mean differences for these variables under differing moderator variables.
+        Code used to for meta-analysis of soybean rust severity. Specifically, calculating mean effect sizes using cluster-level bootstrapping.
         
    C. data_analysis_bootstrap_yield.html
 
+	Code used to for meta-analysis of yield. Specifically, calculating mean effect sizes using cluster-level bootstrapping.
+
    D. data_analysis_bootstrap_seedwt.html
 
+	Code used to for meta-analysis of 100-seed-weight. Specifically, calculating mean effect sizes using cluster-level bootstrapping.
+
    E. results_processing.html
+
+	Code that takes the results of the bootstrapped meta-analysis and prepares it for plotting. Also, displays data used in the manuscript results.
 
    F. results_plotting.html
 
