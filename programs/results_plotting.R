@@ -22,7 +22,7 @@ set.seed(776)
 
 #' Document settings
 #+ settings
-opts_chunk$set(fig.width = 6, fig.height = 4)
+opts_chunk$set(fig.width = 6, fig.height = 4, dev = "jpeg", dpi = 600)
 
 #' ### Load data
 #+ loadData
