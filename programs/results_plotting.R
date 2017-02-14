@@ -65,10 +65,12 @@ ggplot(data = new.wide.3way,
   geom_point(data = new.wide.3way[new.wide.3way$Analysis.x=="Overall Mean",],
              colour="black",size=2)+
   theme_tufte()+
+  theme(axis.line = element_line())+
   ylab("Response Ratio (95% C.I.)")+
   xlab("Response Ratio (95% C.I.)")+
-  facet_wrap(~Comparison, scales = "free_x")+
-  geom_text(data = annotate2013, label = "2013", family="serif")
+  facet_wrap(~Comparison, scales = "free")+
+  geom_text(data = annotate2013, label = "2013", family="serif")+
+  scale_y_continuous(limits=c(1,1.5))
 
 #' ### Main results
 #' 
@@ -99,7 +101,7 @@ p2 <- ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","Strobilurin", "Triazole", "Triaz_Strob"), 
                    labels=c("Overall","Strobilurin", "Triazole", "Mixed Triazole\n& Strobilurin"))+
-  ylab("Mean Effect Size (95% C.I.)")+
+  ylab("Response Ratio (95% C.I.)")+
   xlab("Fungicide Class")+
   ylim(c(0,1.7))+
   theme_tufte()+
@@ -148,7 +150,7 @@ p5 <- ggplot(data = summary.means[summary.means$Analysis=="Applications"|
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","1 Application","2 Applications"), 
                    labels=c("Overall","1","2"))+
-  ylab("Mean Effect Size (95% C.I.)")+
+  ylab("Response Ratio (95% C.I.)")+
   xlab("Applications")+
   theme_tufte()+
   theme(legend.position = "none")+
@@ -167,7 +169,7 @@ ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","2006","2007","2008","2009","2010","2011","2012","2013"), 
                    labels=c("Overall","2006","2007","2008","2009","2010","2011","2012","2013"))+
-  ylab("Mean Effect Size (95% C.I.)")+
+  ylab("Response Ratio (95% C.I.)")+
   xlab("Study Year")+
   theme_tufte()+
   theme(legend.position = "none")+
