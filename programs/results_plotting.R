@@ -41,7 +41,7 @@ new.wide.yV100 <- merge(category.split$Yield, category.split$`Seed Weight`, all=
 new.wide.yV100$Comparison <- "Yield vs 100-sw"
 new.wide <- merge(new.wide.rust, new.wide.y100, by = "Moderator",all = T)
 new.wide$Comparison[new.wide$Category.y=="Seed Weight"] <- "Rust vs. 100-sw"
-new.wide$Comparison[new.wide$Category.y=="Yield"] <- "Rust vs. Yield"
+new.wide$Comparison[new.wide$Category.y=="Yield"] <- "Rust vs. yield"
 new.wide.3way <- rbind(new.wide, new.wide.yV100)
 new.wide.3way <- subset(new.wide.3way, !is.na(Comparison))
 new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
@@ -50,7 +50,7 @@ new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
 #' ### 3-way scatter plot
 #+ figure1, fig.width=8
 # First, will want to annotate 2013 result in facet 2
-annotate2013 <- data.frame(Comparison = "Rust vs. Yield",
+annotate2013 <- data.frame(Comparison = "Rust vs. yield",
                            Mean.x = 0.44,
                            Mean.y = 1.1)
 ggplot(data = new.wide.3way, 
@@ -64,13 +64,14 @@ ggplot(data = new.wide.3way,
                  aes(xmin=LL.x,xmax=UL.x),colour="black",height=0)+
   geom_point(data = new.wide.3way[new.wide.3way$Analysis.x=="Overall Mean",],
              colour="black",size=2)+
-  theme_tufte()+
+  theme_bw()+
   theme(axis.line = element_line())+
-  ylab("Response Ratio (95% C.I.)")+
-  xlab("Response Ratio (95% C.I.)")+
+  ylab("Response ratio (95% C.I.)")+
+  xlab("Response ratio (95% C.I.)")+
   facet_wrap(~Comparison, scales = "free")+
   geom_text(data = annotate2013, label = "2013", family="serif")+
-  scale_y_continuous(limits=c(1,1.5))
+  scale_y_continuous(limits=c(1,1.5))+
+  theme(panel.grid = element_blank())
 
 #' ### Main results
 #' 
@@ -84,13 +85,14 @@ p1 <- ggplot(data = summary.means[summary.means$Analysis=="Active Ingredient",],
   geom_hline(aes(yintercept=1), colour="grey")+
   scale_x_discrete(limits=c("FLUT","PYR","TEBU","MIXED","AZO_PROP"), 
                    labels=c("FLUT","PYR","TEBU","Mixed","AZO + \nPROP"))+
-  xlab("Active Ingredient")+
+  xlab("Active ingredient")+
   ylab("")+
   ylim(c(0,1.7))+
-  theme_tufte()+
+  theme_bw()+
   theme(legend.position = "none")+
-  geom_text(data = annotateAI, label="B", family="serif")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
+  geom_text(data = annotateAI, label="B")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  theme(panel.grid = element_blank())
 
 annotateClass <- data.frame(Mean = 1.6, Moderator = "OVERALL", Category = "Rust")
 p2 <- ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
@@ -101,13 +103,14 @@ p2 <- ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","Strobilurin", "Triazole", "Triaz_Strob"), 
                    labels=c("Overall","Strobilurin", "Triazole", "Mixed Triazole\n& Strobilurin"))+
-  ylab("Response Ratio (95% C.I.)")+
-  xlab("Fungicide Class")+
+  ylab("Response ratio (95% C.I.)")+
+  xlab("Fungicide class")+
   ylim(c(0,1.7))+
-  theme_tufte()+
+  theme_bw()+
   theme(legend.position = "none")+
-  geom_text(data = annotateClass, label="A", family="serif")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
+  geom_text(data = annotateClass, label="A")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  theme(panel.grid = element_blank())
 
 grid.arrange(p2, p1, ncol=2)
 
@@ -121,11 +124,12 @@ p3 <- ggplot(data = summary.means[summary.means$Analysis=="Disease Pressure",],
   scale_x_discrete(limits=c("low","medium","high"), 
                    labels=c("Low","Medium","High"))+
   ylab("")+
-  xlab("Disease Pressure")+
-  theme_tufte()+
+  xlab("Disease pressure")+
+  theme_bw()+
   theme(legend.position = "none")+
-  geom_text(data = annotatePress, label="C", family="serif")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
+  geom_text(data = annotatePress, label="C")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  theme(panel.grid = element_blank())
 
 annotateRstage <- data.frame(Mean = 1.6, Moderator = "R1+", Category="Rust")
 p4 <- ggplot(data = summary.means[summary.means$Analysis=="Growth Stage",], 
@@ -135,11 +139,12 @@ p4 <- ggplot(data = summary.means[summary.means$Analysis=="Growth Stage",],
   scale_x_discrete(limits=c("R1+","R2+","R3","R5"), 
                    labels=c("R1+","R2+","R3","R5"))+
   ylab("")+
-  xlab("Growth Stage")+
-  theme_tufte()+
+  xlab("Growth stage")+
+  theme_bw()+
   theme(legend.position = "none")+
-  geom_text(data = annotateRstage, label="B", family="serif")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
+  geom_text(data = annotateRstage, label="B")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  theme(panel.grid = element_blank())
 
 annotateApps <- data.frame(Mean = 1.6, Moderator = "OVERALL", Category="Rust")
 p5 <- ggplot(data = summary.means[summary.means$Analysis=="Applications"|
@@ -150,12 +155,13 @@ p5 <- ggplot(data = summary.means[summary.means$Analysis=="Applications"|
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","1 Application","2 Applications"), 
                    labels=c("Overall","1","2"))+
-  ylab("Response Ratio (95% C.I.)")+
+  ylab("Response ratio (95% C.I.)")+
   xlab("Applications")+
-  theme_tufte()+
+  theme_bw()+
   theme(legend.position = "none")+
-  geom_text(data = annotateApps, label="A", family="serif")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
+  geom_text(data = annotateApps, label="A")+
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  theme(panel.grid = element_blank())
 
 grid.arrange(p5, p4, p3, ncol=3)
 
@@ -169,11 +175,12 @@ ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","2006","2007","2008","2009","2010","2011","2012","2013"), 
                    labels=c("Overall","2006","2007","2008","2009","2010","2011","2012","2013"))+
-  ylab("Response Ratio (95% C.I.)")+
-  xlab("Study Year")+
-  theme_tufte()+
+  ylab("Response ratio (95% C.I.)")+
+  xlab("Study year")+
+  theme_bw()+
   theme(legend.position = "none")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))
+  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  theme(panel.grid = element_blank())
 
 
 
