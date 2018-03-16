@@ -27,21 +27,28 @@ opts_chunk$set(fig.width = 6, fig.height = 4, dev = "jpeg", dpi = 600)
 #' ### Load data
 #+ loadData
 load(file="data/output_data/summary_results.R")
+
+#' Update name of response variables
+table(summary.means$Category)
+summary.means$Category[summary.means$Category=="Rust"] <- "SBR"
+summary.means$Category[summary.means$Category=="Seed Weight"] <- "100-sw"
+table(summary.means$Category)
+
 #' Separate by analysis
 analysis.split <- split(summary.means, summary.means$Analysis)
 category.split <- split(summary.means, summary.means$Category)
 
-wide <- merge(category.split$Rust, category.split$Yield, by = "Moderator",all=T)
-wide <- merge(wide, category.split$`Seed Weight`, by = "Moderator",all = T)
+wide <- merge(category.split$SBR, category.split$Yield, by = "Moderator",all=T)
+wide <- merge(wide, category.split$`100-sw`, by = "Moderator",all = T)
 
 #' make 3-way comparison
-new.wide.rust <- category.split$Rust
-new.wide.y100 <- rbind(category.split$Yield, category.split$`Seed Weight`)
-new.wide.yV100 <- merge(category.split$Yield, category.split$`Seed Weight`, all=T, by="Moderator")
-new.wide.yV100$Comparison <- "Yield vs 100-sw"
+new.wide.rust <- category.split$SBR
+new.wide.y100 <- rbind(category.split$Yield, category.split$`100-sw`)
+new.wide.yV100 <- merge(category.split$Yield, category.split$`100-sw`, all=T, by="Moderator")
+new.wide.yV100$Comparison <- "Yield (X) vs 100-sw (Y)"
 new.wide <- merge(new.wide.rust, new.wide.y100, by = "Moderator",all = T)
-new.wide$Comparison[new.wide$Category.y=="Seed Weight"] <- "Rust vs. 100-sw"
-new.wide$Comparison[new.wide$Category.y=="Yield"] <- "Rust vs. yield"
+new.wide$Comparison[new.wide$Category.y=="100-sw"] <- "SBR (X) vs. 100-sw (Y)"
+new.wide$Comparison[new.wide$Category.y=="Yield"] <- "SBR (X) vs. Yield (Y)"
 new.wide.3way <- rbind(new.wide, new.wide.yV100)
 new.wide.3way <- subset(new.wide.3way, !is.na(Comparison))
 new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
@@ -50,7 +57,7 @@ new.wide.3way <- subset(new.wide.3way, !is.na(Analysis.x))
 #' ### 3-way scatter plot
 #+ figure1, fig.width=8
 # First, will want to annotate 2013 result in facet 2
-annotate2013 <- data.frame(Comparison = "Rust vs. yield",
+annotate2013 <- data.frame(Comparison = "SBR (X) vs. Yield (Y)",
                            Mean.x = 0.44,
                            Mean.y = 1.1)
 ggplot(data = new.wide.3way, 
@@ -78,7 +85,7 @@ ggplot(data = new.wide.3way,
 pd <- position_dodge(width=0.3)
 #' Active Ingredient and Fungicide Class
 #+ figure2, fig.width=8
-annotateAI <- data.frame(Mean = 1.6, Moderator = "FLUT", Category="Rust")
+annotateAI <- data.frame(Mean = 1.6, Moderator = "FLUT", Category="SBR")
 p1 <- ggplot(data = summary.means[summary.means$Analysis=="Active Ingredient",], 
              aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
@@ -91,14 +98,15 @@ p1 <- ggplot(data = summary.means[summary.means$Analysis=="Active Ingredient",],
   theme_bw()+
   theme(legend.position = "none")+
   geom_text(data = annotateAI, label="B")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  scale_shape_manual(limits = c("SBR", "100-sw", "Yield"), values = c(20,17,15))+
+  scale_color_manual(limits = c("SBR", "100-sw", "Yield"), values = c("#000000","#FC575E","#44BBFF"))+
   theme(panel.grid = element_blank())
 
-annotateClass <- data.frame(Mean = 1.6, Moderator = "OVERALL", Category = "Rust")
+annotateClass <- data.frame(Mean = 1.6, Moderator = "OVERALL", Category = "SBR")
 p2 <- ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
                                     summary.means$Moderator=="OVERALL",], 
-             aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
-  geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
+             aes(x = Moderator, y = Mean))+
+  geom_pointrange(aes(ymin = LL, ymax = UL, colour=Category, shape=Category), position=pd)+
   geom_hline(aes(yintercept=1), colour="grey")+
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","Strobilurin", "Triazole", "Triaz_Strob"), 
@@ -109,14 +117,17 @@ p2 <- ggplot(data = summary.means[summary.means$Analysis=="Fungicide Class"|
   theme_bw()+
   theme(legend.position = "none")+
   geom_text(data = annotateClass, label="A")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
-  theme(panel.grid = element_blank())
+  scale_shape_manual(limits = c("SBR", "100-sw", "Yield"), values = c(20,17,15))+
+  scale_color_manual(limits = c("SBR", "100-sw", "Yield"), values = c("#000000","#FC575E","#44BBFF"))+
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.75,0.4))
 
 grid.arrange(p2, p1, ncol=2)
 
 #' Disease Pressure, Growth Stage, and Applications
 #+ figure3, fig.width=8
-annotatePress <- data.frame(Mean = 1.6, Moderator = "low", Category="Rust")
+annotatePress <- data.frame(Mean = 1.6, Moderator = "low", Category="SBR")
 p3 <- ggplot(data = summary.means[summary.means$Analysis=="Disease Pressure",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
@@ -128,10 +139,11 @@ p3 <- ggplot(data = summary.means[summary.means$Analysis=="Disease Pressure",],
   theme_bw()+
   theme(legend.position = "none")+
   geom_text(data = annotatePress, label="C")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  scale_shape_manual(limits = c("SBR", "100-sw", "Yield"), values = c(20,17,15))+
+  scale_color_manual(limits = c("SBR", "100-sw", "Yield"), values = c("#000000","#FC575E","#44BBFF"))+
   theme(panel.grid = element_blank())
 
-annotateRstage <- data.frame(Mean = 1.6, Moderator = "R1+", Category="Rust")
+annotateRstage <- data.frame(Mean = 1.6, Moderator = "R1+", Category="SBR")
 p4 <- ggplot(data = summary.means[summary.means$Analysis=="Growth Stage",], 
        aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
   geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
@@ -143,14 +155,15 @@ p4 <- ggplot(data = summary.means[summary.means$Analysis=="Growth Stage",],
   theme_bw()+
   theme(legend.position = "none")+
   geom_text(data = annotateRstage, label="B")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
+  scale_shape_manual(limits = c("SBR", "100-sw", "Yield"), values = c(20,17,15))+
+  scale_color_manual(limits = c("SBR", "100-sw", "Yield"), values = c("#000000","#FC575E","#44BBFF"))+
   theme(panel.grid = element_blank())
 
-annotateApps <- data.frame(Mean = 1.6, Moderator = "OVERALL", Category="Rust")
+annotateApps <- data.frame(Mean = 1.6, Moderator = "OVERALL", Category="SBR")
 p5 <- ggplot(data = summary.means[summary.means$Analysis=="Applications"|
                               summary.means$Moderator=="OVERALL",], 
-       aes(x = Moderator, y = Mean, colour=Category, shape=Category))+
-  geom_pointrange(aes(ymin = LL, ymax = UL), position=pd)+
+       aes(x = Moderator, y = Mean))+
+  geom_pointrange(aes(ymin = LL, ymax = UL, colour=Category, shape=Category), position=pd)+
   geom_hline(aes(yintercept=1), colour="grey")+
   geom_vline(aes(xintercept=1.5), colour="grey")+
   scale_x_discrete(limits=c("OVERALL","1 Application","2 Applications"), 
@@ -158,10 +171,14 @@ p5 <- ggplot(data = summary.means[summary.means$Analysis=="Applications"|
   ylab("Response ratio (95% C.I.)")+
   xlab("Applications")+
   theme_bw()+
-  theme(legend.position = "none")+
   geom_text(data = annotateApps, label="A")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
-  theme(panel.grid = element_blank())
+  scale_shape_manual(limits = c("SBR", "100-sw", "Yield"), values = c(20,17,15))+
+  scale_color_manual(limits = c("SBR", "100-sw", "Yield"), values = c("#000000","#FC575E","#44BBFF"))+
+  #theme(legend.position = "none")+
+  #guides(colour = guide_legend(override.aes = list(shape = c(20,17,15))))+
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.75,0.4))
 
 grid.arrange(p5, p4, p3, ncol=3)
 
@@ -179,8 +196,13 @@ ggplot(data = summary.means[summary.means$Analysis=="Study Year"|
   xlab("Study year")+
   theme_bw()+
   theme(legend.position = "none")+
-  scale_color_manual(values = c("#000000","#FC575E","#44BBFF"))+
-  theme(panel.grid = element_blank())
+  scale_shape_manual(limits = c("SBR", "100-sw", "Yield"), values = c(20,17,15))+
+  scale_color_manual(limits = c("SBR", "100-sw", "Yield"), values = c("#000000","#FC575E","#44BBFF"))+
+  #theme(legend.position = "none")+
+  #guides(colour = guide_legend(override.aes = list(shape = c(20,17,15))))+
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.75,0.8))
 
 
 
